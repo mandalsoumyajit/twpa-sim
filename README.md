@@ -11,7 +11,8 @@ Circuit parameters and operating conditions are explicit inputs.
 3WM propagation with Kerr phase shifts; coupled TLS loss and amplifier noise;
 Kerr-pumped resonant JPAs; effective flux-pumped resonant amplifiers;
 4WM Josephson junction chains with optional resonant phase matching,
-multiharmonic mixing and pump depletion. An optional JoSIM backend generates
+multiharmonic mixing, pump depletion and quantum noise with internal loss.
+An optional JoSIM backend generates
 physical RCSJ circuits and has been used to check both JPA and JTWPA models.
 
 ## Installation
@@ -71,7 +72,11 @@ port reflections and exact-sine Fourier projection. Set `depleted=True` for
 self-consistent pump depletion, or attach `jtwpa.ResonantLoad` for resonant
 phase matching. Gain is a power ratio; idler conversion is a photon-flux ratio.
 See the [4WM guide](docs/four-wave-jtwpa.md) for harmonic/sideband convergence,
-normalization and limits. Quantum noise for this 4WM model remains future work.
+normalization and limits. `jtwpa.quantum_noise` returns photon-normalized
+scattering, vacuum/thermal bath noise, quadrature covariance and input-referred
+added noise. Junction, ground and resonator resistances each have explicit
+noise baths. See the [quantum-noise guide](docs/jtwpa-quantum-noise.md) and
+[quantum-limit checks](docs/jtwpa-quantum-validation.md).
 
 ## KIT and phenomenological 3WM circuits
 
@@ -160,6 +165,7 @@ and acquisition-window sensitivity recorded separately. Reproduce runs with
 | --- | --- |
 | `resonant_jpa.py` | Kerr JPA gain/noise and effective flux-pump squeezing |
 | `four_wave_jtwpa.py` | Uniform and resonator-loaded 4WM Josephson chains |
+| `quantum_jtwpa.py` | Quantum-limit and internal thermal noise in 4WM chains |
 | `compare.py` | Compare electrical TWPA parameter sets |
 | `oxide_pipeline.py` | Electrostatics -> lossy circuit -> amplifier noise |
 | `depletion_and_gradients.py` | Pump-depleted propagation with spatial profiles |

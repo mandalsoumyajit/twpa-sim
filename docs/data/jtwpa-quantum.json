@@ -1,0 +1,246 @@
+{
+  "schema_version": 1,
+  "generated_utc": "2026-10-27T21:13:41.967885+00:00",
+  "kind": "quantum consistency and convergence; not independent experimental data",
+  "model": {
+    "harmonics": 3,
+    "sidebands": 1,
+    "quadrature": 16,
+    "nonlinearity": "sine"
+  },
+  "source_sha256": "eef91a941ee36fc532aaffd0b1101f79ecaca3294be9b3e36b22fd51d75657a8",
+  "thermal_equilibrium_error": 2.0384053096157626e-14,
+  "cases": {
+    "bare256": {
+      "chain": {
+        "critical_current": 1.3164239139018133e-07,
+        "ground_capacitance": 1e-12,
+        "junction_capacitance": 1e-12,
+        "cells": 256,
+        "port_impedance": 53.402532558470035,
+        "junction_resistance": 1000000000.0,
+        "ground_resistance": null,
+        "cell_length": 1e-05,
+        "resonator": null
+      },
+      "pump_frequency": 1000000000.0,
+      "pump_power": 7.403607155124823e-14,
+      "signal_frequency": 900000000.0,
+      "temperatures": {
+        "port_temperature": 0.0,
+        "junction_temperature": 0.0,
+        "ground_temperature": 0.0,
+        "resonator_temperature": 0.0
+      },
+      "gain": 2.4574487580637734,
+      "gain_db": 3.9048447082882785,
+      "added_noise": 0.2969955121426743,
+      "quantum_limit": 0.29653695794904367,
+      "excess_noise": 0.00045855419363061145,
+      "commutator_error": 1.037976408095145e-14,
+      "anomalous_commutator_error": 1.7076328370551387e-14,
+      "minimum_uncertainty_eigenvalue": 2.074573412787666e-14,
+      "output_covariance_by_family": {
+        "ports": 1.9585741528809135,
+        "junction": 1.4786165023797995e-06
+      },
+      "refined_added_noise": 0.2969908773011565,
+      "added_noise_resolution_change": -4.634841517803245e-06
+    },
+    "rpm384": {
+      "chain": {
+        "critical_current": 1.3164239139018133e-07,
+        "ground_capacitance": 1e-12,
+        "junction_capacitance": 1e-12,
+        "cells": 384,
+        "port_impedance": 52.72860722885028,
+        "junction_resistance": 1000000000.0,
+        "ground_resistance": null,
+        "cell_length": 1e-05,
+        "resonator": {
+          "coupling_capacitance": 1e-14,
+          "capacitance": 1e-12,
+          "inductance": 2.492982323021428e-08,
+          "resistance": 1000000000.0
+        }
+      },
+      "pump_frequency": 1000000000.0,
+      "pump_power": 7.310175661273295e-14,
+      "signal_frequency": 900000000.0,
+      "temperatures": {
+        "port_temperature": 0.0,
+        "junction_temperature": 0.0,
+        "ground_temperature": 0.0,
+        "resonator_temperature": 0.0
+      },
+      "gain": 9.73637452741717,
+      "gain_db": 9.883972714732558,
+      "added_noise": 0.44904861597791534,
+      "quantum_limit": 0.44864618256086763,
+      "excess_noise": 0.0004024334170477095,
+      "commutator_error": 2.7143352169863012e-14,
+      "anomalous_commutator_error": 2.1495521691552257e-14,
+      "minimum_uncertainty_eigenvalue": 3.062345492039847e-14,
+      "output_covariance_by_family": {
+        "ports": 9.240286256263063,
+        "junction": 6.378107501557165e-06,
+        "resonator": 1.3551732812403742e-07
+      },
+      "refined_added_noise": 0.4490459873332945,
+      "added_noise_resolution_change": -2.628644620861209e-06
+    },
+    "rpm768": {
+      "chain": {
+        "critical_current": 1.3164239139018133e-07,
+        "ground_capacitance": 1e-12,
+        "junction_capacitance": 1e-12,
+        "cells": 768,
+        "port_impedance": 52.72860722885028,
+        "junction_resistance": 1000000000.0,
+        "ground_resistance": null,
+        "cell_length": 1e-05,
+        "resonator": {
+          "coupling_capacitance": 1e-14,
+          "capacitance": 1e-12,
+          "inductance": 2.492982323021428e-08,
+          "resistance": 1000000000.0
+        }
+      },
+      "pump_frequency": 1000000000.0,
+      "pump_power": 7.310175661273295e-14,
+      "signal_frequency": 900000000.0,
+      "temperatures": {
+        "port_temperature": 0.0,
+        "junction_temperature": 0.0,
+        "ground_temperature": 0.0,
+        "resonator_temperature": 0.0
+      },
+      "gain": 224.69008701856438,
+      "gain_db": 23.515839124364692,
+      "added_noise": 0.4981558816777967,
+      "quantum_limit": 0.4977747126869968,
+      "excess_noise": 0.0003811689907998739,
+      "commutator_error": 2.7874030652074707e-13,
+      "anomalous_commutator_error": 2.779639328218738e-13,
+      "minimum_uncertainty_eigenvalue": -1.2587652545212966e-14,
+      "output_covariance_by_family": {
+        "ports": 224.27555595529034,
+        "junction": 0.0001722026289096127,
+        "resonator": 3.754356751362399e-06
+      },
+      "refined_added_noise": 0.4981561578999252,
+      "added_noise_resolution_change": 2.762221285035338e-07
+    },
+    "lossy256_cold": {
+      "chain": {
+        "critical_current": 1.3164239139018133e-07,
+        "ground_capacitance": 1e-12,
+        "junction_capacitance": 1e-12,
+        "cells": 256,
+        "port_impedance": 53.402532558470035,
+        "junction_resistance": 20000.0,
+        "ground_resistance": 100000.0,
+        "cell_length": 1e-05,
+        "resonator": null
+      },
+      "pump_frequency": 1000000000.0,
+      "pump_power": 7.403607155124823e-14,
+      "signal_frequency": 900000000.0,
+      "temperatures": {
+        "port_temperature": 0.0,
+        "junction_temperature": 0.0,
+        "ground_temperature": 0.0,
+        "resonator_temperature": 0.0
+      },
+      "gain": 1.7749228921367481,
+      "gain_db": 2.491794907731359,
+      "added_noise": 0.3593899937356787,
+      "quantum_limit": 0.21829762170790812,
+      "excess_noise": 0.14109237202777059,
+      "commutator_error": 6.085356211083902e-15,
+      "anomalous_commutator_error": 7.430170794620272e-15,
+      "minimum_uncertainty_eigenvalue": 1.0101570142338541e-09,
+      "output_covariance_by_family": {
+        "ports": 1.3603039983406666,
+        "junction": 0.05555077323275234,
+        "ground": 0.1094962015812938
+      }
+    },
+    "lossy256_50mK": {
+      "chain": {
+        "critical_current": 1.3164239139018133e-07,
+        "ground_capacitance": 1e-12,
+        "junction_capacitance": 1e-12,
+        "cells": 256,
+        "port_impedance": 53.402532558470035,
+        "junction_resistance": 20000.0,
+        "ground_resistance": 100000.0,
+        "cell_length": 1e-05,
+        "resonator": null
+      },
+      "pump_frequency": 1000000000.0,
+      "pump_power": 7.403607155124823e-14,
+      "signal_frequency": 900000000.0,
+      "temperatures": {
+        "port_temperature": 0.0,
+        "junction_temperature": 0.05,
+        "ground_temperature": 0.05,
+        "resonator_temperature": 0.05
+      },
+      "gain": 1.7749228921367481,
+      "gain_db": 2.491794907731359,
+      "added_noise": 0.4859510591145828,
+      "quantum_limit": 0.21829762170790812,
+      "excess_noise": 0.2676534374066747,
+      "commutator_error": 6.085356211083902e-15,
+      "anomalous_commutator_error": 7.430170794620272e-15,
+      "minimum_uncertainty_eigenvalue": 0.0004950230961188246,
+      "output_covariance_by_family": {
+        "ports": 1.3603039983406666,
+        "junction": 0.12988408369552448,
+        "ground": 0.2597990233127543
+      }
+    },
+    "rpm_lossy384_50mK": {
+      "chain": {
+        "critical_current": 1.3164239139018133e-07,
+        "ground_capacitance": 1e-12,
+        "junction_capacitance": 1e-12,
+        "cells": 384,
+        "port_impedance": 52.72860722885028,
+        "junction_resistance": 20000.0,
+        "ground_resistance": 100000.0,
+        "cell_length": 1e-05,
+        "resonator": {
+          "coupling_capacitance": 1e-14,
+          "capacitance": 1e-12,
+          "inductance": 2.492982323021428e-08,
+          "resistance": 100000.0
+        }
+      },
+      "pump_frequency": 1000000000.0,
+      "pump_power": 7.310175661273295e-14,
+      "signal_frequency": 900000000.0,
+      "temperatures": {
+        "port_temperature": 0.0,
+        "junction_temperature": 0.05,
+        "ground_temperature": 0.05,
+        "resonator_temperature": 0.05
+      },
+      "gain": 2.6718812935195357,
+      "gain_db": 4.268171593743811,
+      "added_noise": 0.6024001032416981,
+      "quantum_limit": 0.31286593786456174,
+      "excess_noise": 0.2895341653771364,
+      "commutator_error": 1.1102230246251565e-14,
+      "anomalous_commutator_error": 1.5093825147691395e-14,
+      "minimum_uncertainty_eigenvalue": 0.0004889525263361783,
+      "output_covariance_by_family": {
+        "ports": 2.288320705713032,
+        "junction": 0.22309710159187762,
+        "ground": 0.4331630735872303,
+        "resonator": 0.0009013329333579401
+      }
+    }
+  }
+}

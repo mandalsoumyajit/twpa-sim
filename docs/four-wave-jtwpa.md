@@ -106,7 +106,9 @@ does not claim to reproduce the paper's full continuum gain curves.
 
 Current limits: unbiased identical junctions; distinct nearby signal/idler
 bands; no phase slips, DC voltage state, arbitrary fabrication profiles,
-SQUID/SNAIL flux bias, dynamic stability calculation, or quantum-noise
-propagation for 4WM. Strong drives and commensurate-frequency aliases need
+SQUID/SNAIL flux bias, or dynamic stability calculation.
+[Quantum Gaussian scattering and internal-loss noise](jtwpa-quantum-noise.md)
+are available about the coherent pump or depleted multitone operating point.
+Strong drives and commensurate-frequency aliases need
 additional care and independent transient checks. The separate KIT/TLS and
 resonant JPA noise APIs retain their documented scopes.

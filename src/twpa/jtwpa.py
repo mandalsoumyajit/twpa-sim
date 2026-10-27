@@ -288,20 +288,12 @@ class FourWaveResult:
     nonlinearity: str
 
 
-def four_wave_response(chain, pump_frequency, pump_power, signal_frequency,
-                       signal_power=1e-20, *, depleted=False, continuation_steps=8,
+def _pump_solution(chain, pump_frequency, pump_power, signal_frequency,
+                       *, continuation_steps=8,
                        tolerance=1e-10, maximum_phase=1.2, nonlinearity='sine',
                        harmonics=None, sidebands=1, quadrature=16):
-    """Multitone 4WM scattering including Josephson SPM, XPM and finite ports.
-
-    Undepleted mode linearizes about a self-consistent pump-only solution.
-    Depleted mode solves all retained amplitudes together. Exact-sine Fourier
-    projection is the default; nonlinearity='cubic' selects the quartic-potential
-    three-tone approximation. Odd harmonics and additional sidebands may be
-    retained to check truncation error, independently of temporal JoSIM steps.
-    A converged algebraic solution does not by itself establish dynamical stability.
-    """
-    for value in (pump_frequency, signal_frequency, signal_power, maximum_phase, tolerance):
+    """Shared pump-only operating point for classical and quantum linearization."""
+    for value in (pump_frequency, signal_frequency, maximum_phase, tolerance):
         positive(value, 'frequencies/power/solver controls')
     positive(pump_power, 'pump_power', True)
     if not isinstance(continuation_steps, int) or continuation_steps < 1:
@@ -332,12 +324,36 @@ def four_wave_response(chain, pump_frequency, pump_power, signal_frequency,
     matrices = [_linear_system(chain, f) for f in frequencies]
     source = np.zeros((len(indices), chain.cells+1), complex)
     source[0, 0] = 1j*np.sqrt(8*chain.port_impedance*pump_power)/(chain.port_impedance*chain.critical_current)
-    source[1, 0] = 1j*np.sqrt(8*chain.port_impedance*signal_power)/(chain.port_impedance*chain.critical_current)
     pump_source = np.zeros_like(source); pump_source[0] = source[0]
     fields = np.zeros_like(source)
     for fraction in np.linspace(0, 1, continuation_steps+1)[1:]:
         fields, residual, _ = _newton(fields, matrices, pump_source*fraction,
                  tolerance=tolerance, nonlinearity=nonlinearity, indices=indices, quadrature=quadrature)
+    phase = float(max(np.sum(abs(fields[:, :-1]-fields[:, 1:]), axis=0)))
+    if phase > maximum_phase:
+        raise ValueError(f'Junction phase {phase:.3g} exceeds the retained-mode guard {maximum_phase}')
+    return frequencies, indices, matrices, source, fields, residual
+
+
+def four_wave_response(chain, pump_frequency, pump_power, signal_frequency,
+                       signal_power=1e-20, *, depleted=False, continuation_steps=8,
+                       tolerance=1e-10, maximum_phase=1.2, nonlinearity='sine',
+                       harmonics=None, sidebands=1, quadrature=16):
+    """Multitone classical 4WM scattering at finite resistive ports.
+
+    Undepleted mode linearizes about a self-consistent pump-only solution.
+    Depleted mode solves all retained amplitudes together. Exact-sine Fourier
+    projection is the default; 'cubic' retains a three-tone quartic potential.
+    A converged algebraic solution does not establish dynamical stability.
+    """
+    positive(signal_power, 'signal_power')
+    frequencies, indices, matrices, source, fields, residual = _pump_solution(
+        chain, pump_frequency, pump_power, signal_frequency,
+        continuation_steps=continuation_steps, tolerance=tolerance,
+        maximum_phase=maximum_phase, nonlinearity=nonlinearity,
+        harmonics=harmonics, sidebands=sidebands, quadrature=quadrature)
+    fi = 2*pump_frequency-signal_frequency
+    source[1, 0] = 1j*np.sqrt(8*chain.port_impedance*signal_power)/(chain.port_impedance*chain.critical_current)
     if depleted:
         fields, residual, _ = _newton(fields, matrices, source, tolerance=tolerance,
                   nonlinearity=nonlinearity, indices=indices, quadrature=quadrature)
@@ -374,6 +390,12 @@ def obrien_2014(cells=2000):
     """
     return Chain(3.29e-6, 39e-15, 329e-15, cells, cell_length=10e-6,
                  resonator=ResonantLoad(10e-15, 7.036e-12, 100e-12))
+
+
+def quantum_noise(chain, pump_frequency, pump_power, signal_frequency, **kwargs):
+    """Quantum small-signal noise; see twpa.jtwpa_noise.four_wave_noise."""
+    from .jtwpa_noise import four_wave_noise
+    return four_wave_noise(chain, pump_frequency, pump_power, signal_frequency, **kwargs)
 
 
 def chain_netlist(chain, tones, transient=Transient(step=2e-12, stop=200e-9, start=100e-9, output_step=10e-12)):
