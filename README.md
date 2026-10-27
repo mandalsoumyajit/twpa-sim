@@ -10,8 +10,10 @@ Circuit parameters and operating conditions are explicit inputs.
 **Implemented:** periodic ladder circuits and kinetic-inductance TWPA presets;
 3WM propagation with Kerr phase shifts; coupled TLS loss and amplifier noise;
 Kerr-pumped resonant JPAs; effective flux-pumped resonant amplifiers.
-**Planned:** Josephson traveling-wave circuits, full 4WM traveling-wave mixing,
-and an optional JoSIM transient-simulation backend.
+An optional JoSIM backend generates physical RCSJ resonator circuits and has
+been used to check Kerr/flux-pumped JPA gain, conversion and classical quadrature
+response. **Planned:** Josephson traveling-wave circuits and full 4WM
+traveling-wave mixing.
 
 ## Installation
 
@@ -107,8 +109,25 @@ conversion for a physical device.
 The quantum-noise propagation model is small signal: pump attenuation is
 included, while conversion-induced depletion is handled by the separate
 classical nonlinear solver. Gain assumes forward propagation; finite port
-reflection feedback is not included. JoSIM validation is planned and has not
-yet been performed.
+reflection feedback is not included. The JoSIM comparisons currently cover
+the resonant JPA models, not this traveling-wave loss pipeline.
+
+## JoSIM circuit validation
+
+JoSIM is an optional external simulator. The [backend guide](docs/josim-backend.md)
+covers native and Windows/WSL execution, generated junction/SQUID circuits,
+coherent port-wave measurements and reproducible run artifacts.
+
+```powershell
+python tools/validate_jpa_josim.py --executable /path/to/josim-cli `
+  --wsl Ubuntu --output validation/runs/example --step 5e-13 --compression
+```
+
+Omit `--wsl` for a native executable. Tested circuit/model gain and conversion
+differences are below 0.08 dB for the documented benchmark points. See the
+[validation report](docs/josim-validation.md) for parameters, timestep/window
+checks and limits. Classical JoSIM runs do not validate quantum added noise
+or vacuum squeezing noise.
 
 ## Examples, presets and validation
 
@@ -133,5 +152,5 @@ and transient/small-signal agreement. Frequency grids must resolve all relevant
 bands below circuit poles; verify numerical convergence for a new design.
 Passing tests does not establish agreement with a fabricated device.
 
-See the [Josephson model roadmap](docs/josephson-roadmap.md) for JTWPA and JoSIM
+See the [Josephson model roadmap](docs/josephson-roadmap.md) for JTWPA and further circuit
 implementation plans. Contributions are licensed under the [MIT License](LICENSE).

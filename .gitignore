@@ -8,3 +8,4 @@ dist/
 *.log
 .wheelcheck/
 .wheelcheck*/
+validation/runs/

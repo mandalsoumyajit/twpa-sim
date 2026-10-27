@@ -118,7 +118,8 @@ Vary duration, discard fraction, tolerances and sampling for a compression
 study. Strong-signal harmonic truncation and slow switching near a bifurcation
 need extra convergence checks. Transients are classical; they do not sample
 quantum noise. Dynamic pump sweeps, a dedicated resonant 1-dB compression
-search, and JoSIM cross-validation remain future work.
+search remain future work. [JoSIM circuit comparisons](josim-validation.md)
+now check classical Kerr gain, idler conversion and finite-signal compression.
 
 ## Example and current limits
 
@@ -128,5 +129,9 @@ Add `--plot gain.png` after installing `.[plot]` to save a spectrum figure.
 This release adds an effective single-mode model, not a full SQUID circuit
 extractor. Junction capacitance, loop screening, multimode effects and mapping
 physical flux drive into the effective parameters require circuit models.
-The planned JoSIM backend has not been implemented or used to validate these
-JPA results. The existing traveling-wave solvers remain separate APIs.
+An optional [JoSIM backend](josim-backend.md) now supplies physical RCSJ and
+mutually coupled SQUID circuits. It validates the documented classical JPA
+responses, including flux-pump quadrature gains, in the tested weak-phase and
+weak-modulation regime. Quantum noise remains validated against analytic
+identities, not classical transients. The traveling-wave solvers remain
+separate APIs.

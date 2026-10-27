@@ -1,6 +1,7 @@
 # Josephson model implementation scope
 
-Status: first resonant JPA models implemented; remaining milestones scoped.
+Status: resonant JPA models and JoSIM circuit validation implemented;
+traveling-wave Josephson milestones remain scoped.
 Updated 2026-10-27. See [implemented JPA models](resonant-jpa.md).
 
 ## Targets and order
@@ -122,9 +123,10 @@ Suggested modules: `twpa.backends.josim`, `twpa.measurement`.
 Local checkout inspected: `C:\dev\JoSIM`, commit
 `5f33997c7c8a7317e98e3aa8c49ce4503375d9a2`, fork
 `mandalsoumyajit/JoSIM`. It contains an enhanced RCSJ transient simulator,
-SPICE-style parameterized decks and WSL build scripts. No native JoSIM command
-was found on this PowerShell PATH; neither a usable binary nor a WSL build was
-validated in this scoping task. Do not hardcode the developer checkout path.
+SPICE-style parameterized decks and WSL build scripts. Its WSL CLI build has
+now been used for resonant JPA validation. See [backend configuration](josim-backend.md)
+and [measured comparisons](josim-validation.md). No developer checkout path
+is hardcoded in the backend.
 
 Backend contract:
 
@@ -174,10 +176,12 @@ retain quantum input-output/Langevin models for squeezing and added photons.
 
 The first JPA release includes stable pump roots, effective flux pumping,
 sideband scattering, quantum noise, quadratures and classical probe transients.
-It does not yet include JoSIM validation, a dedicated resonant compression
-search or dynamic hysteresis sweeps. M0 and JTWPA milestones remain future work;
+JoSIM validation now covers passive reflection, Kerr gain/idler/compression,
+and flux-pump sidebands and quadratures. A dedicated resonant compression
+search and dynamic hysteresis sweeps remain future work. M0 and JTWPA milestones remain future work;
 the JPA API is separate and does not require the distributed-circuit refactor.
 
 Initial exclusions: full electromagnetic layout extraction, arbitrary
 multi-pump Floquet networks, strong quantum non-Gaussian effects and claims of
-universal junction-process accuracy. No JoSIM simulator results are included.
+universal junction-process accuracy. The current circuit validation uses
+synthetic benchmark parameters and is not a fabrication-process calibration.

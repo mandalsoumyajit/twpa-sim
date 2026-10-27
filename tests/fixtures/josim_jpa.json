@@ -1,0 +1,1008 @@
+{
+  "schema_version": 1,
+  "captured_utc": "2026-10-27T19:31:54.824096+00:00",
+  "reference": {
+    "summary": {
+      "simulator": {
+        "version": "JoSIM: Josephson Junction Superconductive SPICE Circuit Simulator\nCopyright (C) 2020 by Johannes Delport (jdelport@sun.ac.za)\nv2.7.5f33997 compiled on Oct 27 2026 at 15:04:48",
+        "corrector_supported": true,
+        "source_revision": "5f33997c7c8a7317e98e3aa8c49ce4503375d9a2"
+      },
+      "analysis": "phase",
+      "transient": {
+        "step": 5e-13,
+        "stop": 5e-06,
+        "start": 2e-06,
+        "output_step": 2e-11
+      },
+      "probe_power": 1e-22,
+      "cases": {
+        "passive": {
+          "circuit": {
+            "critical_current": 1.2992583254344614e-05,
+            "shunt_capacitance": 9.99e-10,
+            "junction_capacitance": 1e-12,
+            "junction_resistance": 1000000000.0,
+            "port_impedance": 50.0,
+            "internal_resistance": 5000.0
+          },
+          "model": {
+            "frequency": 999999999.9999999,
+            "kappa_external": 20000000.0,
+            "kappa_internal": 200001.0,
+            "kerr": -121706.74028939735,
+            "internal_temperature": 0.0
+          },
+          "measured": {
+            "signal_frequency": [
+              998999999.9999999,
+              999999999.9999999,
+              1000999999.9999999
+            ],
+            "signal_real": [
+              0.4298267925712431,
+              0.9801735392026072,
+              0.4255095954768816
+            ],
+            "signal_imag": [
+              -0.8870993165663829,
+              0.003909327263307494,
+              0.8891886760145223
+            ],
+            "gain": [
+              0.971696269064626,
+              0.9607554497926166,
+              0.9717149173953584
+            ],
+            "idler_real": [
+              2.159966711165411e-05,
+              7.79544893459092e-06,
+              6.4547962563704986e-06
+            ],
+            "idler_imag": [
+              -4.186514625580914e-06,
+              4.121636360417066e-06,
+              -4.9096569652143e-06
+            ],
+            "idler_conversion": [
+              4.840725240444749e-10,
+              7.775691037932676e-11,
+              6.576912622733186e-11
+            ]
+          },
+          "model_gain": [
+            0.9717289953326917,
+            0.9607879658468927,
+            0.9717289953326917
+          ],
+          "max_complex_s11_error": 0.0039094032999101,
+          "passed": true
+        },
+        "kerr": {
+          "circuit": {
+            "critical_current": 1.2992583254344614e-05,
+            "shunt_capacitance": 9.99e-10,
+            "junction_capacitance": 1e-12,
+            "junction_resistance": 1000000000.0,
+            "port_impedance": 50.0,
+            "internal_resistance": 5000.0
+          },
+          "model": {
+            "frequency": 999999999.9999999,
+            "kappa_external": 20000000.0,
+            "kappa_internal": 200001.0,
+            "kerr": -121706.74028939735,
+            "internal_temperature": 0.0
+          },
+          "pump_frequency": 998199639.1946176,
+          "pump_power": 2.0594163873295489e-16,
+          "pump_photons": 46.47236682661311,
+          "measured": {
+            "signal_frequency": [
+              999199639.1946176,
+              1000199639.1946176
+            ],
+            "signal_real": [
+              0.2816111782169903,
+              -0.3696285667682308
+            ],
+            "signal_imag": [
+              1.2885313853718372,
+              1.0146760387241638
+            ],
+            "gain": [
+              1.7396179867850279,
+              1.1661927409320973
+            ],
+            "idler_real": [
+              -0.6204886346928756,
+              -0.09312047580727588
+            ],
+            "idler_imag": [
+              0.6150551653742019,
+              0.41346015326868685
+            ],
+            "idler_conversion": [
+              0.7632990022365156,
+              0.17962072135553944
+            ]
+          },
+          "model_gain": [
+            1.7251773461892561,
+            1.1646940508300168
+          ],
+          "model_conversion": [
+            0.7508789236341002,
+            0.17732892011482665
+          ],
+          "gain_error_db": [
+            0.03620142742639709,
+            0.005584766565321808
+          ],
+          "idler_error_db": [
+            0.07124780365416772,
+            0.05576866839577033
+          ],
+          "passed": true
+        },
+        "compression": {
+          "points": [
+            {
+              "probe_power": 2.059416387329549e-20,
+              "measured_gain": 1.7363414769154455,
+              "model_gain": 1.7251136128056672,
+              "gain_error_db": 0.02817437408122503
+            },
+            {
+              "probe_power": 6.178249161988646e-18,
+              "measured_gain": 1.7138298881926313,
+              "model_gain": 1.7029296180638365,
+              "gain_error_db": 0.02771013423471924
+            },
+            {
+              "probe_power": 6.178249161988646e-17,
+              "measured_gain": 1.35490346440741,
+              "model_gain": 1.350084472324274,
+              "gain_error_db": 0.015474108817606913
+            }
+          ],
+          "passed": true
+        },
+        "flux": {
+          "circuit": {
+            "critical_current": 7e-06,
+            "shunt_capacitance": 9.99e-10,
+            "flux_bias": 0.2,
+            "arm_inductance": 1e-12,
+            "coil_inductance": 1e-09,
+            "coupling": 0.2,
+            "junction_capacitance": 5e-13,
+            "junction_resistance": 1000000000.0,
+            "port_impedance": 50.0,
+            "internal_resistance": 5000.0,
+            "bias_ramp": 1e-07
+          },
+          "model": {
+            "frequency": 929777652.6851147,
+            "kappa_external": 20000676.098547116,
+            "kappa_internal": 200008.69344315093,
+            "kerr": 0.0,
+            "internal_temperature": 0.0
+          },
+          "flux_pump": [
+            1859555305.3702295,
+            0.0016091668429161455,
+            0.0
+          ],
+          "equilibrium_phase_expected": 0.6160289023234604,
+          "equilibrium_phase_observed": 0.616029093728,
+          "pair_drive_real": 5050171.197997566,
+          "pair_drive_imag": 0.0,
+          "measured": {
+            "signal_frequency": [
+              930777652.6851147,
+              931777652.6851147
+            ],
+            "signal_real": [
+              0.3360045639682265,
+              -0.33504889981706143
+            ],
+            "signal_imag": [
+              1.201800010362755,
+              1.009078877374026
+            ],
+            "gain": [
+              1.5572223319153964,
+              1.1304979460310474
+            ],
+            "idler_real": [
+              0.21310921913887093,
+              -0.11611871799870588
+            ],
+            "idler_imag": [
+              -0.7336811335904069,
+              -0.3605904804784977
+            ],
+            "idler_conversion": [
+              0.5837035450684838,
+              0.14350905128137678
+            ]
+          },
+          "model_gain": [
+            1.5570709169260568,
+            1.1303669528975362
+          ],
+          "model_conversion": [
+            0.583613424733965,
+            0.14356290306039263
+          ],
+          "gain_error_db": [
+            0.00042230252031605353,
+            0.0005032551493168169
+          ],
+          "idler_error_db": [
+            0.0006705764600187791,
+            -0.0016293845767840764
+          ],
+          "quadratures": {
+            "transfer": [
+              [
+                2.9605116779741745,
+                -0.010501090850820528
+              ],
+              [
+                0.007113033077823195,
+                0.3200811976760642
+              ]
+            ],
+            "power_gains": [
+              0.10246641335949275,
+              8.764775823316333
+            ]
+          },
+          "model_quadrature_gains": [
+            0.10248442501883608,
+            8.76394246813224
+          ],
+          "model_quadrature_transfer": [
+            [
+              2.9603956607406787,
+              0.0
+            ],
+            [
+              -0.0,
+              0.32013188691355954
+            ]
+          ],
+          "max_quadrature_transfer_error": 0.010501090850820528,
+          "quadrature_error_db": [
+            -0.0007633405498381762,
+            0.00041294697327209917
+          ],
+          "passed": true
+        }
+      }
+    },
+    "netlist_sha256": {
+      "compression-0": {
+        "raw_file": "c3db9f7d3cebcc6610731373e98fec570b93d979c665968ecb3b5e811be14efb",
+        "lf_normalized": "e70f1a2a0da8afe5251a872ccd3d190c3ee97ab839c3cad1c38dfa25ad493a71"
+      },
+      "compression-1": {
+        "raw_file": "b67ea711eca3edb65e2d57236d247cc0448d3883fdb97fb49cb830b5c27018a4",
+        "lf_normalized": "73794f9e24475fcb895abeed654b26d5fd9d166f1d34f65f58280c7445d9e65b"
+      },
+      "compression-2": {
+        "raw_file": "1cb637ae03d2f768efdd5f143f2048dc3b94301b3d7db0ba34f5207c7fd3ac48",
+        "lf_normalized": "faef35b5e2b2eb550b2d29cac2637cbcd0b947262d24ca936d23e594278b4c1e"
+      },
+      "flux-base": {
+        "raw_file": "d5151ae9ab3da4613221395a8a0229c044f3b67d050731dabfe16a43b5fb7f65",
+        "lf_normalized": "1864d1cf3aac19f9cd8b3f9f41b4dacedc625e36fe7428453a29dae678466d2f"
+      },
+      "flux-probe": {
+        "raw_file": "5495e0e11ff404501ba9edaefcef4f838a5ac76637aeaa13d428508eb5d54769",
+        "lf_normalized": "f8ae78cddd1c62707d64a45f021d0ad95ee95302fdfbff941fcb89fba6a06f1c"
+      },
+      "flux-quadrature-0": {
+        "raw_file": "9884e5b5cb0d944393cbe3cf759bcba16fc376867fc31f44a32815706039c861",
+        "lf_normalized": "86b073344b0e6f3b76725e1032d32a1debc2caf2f5b830855c7fdcbbeab39ee2"
+      },
+      "flux-quadrature-1": {
+        "raw_file": "ffc01d62d250c16ce9ae04297d919d51ba0512815f4a8dd9efa45e0cacac780b",
+        "lf_normalized": "b8a44473864452c6a7252b286afa0712dff57a56bdf6e17ef2f87928143d259d"
+      },
+      "kerr-base": {
+        "raw_file": "b6965c00578d20a212c9f9d89e6a6af10f6b04d9a0e02300fd5400078481e905",
+        "lf_normalized": "d520a28cead3d95467a80c443d2acc39451b21d5ffa00f246c0e78ce1b485eba"
+      },
+      "kerr-probe": {
+        "raw_file": "784e5e349f26edd591621783838ab8294f75e9315e9839fcb0e9d7672c3587af",
+        "lf_normalized": "d3f1cf60ba96e1d9622370f9ac275aa241eafa05f7b3a007ab3191f31fbf24c1"
+      },
+      "passive-base": {
+        "raw_file": "5a660fd0f993aea3f73dfdb84382f347654e78bd08434e0c85dada8a00d0ed43",
+        "lf_normalized": "f16a41f5a9824fbf100f3e98f7cb94912b5cf7a6014f8a98928bbaa6e2e76f93"
+      },
+      "passive-probe": {
+        "raw_file": "fe098ca63f11ede69cdf977559433ef551e81238a4fdcf23cc53c50c182f3cf6",
+        "lf_normalized": "a88ac4f72017257272835be697f434096b3fd1206e7466e94db06bf8c906c8e0"
+      }
+    }
+  },
+  "fine": {
+    "summary": {
+      "simulator": {
+        "version": "JoSIM: Josephson Junction Superconductive SPICE Circuit Simulator\nCopyright (C) 2020 by Johannes Delport (jdelport@sun.ac.za)\nv2.7.5f33997 compiled on Oct 27 2026 at 15:04:48",
+        "corrector_supported": true,
+        "source_revision": "5f33997c7c8a7317e98e3aa8c49ce4503375d9a2"
+      },
+      "analysis": "phase",
+      "transient": {
+        "step": 5e-13,
+        "stop": 3e-06,
+        "start": 1e-06,
+        "output_step": 2e-11
+      },
+      "probe_power": 1e-22,
+      "cases": {
+        "passive": {
+          "circuit": {
+            "critical_current": 1.2992583254344614e-05,
+            "shunt_capacitance": 9.99e-10,
+            "junction_capacitance": 1e-12,
+            "junction_resistance": 1000000000.0,
+            "port_impedance": 50.0,
+            "internal_resistance": 5000.0
+          },
+          "model": {
+            "frequency": 999999999.9999999,
+            "kappa_external": 20000000.0,
+            "kappa_internal": 200001.0,
+            "kerr": -121706.74028939735,
+            "internal_temperature": 0.0
+          },
+          "measured": {
+            "signal_frequency": [
+              998999999.9999999,
+              999999999.9999999,
+              1000999999.9999999
+            ],
+            "signal_real": [
+              0.42996378432462956,
+              0.9801643704011415,
+              0.42535956954888204
+            ],
+            "signal_imag": [
+              -0.8869222425082349,
+              0.00428876337626502,
+              0.889357296446162
+            ],
+            "gain": [
+              0.9714999200865928,
+              0.9607405864951635,
+              0.9718871641488366
+            ],
+            "idler_real": [
+              -2.705133227440164e-05,
+              -2.034128061276203e-05,
+              -1.9169769664389966e-05
+            ],
+            "idler_imag": [
+              -1.9187226455663947e-06,
+              4.454023176265613e-06,
+              -1.8648337449757626e-06
+            ],
+            "idler_conversion": [
+              7.354560744106932e-10,
+              4.3360601942183965e-10,
+              3.709576738821661e-10
+            ]
+          },
+          "model_gain": [
+            0.9717289953326917,
+            0.9607879658468927,
+            0.9717289953326917
+          ],
+          "max_complex_s11_error": 0.004288894611913904,
+          "passed": true
+        },
+        "kerr": {
+          "circuit": {
+            "critical_current": 1.2992583254344614e-05,
+            "shunt_capacitance": 9.99e-10,
+            "junction_capacitance": 1e-12,
+            "junction_resistance": 1000000000.0,
+            "port_impedance": 50.0,
+            "internal_resistance": 5000.0
+          },
+          "model": {
+            "frequency": 999999999.9999999,
+            "kappa_external": 20000000.0,
+            "kappa_internal": 200001.0,
+            "kerr": -121706.74028939735,
+            "internal_temperature": 0.0
+          },
+          "pump_frequency": 998199639.1946176,
+          "pump_power": 2.0594163873295489e-16,
+          "pump_photons": 46.47236682661311,
+          "measured": {
+            "signal_frequency": [
+              999199639.1946176,
+              1000199639.1946176
+            ],
+            "signal_real": [
+              0.28112440946007844,
+              -0.3692300081504111
+            ],
+            "signal_imag": [
+              1.2840685025098533,
+              1.0126098848779337
+            ],
+            "gain": [
+              1.7278628527321747,
+              1.1617095778712547
+            ],
+            "idler_real": [
+              -0.6172647752724336,
+              -0.09200270304684911
+            ],
+            "idler_imag": [
+              0.6118000325285331,
+              0.4114908185471767
+            ],
+            "idler_conversion": [
+              0.7553150825940421,
+              0.1777891911165522
+            ]
+          },
+          "model_gain": [
+            1.7251773461892561,
+            1.1646940508300168
+          ],
+          "model_conversion": [
+            0.7508789236341002,
+            0.17732892011482665
+          ],
+          "gain_error_db": [
+            0.006755211875120182,
+            -0.011142871618947003
+          ],
+          "idler_error_db": [
+            0.025582427231478633,
+            0.011257847000226917
+          ],
+          "passed": true
+        },
+        "compression": {
+          "points": [
+            {
+              "probe_power": 2.059416387329549e-20,
+              "measured_gain": 1.7288810693763381,
+              "model_gain": 1.7247757065879228,
+              "gain_error_db": 0.010324924337570707
+            },
+            {
+              "probe_power": 6.178249161988646e-18,
+              "measured_gain": 1.71181816568232,
+              "model_gain": 1.7029278981372062,
+              "gain_error_db": 0.02261370414585029
+            },
+            {
+              "probe_power": 6.178249161988646e-17,
+              "measured_gain": 1.3555047429971625,
+              "model_gain": 1.3500587265285633,
+              "gain_error_db": 0.017483811573296038
+            }
+          ],
+          "passed": true
+        },
+        "flux": {
+          "circuit": {
+            "critical_current": 7e-06,
+            "shunt_capacitance": 9.99e-10,
+            "flux_bias": 0.2,
+            "arm_inductance": 1e-12,
+            "coil_inductance": 1e-09,
+            "coupling": 0.2,
+            "junction_capacitance": 5e-13,
+            "junction_resistance": 1000000000.0,
+            "port_impedance": 50.0,
+            "internal_resistance": 5000.0,
+            "bias_ramp": 1e-07
+          },
+          "model": {
+            "frequency": 929777652.6851147,
+            "kappa_external": 20000676.098547116,
+            "kappa_internal": 200008.69344315093,
+            "kerr": 0.0,
+            "internal_temperature": 0.0
+          },
+          "flux_pump": [
+            1859555305.3702295,
+            0.0016091668429161455,
+            0.0
+          ],
+          "equilibrium_phase_expected": 0.6160289023234604,
+          "equilibrium_phase_observed": 0.616028902822,
+          "pair_drive_real": 5050171.197997566,
+          "pair_drive_imag": 0.0,
+          "measured": {
+            "signal_frequency": [
+              930777652.6851147,
+              931777652.6851147
+            ],
+            "signal_real": [
+              0.33641316592730025,
+              -0.33476220372594845
+            ],
+            "signal_imag": [
+              1.2013410192583942,
+              1.008817509723199
+            ],
+            "gain": [
+              1.5563940627620265,
+              1.1297785009675703
+            ],
+            "idler_real": [
+              0.21422871430236268,
+              -0.11547343874230985
+            ],
+            "idler_imag": [
+              -0.7329753693511527,
+              -0.3608062264847709
+            ],
+            "idler_conversion": [
+              0.5831468341071019,
+              0.14351524812515376
+            ]
+          },
+          "model_gain": [
+            1.5570709169260568,
+            1.1303669528975362
+          ],
+          "model_conversion": [
+            0.583613424733965,
+            0.14356290306039263
+          ],
+          "gain_error_db": [
+            -0.0018882758279934464,
+            -0.002261460043530339
+          ],
+          "idler_error_db": [
+            -0.0034735112688499825,
+            -0.001441856547726772
+          ],
+          "quadratures": {
+            "transfer": [
+              [
+                2.9565388884253143,
+                -0.009127794038389895
+              ],
+              [
+                0.008288135219744029,
+                0.3200806710072903
+              ]
+            ],
+            "power_gains": [
+              0.1024664084154525,
+              8.741259436117648
+            ]
+          },
+          "model_quadrature_gains": [
+            0.10248442501883608,
+            8.76394246813224
+          ],
+          "model_quadrature_transfer": [
+            [
+              2.9603956607406787,
+              0.0
+            ],
+            [
+              -0.0,
+              0.32013188691355954
+            ]
+          ],
+          "max_quadrature_transfer_error": 0.009127794038389895,
+          "quadrature_error_db": [
+            -0.0007635500984477517,
+            -0.011255078580894917
+          ],
+          "passed": true
+        }
+      }
+    },
+    "netlist_sha256": {
+      "compression-0": {
+        "raw_file": "b6871199a9b404d72560a2f494020364c0d918a3bedbf9bd70527a9a127d90a1",
+        "lf_normalized": "24875047f989a3c620c63a9225b95b81d575abd95b89e7f3a1797852a5c0d5bb"
+      },
+      "compression-1": {
+        "raw_file": "f8a320865723909def7a9c6caa53d468b1630b1a7212a5e4a3f054a55905cc65",
+        "lf_normalized": "0ca779feff5c490a4100665164f1552dce4714732a9b8574b586db6cd43a41a2"
+      },
+      "compression-2": {
+        "raw_file": "123cc52f07ad00e8cec1794fbc767b07c36f83b0e9de8dea2a0336283fad8762",
+        "lf_normalized": "f2ed473453e5014604a6a025361210a33593830d85a31146fcb7d8a7dad3e74a"
+      },
+      "flux-base": {
+        "raw_file": "b96b3ea4476448d7490731d229d73c71c9305dd8663d1cdc2ab19f9447dde0f0",
+        "lf_normalized": "39cb294c0e73a44ff2d7c42c593602f7810ed8392ca1dde72f0da9e73caa1451"
+      },
+      "flux-probe": {
+        "raw_file": "88e9a3568124e9473af690b078d537fc2ede2c878d807910087ce9c78a3bdec0",
+        "lf_normalized": "d6e9c857581bd0c1e251e26a12a714b0e36e4463eaf54f644505ff29b714b171"
+      },
+      "flux-quadrature-0": {
+        "raw_file": "652418749b82a13765f075afcc66c2e48ade1c7966bc19170d077fc3e28a94d6",
+        "lf_normalized": "d2f7eb098121e800113bafc5167842e9e887df326168da5536ffbb594850f114"
+      },
+      "flux-quadrature-1": {
+        "raw_file": "49db7aa62a0bea4a1fb88c286bf083ce24d638920051daf7c56de56ff3758dd8",
+        "lf_normalized": "5d5d90988211c2f8596ef71dfa85e040dbb309ed94da966f01f8f29b338ebc46"
+      },
+      "kerr-base": {
+        "raw_file": "86b2ca9539e8b5f105c3203a4fc108282b232d61017208e7229a7ff759549860",
+        "lf_normalized": "b6c03eb2e566867c560ea5d6567e29988dde972560dd6d10d7836d6fadb0ae45"
+      },
+      "kerr-probe": {
+        "raw_file": "bd16ec49b7d1ba8991c0519967beb5dcb1edca41110ac346600d68b22df1c283",
+        "lf_normalized": "8d842bbb65e823cc970427608547c7db0d73338fcd9b1e75dbac389ebf3f89c4"
+      },
+      "passive-base": {
+        "raw_file": "8ee2fd7e50d0717fec4875ac20fd3674ccdb6cf2f4ec11c50dff0130ab0fe83b",
+        "lf_normalized": "2752fc45e46aebd3f429830f827b1db273e5c6bc7f9daa13e29a63e41e70170d"
+      },
+      "passive-probe": {
+        "raw_file": "83d65d3a631746afe5144b1671a5bed7ce9b80ecb7ec335058c0e24929ddc373",
+        "lf_normalized": "e0bfbfdffbce01338f81538fd6b97b376f2cb4672f73deb8eb51450698365a2d"
+      }
+    }
+  },
+  "coarse": {
+    "summary": {
+      "simulator": {
+        "version": "JoSIM: Josephson Junction Superconductive SPICE Circuit Simulator\nCopyright (C) 2020 by Johannes Delport (jdelport@sun.ac.za)\nv2.7.5f33997 compiled on Oct 27 2026 at 15:04:48",
+        "corrector_supported": true,
+        "source_revision": "5f33997c7c8a7317e98e3aa8c49ce4503375d9a2"
+      },
+      "analysis": "phase",
+      "transient": {
+        "step": 1e-12,
+        "stop": 3e-06,
+        "start": 1e-06,
+        "output_step": 2e-11
+      },
+      "probe_power": 1e-22,
+      "cases": {
+        "passive": {
+          "circuit": {
+            "critical_current": 1.2992583254344614e-05,
+            "shunt_capacitance": 9.99e-10,
+            "junction_capacitance": 1e-12,
+            "junction_resistance": 1000000000.0,
+            "port_impedance": 50.0,
+            "internal_resistance": 5000.0
+          },
+          "model": {
+            "frequency": 999999999.9999999,
+            "kappa_external": 20000000.0,
+            "kappa_internal": 200001.0,
+            "kerr": -121706.74028939735,
+            "internal_temperature": 0.0
+          },
+          "measured": {
+            "signal_frequency": [
+              998999999.9999999,
+              999999999.9999999,
+              1000999999.9999999
+            ],
+            "signal_real": [
+              0.4376997455750774,
+              0.9799281970766546,
+              0.41753440750048554
+            ],
+            "signal_imag": [
+              -0.8830366243129292,
+              0.016204866519458024,
+              0.8929721418737478
+            ],
+            "gain": [
+              0.9713347471544606,
+              0.9605218691248162,
+              0.9717342276093703
+            ],
+            "idler_real": [
+              1.1991531059194514e-06,
+              8.97162573675216e-07,
+              7.015592354078163e-07
+            ],
+            "idler_imag": [
+              -2.783055432572529e-06,
+              -2.4030791938312804e-06,
+              -2.107374688119069e-06
+            ],
+            "idler_conversion": [
+              9.183365712207734e-12,
+              6.5796902954283315e-12,
+              4.933213436910943e-12
+            ]
+          },
+          "model_gain": [
+            0.9717289953326917,
+            0.9607879658468927,
+            0.9717289953326917
+          ],
+          "max_complex_s11_error": 0.016207111103615467,
+          "passed": true
+        },
+        "kerr": {
+          "circuit": {
+            "critical_current": 1.2992583254344614e-05,
+            "shunt_capacitance": 9.99e-10,
+            "junction_capacitance": 1e-12,
+            "junction_resistance": 1000000000.0,
+            "port_impedance": 50.0,
+            "internal_resistance": 5000.0
+          },
+          "model": {
+            "frequency": 999999999.9999999,
+            "kappa_external": 20000000.0,
+            "kappa_internal": 200001.0,
+            "kerr": -121706.74028939735,
+            "internal_temperature": 0.0
+          },
+          "pump_frequency": 998199639.1946176,
+          "pump_power": 2.0594163873295489e-16,
+          "pump_photons": 46.47236682661311,
+          "measured": {
+            "signal_frequency": [
+              999199639.1946176,
+              1000199639.1946176
+            ],
+            "signal_real": [
+              0.25143175518475896,
+              -0.38353844760756506
+            ],
+            "signal_imag": [
+              1.2964556314668243,
+              1.0088550885187562
+            ],
+            "gain": [
+              1.7440151318773305,
+              1.1648903304234086
+            ],
+            "idler_real": [
+              -0.6323893114011293,
+              -0.09939718710649095
+            ],
+            "idler_imag": [
+              0.6096027709004016,
+              0.4134609369687529
+            ],
+            "idler_conversion": [
+              0.7715317794638421,
+              0.18082974720376188
+            ]
+          },
+          "model_gain": [
+            1.7251773461892561,
+            1.1646940508300168
+          ],
+          "model_conversion": [
+            0.7508789236341002,
+            0.17732892011482665
+          ],
+          "gain_error_db": [
+            0.047165020886657416,
+            0.0007318313533346554
+          ],
+          "idler_error_db": [
+            0.11783905077883472,
+            0.08490305823982336
+          ],
+          "passed": true
+        },
+        "compression": {
+          "points": [
+            {
+              "probe_power": 2.059416387329549e-20,
+              "measured_gain": 1.7452043461958762,
+              "model_gain": 1.7247757065879228,
+              "gain_error_db": 0.05113659342440435
+            },
+            {
+              "probe_power": 6.178249161988646e-18,
+              "measured_gain": 1.7271542982091683,
+              "model_gain": 1.7029278981372062,
+              "gain_error_db": 0.06134877372198533
+            },
+            {
+              "probe_power": 6.178249161988646e-17,
+              "measured_gain": 1.3620621440000262,
+              "model_gain": 1.3500587265285633,
+              "gain_error_db": 0.03844262301541468
+            }
+          ],
+          "passed": true
+        },
+        "flux": {
+          "circuit": {
+            "critical_current": 7e-06,
+            "shunt_capacitance": 9.99e-10,
+            "flux_bias": 0.2,
+            "arm_inductance": 1e-12,
+            "coil_inductance": 1e-09,
+            "coupling": 0.2,
+            "junction_capacitance": 5e-13,
+            "junction_resistance": 1000000000.0,
+            "port_impedance": 50.0,
+            "internal_resistance": 5000.0,
+            "bias_ramp": 1e-07
+          },
+          "model": {
+            "frequency": 929777652.6851147,
+            "kappa_external": 20000676.098547116,
+            "kappa_internal": 200008.69344315093,
+            "kerr": 0.0,
+            "internal_temperature": 0.0
+          },
+          "flux_pump": [
+            1859555305.3702295,
+            0.0016091668429161455,
+            0.0
+          ],
+          "equilibrium_phase_expected": 0.6160289023234604,
+          "equilibrium_phase_observed": 0.6160289028929999,
+          "pair_drive_real": 5050171.197997566,
+          "pair_drive_imag": 0.0,
+          "measured": {
+            "signal_frequency": [
+              930777652.6851147,
+              931777652.6851147
+            ],
+            "signal_real": [
+              0.32929166934287085,
+              -0.3382204858916582
+            ],
+            "signal_imag": [
+              1.2033373601496657,
+              1.007691804606852
+            ],
+            "gain": [
+              1.5564538058305815,
+              1.129835870148603
+            ],
+            "idler_real": [
+              0.21456429833638566,
+              -0.11529853289573518
+            ],
+            "idler_imag": [
+              -0.7328845794833859,
+              -0.3606459684597957
+            ],
+            "idler_conversion": [
+              0.583157644965125,
+              0.14335926625421289
+            ]
+          },
+          "model_gain": [
+            1.5570709169260568,
+            1.1303669528975362
+          ],
+          "model_conversion": [
+            0.583613424733965,
+            0.14356290306039263
+          ],
+          "gain_error_db": [
+            -0.0017215726281976096,
+            -0.002040934638154135
+          ],
+          "idler_error_db": [
+            -0.0033929989143413053,
+            -0.006164623409670611
+          ],
+          "quadratures": {
+            "transfer": [
+              [
+                2.9558780075156594,
+                -0.02162658583895205
+              ],
+              [
+                0.02180125112886793,
+                0.31994786080357956
+              ]
+            ],
+            "power_gains": [
+              0.10245874954586288,
+              8.738065683167497
+            ]
+          },
+          "model_quadrature_gains": [
+            0.10248442501883608,
+            8.76394246813224
+          ],
+          "model_quadrature_transfer": [
+            [
+              2.9603956607406787,
+              0.0
+            ],
+            [
+              -0.0,
+              0.32013188691355954
+            ]
+          ],
+          "max_quadrature_transfer_error": 0.02180125112886793,
+          "quadrature_error_db": [
+            -0.0010881763995840288,
+            -0.012842129898704258
+          ],
+          "passed": true
+        }
+      }
+    },
+    "netlist_sha256": {
+      "compression-0": {
+        "raw_file": "64eb3280f8306ed36f9584d02cfc50d48b9238cdfa38c8b84225b550dba35fd7",
+        "lf_normalized": "e38c03c1caae15e7d0b3010c19c669902edf150fbfae71d53dd875f900905a43"
+      },
+      "compression-1": {
+        "raw_file": "ed09c2ddfbd7cc9f689b6755fd87c3983a716d1b7d20f9a17a48dc3b0e2c4792",
+        "lf_normalized": "6ae67249f7dac6def0ff715e7ddbcf18642403182dc2afee99e4e92cc0386613"
+      },
+      "compression-2": {
+        "raw_file": "294e39076d329f6c722abc4e0ebadba2962b31f96ad8baea4b9281bfa96e3ecb",
+        "lf_normalized": "3ba8f90f8f05a0eecd43279f323d89472c5bb4c776675246ecb895d2f2a19bdf"
+      },
+      "flux-base": {
+        "raw_file": "cf90db4d2df62ef53f9e2e5eec0f2c9c059e81c94c869662aa9277ee2d3e0820",
+        "lf_normalized": "a900557467f0fc45e3a823039a97ba73aa053bfcfcd5171d68dd6deefb913bdb"
+      },
+      "flux-probe": {
+        "raw_file": "b2dc32be605cce9dba3682f67750ba6d93603baf8d71f290e15dcc49db80873c",
+        "lf_normalized": "ef0ff1acfbdbdcab4b9d70cb49946194b0b5f9112aa906cfed300ce016a201a0"
+      },
+      "flux-quadrature-0": {
+        "raw_file": "4112bfcf0263188244545eb2bfe56613cc79f27202c0f273a31729c155e22911",
+        "lf_normalized": "f8632264b281201ff6403d93459bd4ca12e2aeb041f642247ec14356960198c7"
+      },
+      "flux-quadrature-1": {
+        "raw_file": "4e15a7e169046fb8b938425cdb55bcfe19e193de2461395130ef3610c50ec9ee",
+        "lf_normalized": "d3ceb6372a6abe3f87af43577a2199bb02ff789e2a0ac80a8b1d3ca3f357006a"
+      },
+      "kerr-base": {
+        "raw_file": "962c0d59d856cd9e94b212c9ee38e50b2d946e64406931190a3db996d91c773b",
+        "lf_normalized": "e886725951710ba677d5d68f65bcc5743812107739bfc773977ba781031bf4b1"
+      },
+      "kerr-probe": {
+        "raw_file": "093161bc7c22b594119b14fde65e9b108ad34f4199bec6adb0ddc678783fc62a",
+        "lf_normalized": "59f81cb63db4636c3d5e28bc2e6cfe69352c338b9b787a7a4dbd7bb53b850710"
+      },
+      "passive-base": {
+        "raw_file": "63a65d7a79860fd9e5c4fad07a556bd093627c0fdbf92f46220227360bfd8eb8",
+        "lf_normalized": "d3e530ba1deee50ac71ded2c2e56ceac81ef19249ca42d5e1dd3593ad4cbd92d"
+      },
+      "passive-probe": {
+        "raw_file": "a6a666ca3e1c30c0484eaed73935cf5745fc203a9f39f1a21f4f3e759bc9d4f2",
+        "lf_normalized": "57f40f24d663335832b682a541d32452c313432ba5b364ec1032118d6b1a593a"
+      }
+    }
+  },
+  "timestep_change": {
+    "kerr_gain_db": 0.040409809011537234,
+    "kerr_idler_db": 0.09225662354735609,
+    "flux_gain_db": 0.00022052540537620402,
+    "flux_idler_db": 0.004722766861943839,
+    "quadratures_db": 0.0015870513178093404,
+    "compression_gain_db": 0.040811669086833646
+  },
+  "window_change": {
+    "kerr_gain_db": 0.02944621555127691,
+    "kerr_idler_db": 0.045665376422689086,
+    "flux_gain_db": 0.002764715192847156,
+    "flux_idler_db": 0.004144087728868762,
+    "quadratures_db": 0.011668025554167016,
+    "compression_gain_db": 0.018700206348578163
+  },
+  "generator_sha256": "3934cf5bfbf531d2e6e13aad412e059e68aa43bd212b6c5e99a10cde03a3e74e"
+}
