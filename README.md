@@ -1,27 +1,58 @@
 # TWPA Sim
 
-Parameterized traveling-wave parametric amplifier circuit and envelope solvers.
-Repository: **twpa-sim**. Python import: **twpa**.
+Python models for traveling-wave and resonant parametric amplifiers.
 
-Circuit values, loading pattern, device length, port impedance, operating
-currents, nonlinear coefficients, dielectric participation, TLS properties and
-numerical grids are explicit inputs. The recovered NY CREATES solvers provide
-the initial kinetic-inductance presets and regression references.
+Model dispersion, scattering, nonlinear gain, pump depletion and dielectric
+loss in periodic transmission lines, or calculate operating points, gain and
+noise for a single-mode resonant Josephson parametric amplifier (JPA).
+Circuit parameters and operating conditions are explicit inputs.
 
-## Install and test
+**Implemented:** periodic ladder circuits and kinetic-inductance TWPA presets;
+3WM propagation with Kerr phase shifts; coupled TLS loss and amplifier noise;
+Kerr-pumped resonant JPAs; effective flux-pumped resonant amplifiers.
+**Planned:** Josephson traveling-wave circuits, full 4WM traveling-wave mixing,
+and an optional JoSIM transient-simulation backend.
 
-Python 3.10+, NumPy and SciPy are required. MATLAB and KLayout are not needed.
+## Installation
+
+Python 3.10+, NumPy and SciPy are required. The core package does not require
+MATLAB, KLayout or JoSIM.
 
 ```powershell
+git clone https://github.com/mandalsoumyajit/twpa-sim.git
+cd twpa-sim
 python -m venv .venv
 .\.venv\Scripts\python -m pip install -e .
 .\.venv\Scripts\python -m unittest discover -s tests -v
-.\.venv\Scripts\python examples\compare.py
-.\.venv\Scripts\python examples\oxide_pipeline.py
-.\.venv\Scripts\python examples\depletion_and_gradients.py
 ```
 
-## Define a design
+On macOS/Linux, use `.venv/bin/python` instead of `.\.venv\Scripts\python`.
+Install `.[plot]` for the optional example plots.
+
+## Resonant JPA
+
+```python
+import numpy as np
+from twpa import jpa
+
+r = jpa.Resonator(frequency=5e9, kappa_external=2*np.pi*10e6,
+                  kappa_internal=2*np.pi*.25e6, kerr=-2*np.pi*10e3)
+points = jpa.pump_points(r, frequency=4.994e9, power=2e-13)
+p = jpa.select_pump_point(points, branch='lower')
+response = jpa.kerr_response(r, p, p.frequency+np.array([-.5e6, .5e6]))
+print(response.gain_db, response.added_noise)
+```
+
+All pump roots are reported with their stability. Bistable operation requires
+an explicit branch choice. The flux-pumped model also exposes quadrature gains
+and output squeezing at degeneracy. Frequencies use Hz; decay rates and Kerr
+coefficients use rad/s; incident power uses watts.
+
+See the [JPA guide](docs/resonant-jpa.md) for normalization, noise conventions,
+classical probe transients and limitations. Run
+`python examples/resonant_jpa.py`, optionally adding `--plot gain.png`.
+
+## Traveling-wave circuits
 
 ```python
 import numpy as np
@@ -34,7 +65,6 @@ loaded = Cell(inductance=54e-12, capacitance=4e-15,
 design = Design((Section(unloaded, 23), Section(loaded, 7),
                  Section(unloaded, 24)), repeats=900,
                 tail=(Section(unloaded, 5),), name="custom")
-# Extracted current-envelope coefficients, independent of a KIT current law:
 bias = Bias(pump_current=15e-6,
             nonlinearity=Nonlinearity(three_wave=380., kerr=1e6))
 grid = np.linspace(0, 11e9, 32769)
@@ -42,45 +72,19 @@ response = linear(design, grid, bias.impedance)
 gain = small_signal(design, bias, np.linspace(2e9, 6e9, 101), frequency=grid)
 ```
 
-All inputs use SI. Capacitance is **per finger**, with two shunt fingers per
-cell. Inductances are electrical values at the operating bias; they do not
-automatically rescale when bias changes. Currents are peak, not RMS. Wavenumber
-and amplitude attenuation are rad/cell and nepers/cell; position is cell index.
+Use SI units. Cell capacitance is per finger, with two shunt fingers per cell.
+Inductances are electrical values at the operating bias. TWPA current amplitudes
+are peak, not RMS; propagation uses cell index, rad/cell and nepers/cell.
+`Nonlinearity` supplies phenomenological 3WM/Kerr coefficients; omitting it
+selects the KIT current law. Supplying different coefficients does not add
+Josephson plasma response or full 4WM to the current traveling-wave solver.
 
-`Nonlinearity` supplies phenomenological 3WM and Kerr coefficients in A^-1 and
-A^-2. If omitted, `Bias` derives KIT coefficients using the scaling and DC
-currents. This interface supports devices that fit the ladder and three-mode
-envelope approximation. Josephson plasma dynamics and full 4WM sideband
-generation require additional microscopic models; generic naming does not
-imply those models are already implemented.
+`linear` returns Bloch dispersion, attenuation, stopbands and finite S11/S21.
+`network_scattering` handles arbitrary row/turn blocks. `nonlinear` includes
+pump depletion and optional spatial film gradients; `compression` sweeps input
+power and reports the first bracketed 1-dB compression crossing.
 
-Sections may have odd or zero counts. A period repeats and appends optional
-tail sections. Cell topology accepts `shunt-series` or `symmetric` (the
-presentation's centered circuit). `network_scattering` accepts arbitrary
-repeated blocks for distinct row/turn assemblies.
-
-## Solvers
-
-| API | Purpose |
-| --- | --- |
-| `linear` | Bloch phase, attenuation, stopbands and finite S11/S21 |
-| `network_scattering` | Nonperiodic row/turn/block scattering |
-| `small_signal` | Analytic undepleted-pump 3WM gain and pump search |
-| `constant_langevin` | Original constant-pump lossy amplifier gain and bath noise |
-| `coupled` | Distributed TLS-dependent pump attenuation, transfer and bath covariance |
-| `nonlinear` | Full complex three-current CMEs with depletion and Kerr phases |
-| `compression` | Power sweep and first bracketed 1-dB compression crossing |
-| `route_profile` | Configurable linear, sine, folded and spiral WKB coordinates |
-| `idc_fields` | Recovered finite-volume IDC edge-field solver |
-| `oxide_design` | Computed coated/bare energy ratio and participation -> circuit |
-| `electrostatic` | General rectangular dielectric/electrode-map solver |
-
-Gradient phase is integrated as an extra nonlinear ODE state. Seven sine cycles
-model the original meander x-coordinate; one/two folded cycles model two/four
-passes. Inductance sensitivity uses a configurable centered difference.
-Nonlinear coefficients remain spatially uniform, as in the original scripts.
-
-## Coupled TLS loss + amplifier
+## TLS loss and amplifier noise
 
 ```python
 from twpa import preset, IDCGeometry, oxide_design, TLS, coupled
@@ -88,89 +92,46 @@ from twpa import preset, IDCGeometry, oxide_design, TLS, coupled
 design, bias = preset('v2-tls')
 coated, bare, fields = oxide_design(
     design, IDCGeometry(mesh=5e-9), oxide_thickness=30e-9)
-# Illustrative values; replace with process characterization.
 tls = TLS(loss_tangent=.001, temperature=.02,
           critical_field=30., field_per_amp=2e8, linewidth=1e6)
 result = coupled(coated, bias, [3.5e9, 4e9, 4.5e9], tls)
 print(fields.participation, result.gain_db, result.added_noise)
 ```
 
-This connects the source's Laplace geometry and energy-ratio prescription to
-lossy ABCD dispersion and Langevin amplifier equations. Participation and
-capacitance ratios are calculated, replacing the old plot's hardcoded tables.
-`IDCGeometry` controls finger width, gap, metal thickness, permittivities,
-domain and mesh. The default 2.5 nm mesh reproduces the original boundaries.
-Demonstrate mesh/domain convergence for new geometries. Half-gap domain energy
-ratios scale calibrated circuit capacitances. Unlike cross-sections need
-separate extraction. The helper replaces cell participation with the coating
-participation and does not add an independent residual surface-loss channel.
+The pipeline calculates IDC edge fields, scales circuit capacitance from
+coated/bare electrostatic energy, and couples lossy propagation to amplifier
+transfer and thermal bath covariance. Material and device values above are
+illustrative. Verify mesh/domain convergence and calibrate the field/current
+conversion for a physical device.
 
-TLS loss uses `C*(1-i*p*tan_delta)` with `exp(+i*omega*t)`, thermal
-`tanh(h*f/(2*kB*T))`, and field saturation. `TLS.from_density` accepts spectral
-density in J^-1 m^-3 and dipole in C m. Local peak `field_per_amp` requires
-calibration. A phenomenological Lorentzian saturation hole is an explicit
-extension, not a recovered microscopic driven-TLS calculation.
+The quantum-noise propagation model is small signal: pump attenuation is
+included, while conversion-induced depletion is handled by the separate
+classical nonlinear solver. Gain assumes forward propagation; finite port
+reflection feedback is not included. JoSIM validation is planned and has not
+yet been performed.
 
-`coupled` evolves pump attenuation, accumulated mismatch, photon-normalized
-signal/idler transfer and thermal bath covariance. Added noise is input-referred
-symmetrized quanta: signal-input noise is excluded, input-idler vacuum and
-internal thermal baths are included. Lossless added noise is `(1-1/G)/2`;
-a zero-temperature passive attenuator gives `(1-eta)/(2*eta)`.
+## Examples, presets and validation
 
-Original-source compatibility uses `v2-tls`, `pump_loss=False`, constant effective
-loss at zero temperature and the source's pump frequency. `constant_langevin`
-directly reproduces the rotating-frame solution with a matrix-exponential
-covariance integral replacing the original trapezoidal quadrature. Regression
-fixtures cover all six source loss cases.
-
-The quantum-noise solver is small signal: pump attenuation is included but
-conversion-induced depletion is not. `nonlinear` separately models depletion
-and compression without quantum noise. Envelope gain uses forward propagation
-and homogenized periodic coefficients; reflection feedback and distinct tail
-nonlinearities are excluded. Tail cells enter gain length and exact scattering.
-
-## Presets and provenance
-
-| Preset | Source and total cells |
+| Example | Purpose |
 | --- | --- |
-| `v1-target`, `v1-cpw`, `v1-idc` | MATLAB electrical models, 49,361 |
-| `v2` | Historical MATLAB model, 56,700; not the final layout |
-| `v2-tls`, `v2-standard` | Recovered calibrated TLS circuit, 49,950 |
-| `v2-folded` | Same circuit, report's two-column length, 41,472 |
-| `v2-four-pass` | Same circuit, report's four-pass length, 39,204 |
+| `resonant_jpa.py` | Kerr JPA gain/noise and effective flux-pump squeezing |
+| `compare.py` | Compare electrical TWPA parameter sets |
+| `oxide_pipeline.py` | Electrostatics -> lossy circuit -> amplifier noise |
+| `depletion_and_gradients.py` | Pump-depleted propagation with spatial profiles |
 
-The TLS source uses `eps2=2/(I_star^2+I_dc^2)`; other sources use `1/(...)`.
-`Bias.kerr_factor` retains the distinction, with `2` for TLS/layout presets.
-The layout names encode circuit and length only; supply routing profiles or
-row/turn circuits explicitly.
+TWPA presets are example electrical designs, not universal material models.
+`v1-target`, `v1-cpw`, `v1-idc` and `v2` provide alternative circuit estimates;
+`v2-tls`/`v2-standard`, `v2-folded` and `v2-four-pass` use a calibrated circuit
+with different device lengths. Their names encode circuit and length, not an
+automatically simulated routing geometry. Configure gradient or row/turn
+circuits explicitly. Preset coefficient conventions and migration details
+are documented in the [source audit](docs/source-audit.md).
 
-See [source audit](docs/source-audit.md). Source hashes and captured results
-are in `tests/fixtures/original_solvers.json`. Regenerate using:
+Tests cover analytic circuit limits, energy conservation, source regression,
+loss/noise limits, JPA roots and stability, commutator preservation, squeezing,
+and transient/small-signal agreement. Frequency grids must resolve all relevant
+bands below circuit poles; verify numerical convergence for a new design.
+Passing tests does not establish agreement with a fabricated device.
 
-```powershell
-python tools/capture_reference.py PATH\TO\NY_CREATES\scripts
-```
-
-Original files remain intact. GDS, correspondence, plotting side effects and
-machine-specific output paths are not required. Regression and analytic tests
-check numerical behavior, not measured-device accuracy.
-
-## Numerical behavior and publication
-
-Frequency grids start at DC, increase strictly and must resolve each band below
-effective-stub poles. Phase uses the full supercell trace and continuation from
-DC, replacing whole-device transmission phase and fixed 8.46 GHz branching.
-Scaled matrix powers retain S21 in dB through long stopbands. Check grid
-convergence; a phase-step guard cannot detect an entirely skipped band.
-
-Pump search spacing, offsets and band index are configurable. Supply the pump
-explicitly without a stopband. Analytic gain marks unsupported frequencies NaN;
-ODEs reject them. Compression returns NaN for an unbracketed crossing.
-
-The repository is hosted publicly at
-[mandalsoumyajit/twpa-sim](https://github.com/mandalsoumyajit/twpa-sim), with
-packaging, examples and GitHub CI configuration, under the [MIT License](LICENSE).
-
-The [Josephson model scope](docs/josephson-roadmap.md) covers resonant JPA,
-4WM/3WM JTWPA models, and an optional JoSIM transient-simulation backend.
-Those extensions are planned, not yet implemented.
+See the [Josephson model roadmap](docs/josephson-roadmap.md) for JTWPA and JoSIM
+implementation plans. Contributions are licensed under the [MIT License](LICENSE).

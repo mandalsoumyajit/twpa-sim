@@ -1,6 +1,7 @@
 # Josephson model implementation scope
 
-Status: scoped, not implemented. Updated 2026-10-27.
+Status: first resonant JPA models implemented; remaining milestones scoped.
+Updated 2026-10-27. See [implemented JPA models](resonant-jpa.md).
 
 ## Targets and order
 
@@ -171,7 +172,12 @@ retain quantum input-output/Langevin models for squeezing and added photons.
 | M4 | JTWPA depletion/compression/loss/noise; balance and convergence gates |
 | M5 | SQUID/SNAIL potential extraction and 3WM adapter; symmetry and transient benchmarks |
 
+The first JPA release includes stable pump roots, effective flux pumping,
+sideband scattering, quantum noise, quadratures and classical probe transients.
+It does not yet include JoSIM validation, a dedicated resonant compression
+search or dynamic hysteresis sweeps. M0 and JTWPA milestones remain future work;
+the JPA API is separate and does not require the distributed-circuit refactor.
+
 Initial exclusions: full electromagnetic layout extraction, arbitrary
 multi-pump Floquet networks, strong quantum non-Gaussian effects and claims of
-universal junction-process accuracy. This scope adds no model implementations
-or simulator results; it specifies the implementation and validation work.
+universal junction-process accuracy. No JoSIM simulator results are included.

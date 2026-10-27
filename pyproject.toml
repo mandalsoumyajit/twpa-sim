@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "twpa-sim"
-version = "0.1.0"
-description = "Parameterized TWPA circuit, nonlinear gain, and coupled TLS loss/noise solvers"
+version = "0.2.0"
+description = "Traveling-wave and resonant parametric amplifier circuit, gain, and noise models"
 license = {file = "LICENSE"}
 requires-python = ">=3.10"
 dependencies = ["numpy>=1.24", "scipy>=1.10"]
