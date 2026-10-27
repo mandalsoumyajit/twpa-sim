@@ -167,10 +167,9 @@ Pump search spacing, offsets and band index are configurable. Supply the pump
 explicitly without a stopband. Analytic gain marks unsupported frequencies NaN;
 ODEs reject them. Compression returns NaN for an unbracketed crossing.
 
-The repository is hosted privately at
+The repository is hosted publicly at
 [mandalsoumyajit/twpa-sim](https://github.com/mandalsoumyajit/twpa-sim), with
-packaging, examples and GitHub CI configuration. A redistribution license is
-not assumed; choose an appropriate license before a public release.
+packaging, examples and GitHub CI configuration, under the [MIT License](LICENSE).
 
 The [Josephson model scope](docs/josephson-roadmap.md) covers resonant JPA,
 4WM/3WM JTWPA models, and an optional JoSIM transient-simulation backend.
