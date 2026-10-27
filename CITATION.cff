@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "Please cite the version or commit used, together with the relevant physical-model references in references.bib."
+type: software
+title: "TWPA Sim"
+authors:
+  - family-names: "Mandal"
+    given-names: "Soumyajit"
+repository-code: "https://github.com/mandalsoumyajit/twpa-sim"
+url: "https://github.com/mandalsoumyajit/twpa-sim"
+license: MIT
+abstract: "Parameterized circuit, gain, loss and quantum-noise models for traveling-wave and resonant superconducting parametric amplifiers."
+keywords:
+  - parametric amplifiers
+  - superconducting circuits
+  - quantum noise
+  - traveling-wave amplifiers
+  - Josephson junctions

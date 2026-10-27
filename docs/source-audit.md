@@ -1,6 +1,9 @@
-# Recovered source audit
+# KIT implementation provenance
 
-The original scripts and report added on 2026-10-27 supersede the initial draft.
+The KIT routines were ported from earlier MATLAB and Python design scripts.
+This audit maps those sources to the package and records numerical and
+normalization changes. It preserves implementation history, rather than
+serving as an independent experimental or literature validation.
 
 | Original | Extracted implementation |
 | --- | --- |
@@ -13,7 +16,7 @@ The original scripts and report added on 2026-10-27 supersede the initial draft.
 | `kitwpa_nycreates_v1.m` | Four historical electrical presets |
 | `KI_TWPA_Design_Report.md` | Final device counts and pipeline prescription |
 
-The coupled TLS solver is present in the recovered sources. It uses a constant
+The coupled TLS solver is present in the earlier sources. It uses a constant
 pump and lossy signal/idler Bloch parameters in a rotating-frame transfer and
 Green-function noise integral. `constant_langevin` preserves this; `coupled`
 adds optional pump attenuation and thermal baths.
@@ -21,7 +24,7 @@ adds optional pump attenuation and thermal baths.
 The original figure script solves a Laplace field image, but plots tabulated
 participation/capacitance curves. `oxide_design` implements the report's energy
 ratio prescription to connect actual field extraction to the amplifier. This
-is new wiring of recovered components, not a claim that every original plotted
+is new wiring of ported components, not a claim that every original plotted
 curve was automatically computed through all three stages.
 
 Deliberate differences:

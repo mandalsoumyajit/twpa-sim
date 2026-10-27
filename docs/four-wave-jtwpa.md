@@ -1,5 +1,9 @@
 # Four-wave Josephson traveling-wave amplifiers
 
+Start with the [commented HOWTO](../HOWTO.md#4wm-jtwpa). Background references
+include [O'Brien et al.](references.md#obrien2014) for resonant phase matching
+and [Peng et al.](references.md#peng2022) for Floquet/noise context.
+
 `twpa.jtwpa` models an unbiased series Josephson-junction chain with ground
 capacitance, junction capacitance and resistive loss. `ResonantLoad` adds an
 identical capacitively coupled parallel LC resonator at each node for resonant

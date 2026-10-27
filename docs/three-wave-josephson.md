@@ -1,5 +1,10 @@
 # Flux-biased rf-SQUID and SNAIL traveling-wave amplifiers
 
+Start with the [rf-SQUID](../HOWTO.md#rf-squid-3wm) and
+[SNAIL](../HOWTO.md#snail-3wm) examples. Key physical references are
+[Zorin](references.md#zorin2016), [Frattini et al.](references.md#frattini2017)
+and [Roudsari et al.](references.md#roudsari2023).
+
 `twpa.three_wave` models finite chains of identical flux-biased rf-SQUIDs
 or SNAILs, ground capacitance, resistive loss and optional capacitively
 coupled phase-matching resonators. It calculates passive dispersion,

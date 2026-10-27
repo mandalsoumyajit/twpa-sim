@@ -128,7 +128,8 @@ does not validate vacuum fluctuations, output squeezing noise or added photons.
 The physical circuit tests validate gain and deterministic quadrature response;
 quantum noise remains tested through input-output identities and analytic limits.
 
-Simulator references: [JoSIM documentation](https://joeydelp.github.io/JoSIM/)
+Simulator references: [Delport et al. (2019)](references.md#josim2019),
+[JoSIM documentation](https://joeydelp.github.io/JoSIM/)
 and [thermal-noise implementation](https://joeydelp.github.io/JoSIM/tech_disc/).
 
 ## Four-wave traveling-wave circuits

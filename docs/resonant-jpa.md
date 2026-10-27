@@ -1,5 +1,9 @@
 # Resonant JPA models
 
+Start with the [Kerr](../HOWTO.md#kerr-jpa) and
+[flux-pump](../HOWTO.md#flux-pumped-jpa) HOWTO examples. Related literature:
+[Eichler–Wallraff](references.md#eichler2014) and [Caves](references.md#caves1982).
+
 `twpa.jpa` implements a single-mode resonator pumped through the signal port
 (Kerr JPA) and an effective flux-pumped oscillator. Both expose complex
 signal/idler scattering, internal-loss noise and stability. A classical

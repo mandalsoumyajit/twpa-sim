@@ -1,4 +1,4 @@
-"""Run the recovered Laplace -> lossy ABCD -> Langevin amplifier pipeline."""
+"""Run the IDC electrostatics -> lossy circuit -> amplifier-noise pipeline."""
 from twpa import preset, IDCGeometry, oxide_design, TLS, coupled
 
 design, bias = preset('v2-tls')

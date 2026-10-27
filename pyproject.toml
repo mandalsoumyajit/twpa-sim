@@ -6,12 +6,18 @@ build-backend = "setuptools.build_meta"
 name = "twpa-sim"
 version = "0.6.0"
 description = "Traveling-wave and resonant parametric amplifier circuit, gain, and noise models"
+readme = "README.md"
 license = {file = "LICENSE"}
 requires-python = ">=3.10"
 dependencies = ["numpy>=1.24", "scipy>=1.10"]
 
 [project.optional-dependencies]
 plot = ["matplotlib>=3.7"]
+
+[project.urls]
+Homepage = "https://github.com/mandalsoumyajit/twpa-sim"
+Documentation = "https://github.com/mandalsoumyajit/twpa-sim/blob/main/docs/README.md"
+Issues = "https://github.com/mandalsoumyajit/twpa-sim/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]

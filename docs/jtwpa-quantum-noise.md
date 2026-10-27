@@ -1,5 +1,10 @@
 # Quantum noise in 4WM Josephson chains
 
+For a runnable starting point see the [4WM HOWTO](../HOWTO.md#4wm-jtwpa).
+The annotated [Caves](references.md#caves1982),
+[Caves et al.](references.md#caves2012) and [Peng et al.](references.md#peng2022)
+references explain the physical context of the noise limits and Floquet channels.
+
 `twpa.jtwpa.quantum_noise` (also `twpa.jtwpa_noise.four_wave_noise`) calculates
 Gaussian quantum fluctuations about the finite circuit's coherent operating
 point. It supports uniform and resonator-loaded chains, both ports, all
