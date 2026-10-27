@@ -130,3 +130,15 @@ quantum noise remains tested through input-output identities and analytic limits
 
 Simulator references: [JoSIM documentation](https://joeydelp.github.io/JoSIM/)
 and [thermal-noise implementation](https://joeydelp.github.io/JoSIM/tech_disc/).
+
+## Four-wave traveling-wave circuits
+
+`twpa.jtwpa.chain_netlist` generates finite RCSJ chains with physical source
+and load resistors, half shunts at the ends, and optional capacitively coupled
+LC resonators. `twpa.josim_jtwpa.run_chain` stores the shared circuit metadata;
+`measure_chain` extracts two-port waves and optionally subtracts a pump-only
+trajectory. `measure_bloch` extracts the interior voltage recurrence from
+three neighboring nodes. `Tone.ramp_time` adds exponential source turn-on to
+reduce long-lived startup ringing. See the [4WM model guide](four-wave-jtwpa.md)
+and [JTWPA circuit comparisons](jtwpa-josim-validation.md) for API conventions,
+actual benchmark results and reproduction commands.

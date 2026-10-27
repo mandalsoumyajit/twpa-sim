@@ -1,7 +1,10 @@
 # Josephson model implementation scope
 
-Status: resonant JPA models and JoSIM circuit validation implemented;
-traveling-wave Josephson milestones remain scoped.
+Status: resonant JPA models and finite-circuit 4WM JTWPA models implemented
+and compared with JoSIM. Uniform/RPM chains include multiharmonic mixing and
+classical pump depletion. See the [4WM guide](four-wave-jtwpa.md) and
+[circuit validation](jtwpa-josim-validation.md). The targets below preserve
+the broader scope; quantum 4WM noise and SQUID/SNAIL 3WM remain future work.
 Updated 2026-10-27. See [implemented JPA models](resonant-jpa.md).
 
 ## Targets and order
@@ -178,8 +181,14 @@ The first JPA release includes stable pump roots, effective flux pumping,
 sideband scattering, quantum noise, quadratures and classical probe transients.
 JoSIM validation now covers passive reflection, Kerr gain/idler/compression,
 and flux-pump sidebands and quadratures. A dedicated resonant compression
-search and dynamic hysteresis sweeps remain future work. M0 and JTWPA milestones remain future work;
-the JPA API is separate and does not require the distributed-circuit refactor.
+search and dynamic hysteresis sweeps remain future work. The JTWPA release
+implements M3's finite-circuit uniform/RPM dispersion and gain, plus M4's
+classical depletion and resistive loss. It uses `twpa.jtwpa` harmonic balance
+rather than the originally suggested continuum transfer refactor. The paper
+circuit preset is supplied, but full published gain-curve reproduction,
+automated compression searches, arbitrary fabrication patterns, quantum bath
+covariance and dynamical stability analysis remain future work. These APIs
+are separate and preserve the existing KIT and JPA interfaces.
 
 Initial exclusions: full electromagnetic layout extraction, arbitrary
 multi-pump Floquet networks, strong quantum non-Gaussian effects and claims of

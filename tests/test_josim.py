@@ -118,6 +118,21 @@ class CircuitMeasurementTests(unittest.TestCase):
 
 @unittest.skipUnless(os.environ.get('TWPA_JOSIM_EXECUTABLE'), 'Set TWPA_JOSIM_EXECUTABLE for a real JoSIM integration test')
 class JoSIMIntegration(unittest.TestCase):
+    def test_passive_physical_chain(self):
+        from twpa.jtwpa import Chain, linear_response
+        from twpa.josim_jtwpa import run_chain, measure_chain, measure_bloch
+        from twpa.jtwpa import bloch
+        c = Chain(PHIBAR/2.5e-9, 1e-12, 1e-12, 16)
+        runner = JoSIM(os.environ['TWPA_JOSIM_EXECUTABLE'], os.environ.get('TWPA_JOSIM_WSL'))
+        parent = os.environ.get('TWPA_JOSIM_TEST_ROOT')
+        with tempfile.TemporaryDirectory(dir=parent) as tmp:
+            run = run_chain(runner, c, Path(tmp)/'chain', [Tone(1e9, 1e-22)],
+                            Transient(1e-12, 60e-9, 30e-9, 10e-12))
+            m = measure_chain(run, c, [1e9])
+            s21 = m['transmitted']/m['incident']
+            self.assertLess(abs(s21[0]-linear_response(c, [1e9])['s21'][0]), .003)
+            self.assertLess(abs(measure_bloch(run, c, [1e9])[0].real-bloch(c, [1e9]).k[0]), 1e-4)
+
     def test_passive_physical_resonator(self):
         from twpa import jpa
         from twpa.josim_jpa import run_circuit, sideband_measurement

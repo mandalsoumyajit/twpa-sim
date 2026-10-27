@@ -1,0 +1,947 @@
+{
+  "schema_version": 1,
+  "captured_utc": "2026-10-27T20:38:56.766340+00:00",
+  "cases": {
+    "bare256": {
+      "summary": {
+        "chain": {
+          "critical_current": 1.3164239139018133e-07,
+          "ground_capacitance": 1e-12,
+          "junction_capacitance": 1e-12,
+          "cells": 256,
+          "port_impedance": 53.402532558470035,
+          "junction_resistance": 1000000000.0,
+          "ground_resistance": null,
+          "cell_length": 1e-05,
+          "resonator": null
+        },
+        "transient": {
+          "step": 1e-12,
+          "stop": 3e-07,
+          "start": 2e-07,
+          "output_step": 1e-11
+        },
+        "simulator": {
+          "version": "JoSIM: Josephson Junction Superconductive SPICE Circuit Simulator\nCopyright (C) 2020 by Johannes Delport (jdelport@sun.ac.za)\nv2.7.5f33997 compiled on Oct 27 2026 at 15:04:48",
+          "corrector_supported": true,
+          "source_revision": "5f33997c7c8a7317e98e3aa8c49ce4503375d9a2"
+        },
+        "pump_frequency": 1000000000.0,
+        "pump_power": 7.403607155124823e-14,
+        "signal_frequency": 900000000.0,
+        "signal_power": 7.403607155124822e-20,
+        "passive": {
+          "s21_real": [
+            0.9427221292201147,
+            -0.9600904009718404,
+            0.8415938608210505
+          ],
+          "s21_imag": [
+            0.33353572903457074,
+            -0.27964323379705797,
+            0.5400257724027245
+          ],
+          "s11_real": [
+            -0.0014681326498659725,
+            -3.900634758671144e-07,
+            0.004374719463735318
+          ],
+          "s11_imag": [
+            0.004145212914105627,
+            -3.3946364968020033e-06,
+            -0.00682121255216801
+          ],
+          "max_s21_error": 0.001742876988158985,
+          "max_s11_error": 2.8346913333670876e-05,
+          "measured_k": [
+            0.2958687985592861,
+            0.3324602850968882,
+            0.3703681888649514
+          ],
+          "model_k": [
+            0.29584906956038404,
+            0.3324420594293049,
+            0.37037688627749404
+          ],
+          "max_k_error": 1.9728998902068806e-05
+        },
+        "active": {
+          "measured_gain": 2.4573343820131464,
+          "model_gain": 2.457448758063413,
+          "measured_conversion": 1.4578795977733279,
+          "model_conversion": 1.4579960682166555,
+          "gain_error_db": -0.00020213663995279925,
+          "conversion_error_db": -0.00034694532046666826,
+          "model_max_phase": 0.469548210344546,
+          "residual": 8.861866754657627e-14,
+          "harmonics": 3,
+          "sidebands": 1,
+          "quadrature": 16,
+          "depleted": false,
+          "model_pump_transmission": 0.9996736408584812,
+          "measured_pump_transmission": 0.9996511550045507,
+          "third_harmonic_power_ratio": 9.41216985116166e-05
+        },
+        "passed": true
+      },
+      "hashes": {
+        "passive": {
+          "netlist_sha256": "e741f12ab91319435b2ce8c1311c8ae0657e8f3e67da8329486938304d33ea4c",
+          "output_sha256": "ffc832fabfe6d48626ff4118bcc83138865cfd271cb64ba7dcc3bf5a7ae146bf"
+        },
+        "probe": {
+          "netlist_sha256": "b9bca16ef7004f9db9c3bef444ee0a74c4412fd9a6cd6f61a1f3337dda02e1fe",
+          "output_sha256": "6dbd39251c84b6b051ec737f0c06617472955e97fbdbfedcc0bccfc51265acba"
+        },
+        "pump": {
+          "netlist_sha256": "def4957572598eec8ef1155bd181bcd270ad1422778a5f124033b84c8ced5ce3",
+          "output_sha256": "e77f83d3c3464928d13cb99b0cfd38fc77a6f6bb0f4a209cab72481c7984f3e9"
+        }
+      },
+      "provenance": {
+        "binary_revision": "5f33997",
+        "supplied_revision_matches_binary": true
+      }
+    },
+    "bare384": {
+      "summary": {
+        "chain": {
+          "critical_current": 1.3164239139018133e-07,
+          "ground_capacitance": 1e-12,
+          "junction_capacitance": 1e-12,
+          "cells": 384,
+          "port_impedance": 53.402532558470035,
+          "junction_resistance": 1000000000.0,
+          "ground_resistance": null,
+          "cell_length": 1e-05,
+          "resonator": null
+        },
+        "transient": {
+          "step": 1e-12,
+          "stop": 3e-07,
+          "start": 2e-07,
+          "output_step": 1e-11
+        },
+        "simulator": {
+          "version": "JoSIM: Josephson Junction Superconductive SPICE Circuit Simulator\nCopyright (C) 2020 by Johannes Delport (jdelport@sun.ac.za)\nv2.7.0e0ed0f compiled on Oct 27 2026 at 16:26:59",
+          "corrector_supported": true,
+          "source_revision": "5f33997c7c8a7317e98e3aa8c49ce4503375d9a2"
+        },
+        "pump_frequency": 1000000000.0,
+        "pump_power": 7.403607155124823e-14,
+        "signal_frequency": 900000000.0,
+        "signal_power": 7.403607155124822e-20,
+        "source_ramp": 0.0,
+        "passive_probe_power": 7.403607155124822e-20,
+        "passive": {
+          "s21_real": [
+            0.8726771433065436,
+            -0.4124450955637164,
+            -0.6556175547833564
+          ],
+          "s21_imag": [
+            0.4882251767262469,
+            0.9109587327351131,
+            -0.7549860606672939
+          ],
+          "s11_real": [
+            -0.0031463166864244955,
+            -1.598959354429581e-07,
+            0.008550209535011243
+          ],
+          "s11_imag": [
+            0.005620837240571637,
+            7.15199680498577e-07,
+            -0.007426287353236536
+          ],
+          "max_s21_error": 0.0026151527405920342,
+          "max_s11_error": 3.870379277112967e-05,
+          "measured_k": [
+            0.2958712445037393,
+            0.33248190722922827,
+            0.3704093439632863
+          ],
+          "model_k": [
+            0.29584906956038404,
+            0.3324420594293049,
+            0.37037688627749404
+          ],
+          "max_k_error": 3.984779992338705e-05
+        },
+        "active": {
+          "measured_gain": 3.565836585377564,
+          "model_gain": 3.5663001027501675,
+          "measured_conversion": 2.5655274268477983,
+          "model_conversion": 2.5660008872787774,
+          "gain_error_db": -0.0005644957360575937,
+          "conversion_error_db": -0.0008014035607722822,
+          "model_max_phase": 0.4699088514997991,
+          "residual": 3.1930694589460054e-15,
+          "harmonics": 3,
+          "sidebands": 1,
+          "quadrature": 16,
+          "depleted": false,
+          "model_pump_transmission": 0.9995986620560067,
+          "measured_pump_transmission": 0.9995630069758888,
+          "third_harmonic_power_ratio": 9.392125660090605e-05,
+          "retained_frequency": [
+            1000000000.0,
+            900000000.0,
+            1100000000.0,
+            3100000000.0,
+            3000000000.0,
+            2900000000.0
+          ],
+          "measured_output_power": [
+            7.400371810406571e-14,
+            2.63692552447586e-19,
+            2.3175128660977145e-19,
+            2.163642322857761e-22,
+            6.950505206632692e-18,
+            1.7749238130331265e-22
+          ],
+          "model_output_power": [
+            7.400635806651051e-14,
+            2.6403484958043545e-19,
+            2.321936531336131e-19,
+            1.8125772870969772e-22,
+            6.962925871548957e-18,
+            2.452069678178728e-22
+          ],
+          "pump_error_db": -0.00015491297966049552
+        },
+        "passed": true
+      },
+      "hashes": {
+        "passive": {
+          "netlist_sha256": "e4776e3fea92f88f27be0bb4f059db43bf8eb8ddf1d9bdba7045b64006664f1b",
+          "output_sha256": "475ba154fcee5bf9145bb4574027ffdd744469aec23261b3dd36531688a3b108"
+        },
+        "probe": {
+          "netlist_sha256": "28626e9c8a60946d67a45489699af3a151c48bd1842fa4508e06cf04954ad1cc",
+          "output_sha256": "8613b557a842b49d2a9983558811fbd31622d99336a5c707b58da24ecb2f6a99"
+        },
+        "pump": {
+          "netlist_sha256": "74f57adcfc6bf84401db7dd8c90a0f607b46b6b4c019896ca259783fc7da6717",
+          "output_sha256": "899126bf9a972211ac51890b8c1907c19703c14f127a5063bd0488ef2411f4a7"
+        }
+      },
+      "provenance": {
+        "binary_revision": "0e0ed0f",
+        "supplied_revision_matches_binary": false
+      }
+    },
+    "depleted256": {
+      "summary": {
+        "chain": {
+          "critical_current": 1.3164239139018133e-07,
+          "ground_capacitance": 1e-12,
+          "junction_capacitance": 1e-12,
+          "cells": 256,
+          "port_impedance": 53.402532558470035,
+          "junction_resistance": 1000000000.0,
+          "ground_resistance": null,
+          "cell_length": 1e-05,
+          "resonator": null
+        },
+        "transient": {
+          "step": 1e-12,
+          "stop": 3e-07,
+          "start": 2e-07,
+          "output_step": 1e-11
+        },
+        "simulator": {
+          "version": "JoSIM: Josephson Junction Superconductive SPICE Circuit Simulator\nCopyright (C) 2020 by Johannes Delport (jdelport@sun.ac.za)\nv2.7.5f33997 compiled on Oct 27 2026 at 15:04:48",
+          "corrector_supported": true,
+          "source_revision": "5f33997c7c8a7317e98e3aa8c49ce4503375d9a2"
+        },
+        "pump_frequency": 1000000000.0,
+        "pump_power": 7.403607155124823e-14,
+        "signal_frequency": 900000000.0,
+        "signal_power": 7.403607155124823e-15,
+        "source_ramp": 0.0,
+        "passive_probe_power": 7.403607155124822e-20,
+        "passive": {
+          "s21_real": [
+            0.9427221292201147,
+            -0.9600904009718404,
+            0.8415938608210505
+          ],
+          "s21_imag": [
+            0.33353572903457074,
+            -0.27964323379705797,
+            0.5400257724027245
+          ],
+          "s11_real": [
+            -0.0014681326498659725,
+            -3.900634758671144e-07,
+            0.004374719463735318
+          ],
+          "s11_imag": [
+            0.004145212914105627,
+            -3.3946364968020033e-06,
+            -0.00682121255216801
+          ],
+          "max_s21_error": 0.001742876988158985,
+          "max_s11_error": 2.8346913333670876e-05,
+          "measured_k": [
+            0.2958687985592861,
+            0.3324602850968882,
+            0.3703681888649514
+          ],
+          "model_k": [
+            0.29584906956038404,
+            0.3324420594293049,
+            0.37037688627749404
+          ],
+          "max_k_error": 1.9728998902068806e-05
+        },
+        "active": {
+          "measured_gain": 2.1732216275396072,
+          "model_gain": 2.1729640664083703,
+          "measured_conversion": 1.1234854964502659,
+          "model_conversion": 1.12311254974941,
+          "gain_error_db": 0.0005147381453846874,
+          "conversion_error_db": 0.0014419018656899349,
+          "model_max_phase": 0.9197186982884659,
+          "residual": 1.4592571830906266e-15,
+          "harmonics": 3,
+          "sidebands": 3,
+          "quadrature": 16,
+          "depleted": true,
+          "model_pump_transmission": 0.7218662875237969,
+          "measured_pump_transmission": 0.7218329030646891,
+          "third_harmonic_power_ratio": 2.3578994012994196e-05,
+          "retained_frequency": [
+            1000000000.0,
+            900000000.0,
+            1100000000.0,
+            1300000000.0,
+            1200000000.0,
+            800000000.0,
+            700000000.0,
+            3300000000.0,
+            3200000000.0,
+            3100000000.0,
+            3000000000.0,
+            2900000000.0,
+            2800000000.0,
+            2700000000.0
+          ],
+          "measured_output_power": [
+            5.344144992096979e-14,
+            1.6089650839501958e-14,
+            1.0166247683732517e-14,
+            8.84430701330866e-17,
+            1.0096930676193463e-15,
+            5.936846768029091e-16,
+            3.57010959939098e-18,
+            3.9800901108883214e-19,
+            1.1102482845996722e-18,
+            1.506680514755982e-18,
+            1.2603200933792024e-18,
+            3.735273980392837e-18,
+            3.413262686969723e-18,
+            6.392178687299235e-19
+          ],
+          "model_output_power": [
+            5.3444144113545725e-14,
+            1.6087772309890143e-14,
+            1.0162880578076381e-14,
+            9.597749269945436e-17,
+            1.0150758137729183e-15,
+            5.92571336560697e-16,
+            4.3318469187072594e-18,
+            4.474680116939352e-19,
+            1.044237360989842e-18,
+            1.533482087824136e-18,
+            1.2500384322151965e-18,
+            3.728903004488656e-18,
+            3.3823454680527517e-18,
+            8.68408717820131e-19
+          ],
+          "pump_error_db": -0.00020085467206695624
+        },
+        "passed": true
+      },
+      "hashes": {
+        "passive": {
+          "netlist_sha256": "e741f12ab91319435b2ce8c1311c8ae0657e8f3e67da8329486938304d33ea4c",
+          "output_sha256": "ffc832fabfe6d48626ff4118bcc83138865cfd271cb64ba7dcc3bf5a7ae146bf"
+        },
+        "probe": {
+          "netlist_sha256": "5ee05808388924ea55ae22f5b389d2cc70bf0ef75ed0ab8a7d7a17c2e73ba96d",
+          "output_sha256": "6add17b32e7826421cc1f7f05795ffd7448147b5476a1940d8afdcb8372a87a9"
+        },
+        "pump": {
+          "netlist_sha256": "def4957572598eec8ef1155bd181bcd270ad1422778a5f124033b84c8ced5ce3",
+          "output_sha256": "e77f83d3c3464928d13cb99b0cfd38fc77a6f6bb0f4a209cab72481c7984f3e9"
+        }
+      },
+      "provenance": {
+        "binary_revision": "5f33997",
+        "supplied_revision_matches_binary": true
+      }
+    },
+    "rpm384": {
+      "summary": {
+        "chain": {
+          "critical_current": 1.3164239139018133e-07,
+          "ground_capacitance": 1e-12,
+          "junction_capacitance": 1e-12,
+          "cells": 384,
+          "port_impedance": 52.72860722885028,
+          "junction_resistance": 1000000000.0,
+          "ground_resistance": null,
+          "cell_length": 1e-05,
+          "resonator": {
+            "coupling_capacitance": 1e-14,
+            "capacitance": 1e-12,
+            "inductance": 2.492982323021428e-08,
+            "resistance": 1000000000.0
+          }
+        },
+        "transient": {
+          "step": 1e-12,
+          "stop": 2e-06,
+          "start": 1.6e-06,
+          "output_step": 1e-11
+        },
+        "simulator": {
+          "version": "JoSIM: Josephson Junction Superconductive SPICE Circuit Simulator\nCopyright (C) 2020 by Johannes Delport (jdelport@sun.ac.za)\nv2.7.5f33997 compiled on Oct 27 2026 at 15:04:48",
+          "corrector_supported": true,
+          "source_revision": "5f33997c7c8a7317e98e3aa8c49ce4503375d9a2"
+        },
+        "pump_frequency": 1000000000.0,
+        "pump_power": 7.310175661273295e-14,
+        "signal_frequency": 900000000.0,
+        "signal_power": 7.310175661273295e-20,
+        "source_ramp": 2e-07,
+        "passive_probe_power": 7.310175661273295e-20,
+        "passive": {
+          "s21_real": [
+            0.44988613863871035,
+            -0.8489873820537863,
+            -0.03951875769875937
+          ],
+          "s21_imag": [
+            0.893052291243305,
+            -0.5268403346912178,
+            -0.9989055131984217
+          ],
+          "s11_real": [
+            -0.0044313734660548516,
+            -4.2079942576241235e-05,
+            0.02314318166151257
+          ],
+          "s11_imag": [
+            0.0022368094897631677,
+            0.00017364718611772022,
+            -0.0009195324425915102
+          ],
+          "max_s21_error": 0.007200823751494272,
+          "max_s11_error": 0.0001787042740901343,
+          "measured_k": [
+            0.29740007004350144,
+            0.33686365358306747,
+            0.3721446321689605
+          ],
+          "model_k": [
+            0.2973962443776564,
+            0.3368581603569609,
+            0.37213623306221966
+          ],
+          "max_k_error": 8.399106740830664e-06
+        },
+        "active": {
+          "measured_gain": 9.755011227776107,
+          "model_gain": 9.736374527415757,
+          "measured_conversion": 8.75141625513249,
+          "model_conversion": 8.733562150366543,
+          "gain_error_db": 0.00830502119814667,
+          "conversion_error_db": 0.00886926102426722,
+          "model_max_phase": 0.4737505857528032,
+          "residual": 3.5388358909926857e-15,
+          "harmonics": 3,
+          "sidebands": 1,
+          "quadrature": 16,
+          "depleted": false,
+          "model_pump_transmission": 0.9997210013107993,
+          "measured_pump_transmission": 0.9970796271370276,
+          "third_harmonic_power_ratio": 9.387508129829688e-05,
+          "retained_frequency": [
+            1000000000.0,
+            900000000.0,
+            1100000000.0,
+            3100000000.0,
+            3000000000.0,
+            2900000000.0
+          ],
+          "measured_output_power": [
+            7.286713125310331e-14,
+            7.350843577914864e-19,
+            7.589275390929912e-19,
+            5.89404040554187e-22,
+            6.840397234466087e-18,
+            6.472876978440616e-22
+          ],
+          "model_output_power": [
+            7.308136131845974e-14,
+            7.117460809935592e-19,
+            7.80314009051221e-19,
+            6.147628941871536e-22,
+            6.902116718298291e-18,
+            6.638770336017131e-22
+          ],
+          "pump_error_db": -0.011489728929938377
+        },
+        "passed": true
+      },
+      "hashes": {
+        "passive": {
+          "netlist_sha256": "63fa977d60fab32b0dc2b5937e4d02b92de79a5e2fa5717d74420f016762e01e",
+          "output_sha256": "00ce9ff085f5fea71a29c7b5f0d6d5fc81f6cd13263b8f6f24e0270f75164e53"
+        },
+        "probe": {
+          "netlist_sha256": "b2b33a5de0ed3b40534bc8ef7729fa1efbedb293a8a682de84519783890ad400",
+          "output_sha256": "2cfbebf8efa397bb2bbced83c4cf0333edc2cb336d1e446450d842912b5c1eba"
+        },
+        "pump": {
+          "netlist_sha256": "cda21bb92e8f00573416d891ac18f7162ceddb22672046a9ad3aa1aede30aaca",
+          "output_sha256": "545c29451a45b54cc57f6fea0bd9818f9596c2390a8b322514c12ef0327b3d42"
+        }
+      },
+      "provenance": {
+        "binary_revision": "5f33997",
+        "supplied_revision_matches_binary": true
+      }
+    }
+  },
+  "coarse": {
+    "bare256": {
+      "summary": {
+        "chain": {
+          "critical_current": 1.3164239139018133e-07,
+          "ground_capacitance": 1e-12,
+          "junction_capacitance": 1e-12,
+          "cells": 256,
+          "port_impedance": 53.402532558470035,
+          "junction_resistance": 1000000000.0,
+          "ground_resistance": null,
+          "cell_length": 1e-05,
+          "resonator": null
+        },
+        "transient": {
+          "step": 2e-12,
+          "stop": 2e-07,
+          "start": 1e-07,
+          "output_step": 1e-11
+        },
+        "simulator": {
+          "version": "JoSIM: Josephson Junction Superconductive SPICE Circuit Simulator\nCopyright (C) 2020 by Johannes Delport (jdelport@sun.ac.za)\nv2.7.5f33997 compiled on Oct 27 2026 at 15:04:48",
+          "corrector_supported": true,
+          "source_revision": "5f33997c7c8a7317e98e3aa8c49ce4503375d9a2"
+        },
+        "pump_frequency": 1000000000.0,
+        "pump_power": 7.403607155124823e-14,
+        "signal_frequency": 900000000.0,
+        "signal_power": 7.403607155124822e-20,
+        "passive": {
+          "s21_real": [
+            0.9417919050950967,
+            -0.9589668062465583,
+            0.8386823320273372
+          ],
+          "s21_imag": [
+            0.336024765600903,
+            -0.2832282413092797,
+            0.5443456229281802
+          ],
+          "s11_real": [
+            -0.0014884756197005406,
+            2.097935288286096e-06,
+            0.004451412263738458
+          ],
+          "s11_imag": [
+            0.004177767492072919,
+            2.2434496376294856e-06,
+            -0.006848206343617857
+          ],
+          "max_s21_error": 0.006952128198310613,
+          "max_s11_error": 0.00010915207111813284,
+          "measured_k": [
+            0.295854480086797,
+            0.3324519352111705,
+            0.37041253222206344
+          ],
+          "model_k": [
+            0.29584906956038404,
+            0.3324420594293049,
+            0.37037688627749404
+          ],
+          "max_k_error": 3.564594456939574e-05
+        },
+        "active": {
+          "measured_gain": 2.456877245373828,
+          "model_gain": 2.457448758063413,
+          "measured_conversion": 1.4574745623809862,
+          "model_conversion": 1.4579960682166555,
+          "gain_error_db": -0.001010127567319546,
+          "conversion_error_db": -0.0015536915841318421,
+          "model_max_phase": 0.469548210344546,
+          "residual": 8.861866754657627e-14,
+          "harmonics": 3,
+          "sidebands": 1,
+          "quadrature": 16,
+          "depleted": false,
+          "model_pump_transmission": 0.9996736408584812,
+          "measured_pump_transmission": 0.999503455590633,
+          "third_harmonic_power_ratio": 9.379850115992252e-05
+        },
+        "passed": true
+      },
+      "hashes": {
+        "passive": {
+          "netlist_sha256": "deb48c17b6bddf274c4c176ae49ab35b103bed63a7700f1c66cc361d5ba4eda6",
+          "output_sha256": "08a1994047267f511bc7c27a75fd82af6b613d579347f771f4f3a94558c73b01"
+        },
+        "probe": {
+          "netlist_sha256": "c43fd5589040af22dfc586a3132e2c50f31d199509ff4109881c65c543f566e8",
+          "output_sha256": "d99a6cb247e9f7dfecad441854c3f139ec23f55379903f7c00ce3c5c0f9851c4"
+        },
+        "pump": {
+          "netlist_sha256": "e35025762de2d508003dafa936931ecb0fa63cc523ebecbc056b692d8c9dfa86",
+          "output_sha256": "c8b10e689d78b4afe85a48f2ec711ffbba1e696f68bd291331947a810d6046da"
+        }
+      },
+      "provenance": {
+        "binary_revision": "5f33997",
+        "supplied_revision_matches_binary": true
+      }
+    },
+    "rpm384": {
+      "summary": {
+        "chain": {
+          "critical_current": 1.3164239139018133e-07,
+          "ground_capacitance": 1e-12,
+          "junction_capacitance": 1e-12,
+          "cells": 384,
+          "port_impedance": 52.72860722885028,
+          "junction_resistance": 1000000000.0,
+          "ground_resistance": null,
+          "cell_length": 1e-05,
+          "resonator": {
+            "coupling_capacitance": 1e-14,
+            "capacitance": 1e-12,
+            "inductance": 2.492982323021428e-08,
+            "resistance": 1000000000.0
+          }
+        },
+        "transient": {
+          "step": 2e-12,
+          "stop": 2e-06,
+          "start": 1.6e-06,
+          "output_step": 1e-11
+        },
+        "simulator": {
+          "version": "JoSIM: Josephson Junction Superconductive SPICE Circuit Simulator\nCopyright (C) 2020 by Johannes Delport (jdelport@sun.ac.za)\nv2.7.5f33997 compiled on Oct 27 2026 at 15:04:48",
+          "corrector_supported": true,
+          "source_revision": "5f33997c7c8a7317e98e3aa8c49ce4503375d9a2"
+        },
+        "pump_frequency": 1000000000.0,
+        "pump_power": 7.310175661273295e-14,
+        "signal_frequency": 900000000.0,
+        "signal_power": 7.310175661273295e-20,
+        "source_ramp": 2e-07,
+        "passive": {
+          "s21_real": [
+            0.44627178561275205,
+            -0.8381963075885746,
+            -0.031656984844924727
+          ],
+          "s21_imag": [
+            0.8947986184320987,
+            -0.5432240556446444,
+            -0.9990367575421066
+          ],
+          "s11_real": [
+            -0.0044477750547713526,
+            -0.00013193971006080694,
+            0.023162743872436404
+          ],
+          "s11_imag": [
+            0.002220830711125891,
+            0.00018377233860618353,
+            -0.0007361634145186542
+          ],
+          "max_s21_error": 0.026801775553842774,
+          "max_s11_error": 0.00024092185246256924,
+          "measured_k": [
+            0.29741016057347713,
+            0.3369183343550684,
+            0.3721651559243219
+          ],
+          "model_k": [
+            0.2973962443776564,
+            0.3368581603569609,
+            0.37213623306221966
+          ],
+          "max_k_error": 6.017399810748225e-05
+        },
+        "active": {
+          "measured_gain": 9.846329576492343,
+          "model_gain": 9.736374527415757,
+          "measured_conversion": 8.842634372801166,
+          "model_conversion": 8.733562150366543,
+          "gain_error_db": 0.048770969182955475,
+          "conversion_error_db": 0.05390252931790456,
+          "model_max_phase": 0.4737505857528032,
+          "residual": 3.5388358909926857e-15,
+          "harmonics": 3,
+          "sidebands": 1,
+          "quadrature": 16,
+          "depleted": false,
+          "model_pump_transmission": 0.9997210013107993,
+          "measured_pump_transmission": 0.9978764144528814,
+          "third_harmonic_power_ratio": 9.389204645414941e-05,
+          "pump_error_db": -0.008020576269809603
+        },
+        "passed": true
+      },
+      "hashes": {
+        "passive": {
+          "netlist_sha256": "64bfd9943344604586af6629c1d694be0932ffcadecc6869b1a3fb15236ff6fa",
+          "output_sha256": "5ab1b438deea18c5b6f96f78817d770391a5d3fae457930ac0f1835d7cae6c5b"
+        },
+        "probe": {
+          "netlist_sha256": "61f1aa5a9b8152bb96aced103c72866875bcdb51e43d9bd14496ec25f8c9553d",
+          "output_sha256": "e8da753c0ea805f26eb14e12cd4e0f4f3c2d2b09bd7cbeae20e2ee965c1a2b9f"
+        },
+        "pump": {
+          "netlist_sha256": "19985baada8a52e532881fd155a133d9799d67cc252970a86e507f6e596d964e",
+          "output_sha256": "3e476c4062a093dc728bd1bded8cabe7469dd4c2b520a0f18ab4a80548cc4cf5"
+        }
+      },
+      "provenance": {
+        "binary_revision": "5f33997",
+        "supplied_revision_matches_binary": true
+      }
+    }
+  },
+  "model_resolution": {
+    "bare256": {
+      "chain": {
+        "critical_current": 1.3164239139018133e-07,
+        "ground_capacitance": 1e-12,
+        "junction_capacitance": 1e-12,
+        "cells": 256,
+        "port_impedance": 53.402532558470035,
+        "junction_resistance": 1000000000.0,
+        "ground_resistance": null,
+        "cell_length": 1e-05,
+        "resonator": null
+      },
+      "results": [
+        {
+          "harmonics": 3,
+          "sidebands": 1,
+          "quadrature": 16,
+          "gain": 2.457448758063413,
+          "conversion": 1.4579960682166555,
+          "pump_transmission": 0.9996736408584812,
+          "maximum_phase": 0.469548210344546,
+          "residual": 8.861866754657627e-14,
+          "gain_change_db": 0.0,
+          "conversion_change_db": 0.0,
+          "pump_change_db": 0.0
+        },
+        {
+          "harmonics": 5,
+          "sidebands": 1,
+          "quadrature": 24,
+          "gain": 2.4573861093309173,
+          "conversion": 1.4579341748180477,
+          "pump_transmission": 0.9996735087499354,
+          "maximum_phase": 0.46959923684934246,
+          "residual": 8.955413463343133e-14,
+          "gain_change_db": -0.0001107178554582405,
+          "conversion_change_db": -0.0001843662861953416,
+          "pump_change_db": -5.739274689499599e-07
+        },
+        {
+          "harmonics": 3,
+          "sidebands": 1,
+          "quadrature": 24,
+          "gain": 2.457448758069874,
+          "conversion": 1.4579960682236506,
+          "pump_transmission": 0.9996736408588283,
+          "maximum_phase": 0.46954821034784666,
+          "residual": 8.929227026706545e-14,
+          "gain_change_db": 1.1418601531442461e-11,
+          "conversion_change_db": 2.083622356976689e-11,
+          "pump_change_db": 1.5082081576890792e-12
+        }
+      ]
+    },
+    "rpm384": {
+      "chain": {
+        "critical_current": 1.3164239139018133e-07,
+        "ground_capacitance": 1e-12,
+        "junction_capacitance": 1e-12,
+        "cells": 384,
+        "port_impedance": 52.72860722885028,
+        "junction_resistance": 1000000000.0,
+        "ground_resistance": null,
+        "cell_length": 1e-05,
+        "resonator": {
+          "coupling_capacitance": 1e-14,
+          "capacitance": 1e-12,
+          "inductance": 2.492982323021428e-08,
+          "resistance": 1000000000.0
+        }
+      },
+      "results": [
+        {
+          "harmonics": 3,
+          "sidebands": 1,
+          "quadrature": 16,
+          "gain": 9.736374527415757,
+          "conversion": 8.733562150366543,
+          "pump_transmission": 0.9997210013107993,
+          "maximum_phase": 0.4737505857528032,
+          "residual": 3.5388358909926857e-15,
+          "gain_change_db": 0.0,
+          "conversion_change_db": 0.0,
+          "pump_change_db": 0.0
+        },
+        {
+          "harmonics": 5,
+          "sidebands": 1,
+          "quadrature": 24,
+          "gain": 9.735767595925086,
+          "conversion": 8.732956501959762,
+          "pump_transmission": 0.9997208668552079,
+          "maximum_phase": 0.4738606140801746,
+          "residual": 2.3821360215581104e-15,
+          "gain_change_db": -0.00027073240910779705,
+          "conversion_change_db": -0.00030118166805828185,
+          "pump_change_db": -5.840962156866865e-07
+        },
+        {
+          "harmonics": 3,
+          "sidebands": 1,
+          "quadrature": 24,
+          "gain": 9.736374527453965,
+          "conversion": 8.733562150406284,
+          "pump_transmission": 0.9997210013110795,
+          "maximum_phase": 0.4737505857355157,
+          "residual": 2.1733253756880707e-15,
+          "gain_change_db": 1.7042559316362803e-11,
+          "conversion_change_db": 1.976196277203155e-11,
+          "pump_change_db": 1.2169812627900777e-12
+        }
+      ]
+    },
+    "depleted256": {
+      "chain": {
+        "critical_current": 1.3164239139018133e-07,
+        "ground_capacitance": 1e-12,
+        "junction_capacitance": 1e-12,
+        "cells": 256,
+        "port_impedance": 53.402532558470035,
+        "junction_resistance": 1000000000.0,
+        "ground_resistance": null,
+        "cell_length": 1e-05,
+        "resonator": null
+      },
+      "results": [
+        {
+          "harmonics": 3,
+          "sidebands": 3,
+          "quadrature": 16,
+          "gain": 2.1729640664083703,
+          "conversion": 1.12311254974941,
+          "pump_transmission": 0.7218662875237969,
+          "maximum_phase": 0.9197186982884659,
+          "residual": 1.4592571830906266e-15,
+          "gain_change_db": 0.0,
+          "conversion_change_db": 0.0,
+          "pump_change_db": 0.0
+        },
+        {
+          "harmonics": 5,
+          "sidebands": 3,
+          "quadrature": 24,
+          "gain": 2.172895512735248,
+          "conversion": 1.1230446922391775,
+          "pump_transmission": 0.7218843348778593,
+          "maximum_phase": 0.919821207651121,
+          "residual": 1.0950763977617566e-15,
+          "gain_change_db": -0.00013701538860809047,
+          "conversion_change_db": -0.00026240497956037773,
+          "pump_change_db": 0.00010857645580938446
+        },
+        {
+          "harmonics": 3,
+          "sidebands": 3,
+          "quadrature": 24,
+          "gain": 2.1729640664169985,
+          "conversion": 1.1231125497472885,
+          "pump_transmission": 0.7218662875228987,
+          "maximum_phase": 0.9197186982129412,
+          "residual": 1.0614466625631893e-15,
+          "gain_change_db": 1.7244103756871644e-11,
+          "conversion_change_db": -8.20401592170984e-12,
+          "pump_change_db": -5.403608958834706e-12
+        },
+        {
+          "harmonics": 3,
+          "sidebands": 4,
+          "quadrature": 24,
+          "gain": 2.1733428172262634,
+          "conversion": 1.1235612875541001,
+          "pump_transmission": 0.7218226581082218,
+          "maximum_phase": 0.9252757864384641,
+          "residual": 1.233606737424746e-15,
+          "gain_change_db": 0.000756915675987473,
+          "conversion_change_db": 0.0017348700265609987,
+          "pump_change_db": -0.0002624944174580563
+        }
+      ]
+    }
+  },
+  "refinement": {
+    "bare256": {
+      "gain_db": 0.000807990927367139,
+      "conversion_db": 0.0012067462636652872,
+      "pump_db": 0.0006417216579598549
+    },
+    "rpm384": {
+      "gain_db": -0.040465947984808626,
+      "conversion_db": -0.045033268293636734,
+      "pump_db": -0.003469152660128644
+    }
+  },
+  "rpm_windows": {
+    "windows": [
+      {
+        "window": "early",
+        "gain": 9.739668199248436,
+        "conversion": 8.736838977164556,
+        "pump_transmission": 0.9880704092553821
+      },
+      {
+        "window": "late",
+        "gain": 9.770388262469409,
+        "conversion": 8.766057625296698,
+        "pump_transmission": 1.0061322832373676
+      }
+    ],
+    "late_minus_early_db": {
+      "gain": 0.013676603132993133,
+      "conversion": 0.014499896477989322,
+      "pump_transmission": 0.07867190969281167
+    }
+  },
+  "generator_sha256": "02b96cd16b6ad32df0a6d750072438f4db52df66846bd0fe68ac76e23715e636"
+}

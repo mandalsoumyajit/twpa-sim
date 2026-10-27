@@ -9,11 +9,10 @@ Circuit parameters and operating conditions are explicit inputs.
 
 **Implemented:** periodic ladder circuits and kinetic-inductance TWPA presets;
 3WM propagation with Kerr phase shifts; coupled TLS loss and amplifier noise;
-Kerr-pumped resonant JPAs; effective flux-pumped resonant amplifiers.
-An optional JoSIM backend generates physical RCSJ resonator circuits and has
-been used to check Kerr/flux-pumped JPA gain, conversion and classical quadrature
-response. **Planned:** Josephson traveling-wave circuits and full 4WM
-traveling-wave mixing.
+Kerr-pumped resonant JPAs; effective flux-pumped resonant amplifiers;
+4WM Josephson junction chains with optional resonant phase matching,
+multiharmonic mixing and pump depletion. An optional JoSIM backend generates
+physical RCSJ circuits and has been used to check both JPA and JTWPA models.
 
 ## Installation
 
@@ -54,7 +53,27 @@ See the [JPA guide](docs/resonant-jpa.md) for normalization, noise conventions,
 classical probe transients and limitations. Run
 `python examples/resonant_jpa.py`, optionally adding `--plot gain.png`.
 
-## Traveling-wave circuits
+## Four-wave Josephson TWPA
+
+```python
+import numpy as np
+from twpa import jtwpa
+
+chain = jtwpa.Chain(critical_current=1.3e-7, ground_capacitance=1e-12,
+                    junction_capacitance=1e-12, cells=256)
+r = jtwpa.four_wave_response(chain, pump_frequency=1e9, pump_power=7e-14,
+                            signal_frequency=.9e9, signal_power=7e-20)
+print(10*np.log10(r.gain), r.idler_conversion)
+```
+
+The finite-circuit model includes JJ plasma response, resistive losses,
+port reflections and exact-sine Fourier projection. Set `depleted=True` for
+self-consistent pump depletion, or attach `jtwpa.ResonantLoad` for resonant
+phase matching. Gain is a power ratio; idler conversion is a photon-flux ratio.
+See the [4WM guide](docs/four-wave-jtwpa.md) for harmonic/sideband convergence,
+normalization and limits. Quantum noise for this 4WM model remains future work.
+
+## KIT and phenomenological 3WM circuits
 
 ```python
 import numpy as np
@@ -79,7 +98,7 @@ Inductances are electrical values at the operating bias. TWPA current amplitudes
 are peak, not RMS; propagation uses cell index, rad/cell and nepers/cell.
 `Nonlinearity` supplies phenomenological 3WM/Kerr coefficients; omitting it
 selects the KIT current law. Supplying different coefficients does not add
-Josephson plasma response or full 4WM to the current traveling-wave solver.
+Josephson plasma response or full 4WM to these APIs; use `twpa.jtwpa` above.
 
 `linear` returns Bloch dispersion, attenuation, stopbands and finite S11/S21.
 `network_scattering` handles arbitrary row/turn blocks. `nonlinear` includes
@@ -110,7 +129,7 @@ The quantum-noise propagation model is small signal: pump attenuation is
 included, while conversion-induced depletion is handled by the separate
 classical nonlinear solver. Gain assumes forward propagation; finite port
 reflection feedback is not included. The JoSIM comparisons currently cover
-the resonant JPA models, not this traveling-wave loss pipeline.
+the resonant JPA and separate JTWPA models, not this KIT/TLS loss pipeline.
 
 ## JoSIM circuit validation
 
@@ -129,11 +148,18 @@ differences are below 0.08 dB for the documented benchmark points. See the
 checks and limits. Classical JoSIM runs do not validate quantum added noise
 or vacuum squeezing noise.
 
+The [JTWPA circuit report](docs/jtwpa-josim-validation.md) covers uniform
+and resonator-loaded 4WM chains, passive dispersion and strong-probe depletion.
+Tested signal/idler differences are below 0.01 dB, with timestep, harmonic
+and acquisition-window sensitivity recorded separately. Reproduce runs with
+`tools/validate_jtwpa_josim.py`.
+
 ## Examples, presets and validation
 
 | Example | Purpose |
 | --- | --- |
 | `resonant_jpa.py` | Kerr JPA gain/noise and effective flux-pump squeezing |
+| `four_wave_jtwpa.py` | Uniform and resonator-loaded 4WM Josephson chains |
 | `compare.py` | Compare electrical TWPA parameter sets |
 | `oxide_pipeline.py` | Electrostatics -> lossy circuit -> amplifier noise |
 | `depletion_and_gradients.py` | Pump-depleted propagation with spatial profiles |

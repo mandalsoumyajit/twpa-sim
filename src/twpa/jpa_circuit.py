@@ -15,12 +15,30 @@ class Tone:
     frequency: float
     power: float
     phase: float = 0.  # Radians in sin(omega*t+phase).
+    ramp_time: float = 0.  # Exponential amplitude turn-on time constant [s].
 
     def __post_init__(self):
         positive(self.frequency, 'tone frequency')
         positive(self.power, 'tone power', True)
+        positive(self.ramp_time, 'ramp_time', True)
         if not np.isfinite(self.phase):
             raise ValueError('tone phase must be finite')
+
+
+def voltage_sources(tones, impedance, prefix='VDRIVE'):
+    """Series sources form A*(1-exp(-t/tau))*sin without external wave files."""
+    terms = []
+    for tone in tones:
+        peak = np.sqrt(8*impedance*tone.power)
+        terms.append((tone, peak, 0.))
+        if tone.ramp_time:
+            terms.append((tone, -peak, 1/tone.ramp_time))
+    lines = []
+    for i, (tone, peak, decay) in enumerate(terms):
+        nxt = f'SRC{i+1}' if i+1<len(terms) else '0'
+        lines.append(f'{prefix}{i} SRC{i} {nxt} SIN(0 {peak:.17g} '
+                     f'{tone.frequency:.17g} 0 {decay:.17g} {tone.phase:.17g})')
+    return lines
 
 
 @dataclass(frozen=True)
@@ -173,11 +191,7 @@ def jpa_netlist(circuit, tones, transient=Transient(), *, flux_pump=None):
     if not tones:
         raise ValueError('provide at least one tone, even if power is zero')
     lines = ['* TWPA Sim: classical Josephson resonator circuit']
-    for i, tone in enumerate(tones):
-        nxt = f'SRC{i+1}' if i+1<len(tones) else '0'
-        peak = np.sqrt(8*circuit.port_impedance*tone.power)
-        lines.append(f'VDRIVE{i} SRC{i} {nxt} SIN(0 {peak:.17g} '
-                     f'{tone.frequency:.17g} 0 0 {tone.phase:.17g})')
+    lines += voltage_sources(tones, circuit.port_impedance)
     lines.append(f'RPORT SRC0 PORT {circuit.port_impedance:.17g}')
     lines += circuit.components(flux_pump) if isinstance(circuit, SQUIDJPA) else circuit.components()
     junction_traces = 'P(BJ1) P(BJ2) I(LCOIL)' if isinstance(circuit, SQUIDJPA) else 'P(BJJ)'
