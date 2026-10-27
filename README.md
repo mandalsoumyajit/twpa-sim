@@ -12,6 +12,8 @@ Circuit parameters and operating conditions are explicit inputs.
 Kerr-pumped resonant JPAs; effective flux-pumped resonant amplifiers;
 4WM Josephson junction chains with optional resonant phase matching,
 multiharmonic mixing, pump depletion and quantum noise with internal loss.
+Flux-biased rf-SQUID and SNAIL 3WM chains include exact element potentials,
+DC rectification, pump harmonics, depletion and Gaussian quantum noise.
 An optional JoSIM backend generates
 physical RCSJ circuits and has been used to check both JPA and JTWPA models.
 
@@ -77,6 +79,24 @@ scattering, vacuum/thermal bath noise, quadrature covariance and input-referred
 added noise. Junction, ground and resonator resistances each have explicit
 noise baths. See the [quantum-noise guide](docs/jtwpa-quantum-noise.md) and
 [quantum-limit checks](docs/jtwpa-quantum-validation.md).
+
+## Flux-biased Josephson 3WM
+
+```python
+from twpa import three_wave as tw
+
+chain = tw.example_chain('snail', cells=128, dispersion_engineered=True)
+power = .5*chain.port_impedance*(.18*chain.linear_chain.critical_current)**2
+result = tw.three_wave_response(chain, 1e9, power, .45e9, power*1e-6)
+noise = tw.quantum_noise(chain, 1e9, power, .45e9, junction_temperature=.02)
+print(result.gain, noise.added_noise, noise.quantum_limit)
+```
+
+Configure `RFSQUID` or `SNAIL` and `ThreeWaveChain` for a new design.
+The [3WM guide](docs/three-wave-josephson.md) explains the element potentials,
+branch restrictions, mode/temperature conventions and SNAIL small-loop limit.
+See the [classical and quantum validation](docs/three-wave-validation.md)
+for actual JoSIM comparisons and quantum-limit checks.
 
 ## KIT and phenomenological 3WM circuits
 
@@ -166,6 +186,7 @@ and acquisition-window sensitivity recorded separately. Reproduce runs with
 | `resonant_jpa.py` | Kerr JPA gain/noise and effective flux-pump squeezing |
 | `four_wave_jtwpa.py` | Uniform and resonator-loaded 4WM Josephson chains |
 | `quantum_jtwpa.py` | Quantum-limit and internal thermal noise in 4WM chains |
+| `three_wave_josephson.py` | rf-SQUID/SNAIL 3WM gain and Gaussian quantum noise |
 | `compare.py` | Compare electrical TWPA parameter sets |
 | `oxide_pipeline.py` | Electrostatics -> lossy circuit -> amplifier noise |
 | `depletion_and_gradients.py` | Pump-depleted propagation with spatial profiles |

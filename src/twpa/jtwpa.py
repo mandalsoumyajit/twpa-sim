@@ -185,6 +185,8 @@ def _basis(indices, quadrature):
 
 
 def _nonlinear(branch, nonlinearity='cubic', indices=None, quadrature=16, derivative=False):
+    if not isinstance(nonlinearity, str):
+        return nonlinearity.project(branch, indices, quadrature, derivative)
     modes = len(branch)
     if nonlinearity == 'cubic':
         if modes != 3:

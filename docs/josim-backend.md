@@ -142,3 +142,9 @@ three neighboring nodes. `Tone.ramp_time` adds exponential source turn-on to
 reduce long-lived startup ringing. See the [4WM model guide](four-wave-jtwpa.md)
 and [JTWPA circuit comparisons](jtwpa-josim-validation.md) for API conventions,
 actual benchmark results and reproduction commands.
+
+For 3WM devices, `twpa.three_wave.chain_netlist` generates explicit one-JJ
+rf-SQUID loops or small-junction/series-junction SNAIL loops with flux coils.
+Use `runner.run` with that deck and the common `measure_chain` port extractor.
+The [3WM guide](three-wave-josephson.md) describes physical biasing, loop-size
+limits and the [circuit comparisons](three-wave-validation.md).

@@ -113,6 +113,19 @@ def four_wave_noise(chain, pump_frequency, pump_power, signal_frequency, *,
         phase = float(np.max(np.sum(abs(fields[:, :-1]-fields[:, 1:]), axis=0)))
         if phase > maximum_phase:
             raise ValueError(f'Junction phase {phase:.3g} exceeds the retained-mode guard {maximum_phase}')
+    return _noise_from_state(chain, f, indices, fields,
+        _jacobian(fields, matrices, nonlinearity, indices, quadrature), residual,
+        port_temperature=port_temperature, junction_temperature=junction_temperature,
+        ground_temperature=ground_temperature, resonator_temperature=resonator_temperature,
+        commutator_tolerance=commutator_tolerance)
+
+
+def _noise_from_state(chain, f, indices, fields, jacobian, residual, *,
+                      port_temperature=0., junction_temperature=0.,
+                      ground_temperature=0., resonator_temperature=0.,
+                      commutator_tolerance=1e-6, signal_mode=1):
+    """Shared resistor-bath input-output map for a supplied real circuit Jacobian."""
+    positive(commutator_tolerance, 'commutator_tolerance')
     modes, nodes = fields.shape
     ports = 2*modes
     size = modes*nodes
@@ -130,7 +143,7 @@ def four_wave_noise(chain, pump_frequency, pump_power, signal_frequency, *,
             row, col = 2*mode+port, mode*nodes+node
             select[row, size+col] = scale[mode]
             select[ports+row, col] = -scale[mode]
-    factor = splu(_jacobian(fields, matrices, nonlinearity, indices, quadrature))
+    factor = splu(jacobian)
     transfer = factor.solve(select.T, trans='T').T
     output = transfer[:ports]+1j*transfer[ports:]
 
@@ -197,7 +210,7 @@ def four_wave_noise(chain, pump_frequency, pump_power, signal_frequency, *,
     omega = np.block([[np.zeros((ports, ports)), np.eye(ports)],
                       [-np.eye(ports), np.zeros((ports, ports))]])
     minimum = float(np.linalg.eigvalsh(covariance+.5j*omega)[0])
-    incoming, outgoing = 2, 3  # Primary signal, left -> right.
+    incoming, outgoing = 2*signal_mode, 2*signal_mode+1
     gain = float(abs(u[outgoing, incoming])**2)
     phase_preserving = bool(abs(v[outgoing, incoming]) < 1e-8*max(1., np.sqrt(gain)))
     noise = float(normal[outgoing, outgoing].real)

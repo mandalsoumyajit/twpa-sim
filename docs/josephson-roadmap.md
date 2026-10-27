@@ -6,7 +6,9 @@ classical pump depletion. See the [4WM guide](four-wave-jtwpa.md) and
 [circuit validation](jtwpa-josim-validation.md). The targets below preserve
 the broader scope. Gaussian 4WM quantum noise with internal resistor baths
 is now implemented; see [quantum noise](jtwpa-quantum-noise.md).
-SQUID/SNAIL 3WM remains future work.
+Flux-biased rf-SQUID/SNAIL 3WM potentials, DC rectification, classical
+depletion and pump-only Gaussian quantum noise are implemented; see the
+[3WM guide](three-wave-josephson.md) and [validation](three-wave-validation.md).
 Updated 2026-10-27. See [implemented JPA models](resonant-jpa.md).
 
 ## Targets and order
@@ -192,6 +194,13 @@ circuit preset is supplied, but full published gain-curve reproduction,
 automated compression searches, arbitrary fabrication patterns and dynamical
 stability analysis remain future work. These APIs
 are separate and preserve the existing KIT and JPA interfaces.
+
+M5 now includes a unique-branch rf-SQUID model with finite screening,
+a symmetric-series SNAIL model in its small-geometric-loop limit, physical
+flux-coil JoSIM decks and quantum internal-loss baths. Flux patterns,
+unequal/internal-island SNAIL modes, large SNAIL loop inductance,
+multistable branch selection, degenerate 3WM and quantum fluctuations about
+a strongly depleted multitone 3WM state remain outside this implementation.
 
 Initial exclusions: full electromagnetic layout extraction, arbitrary
 multi-pump Floquet networks, strong quantum non-Gaussian effects and claims of
