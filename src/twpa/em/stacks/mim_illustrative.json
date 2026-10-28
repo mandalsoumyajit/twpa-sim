@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "id": "mim_illustrative_v1",
+  "status": "illustrative",
+  "description": "Independent illustrative dielectric stack, not a vendor PDK. Approximately 1 fF/um2 parallel-plate density. No material dispersion, loss, kinetic inductance or junction barrier is simulated by this PEC capacitor coupon.",
+  "dielectric_thickness_um": 0.0664,
+  "dielectric_epsilon_r": 7.5,
+  "substrate_thickness_um": 3.0,
+  "substrate_epsilon_r": 11.7,
+  "electrode_model": "PEC"
+}

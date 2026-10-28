@@ -88,6 +88,10 @@ The initial workflow deliberately exposes these boundaries:
 - RPM resonators, coupling networks, bias coils/tees and on-chip loss elements.
 - Extracted-layout versus JoSIM amplifier-response validation.
 
-The existing JoSIM validation reports apply to the numerical circuits. No
-layout-derived performance claim is made until extraction and circuit
-back-annotation have been implemented and checked.
+The [initial JPA EM implementation](em-extraction.md) now covers the capacitor
+coupon and annotated lumped-circuit response. The full interconnect/package
+and other device families remain outside that first extraction stage.
+
+The earlier JoSIM reports apply to their numerical circuits. The separate
+[JPA EM report](em-jpa-validation.md) now checks a capacitor-annotated circuit;
+it does not validate omitted full-layout parasitics.

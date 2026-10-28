@@ -193,6 +193,11 @@ JPA, SQUID JPA, 4WM, rf-SQUID and SNAIL layouts. Electrical sizing for a bare
 JPA or uniform 4WM chain rejects incompatible junction current/capacitance
 targets; loop inductance and parasitics still require extraction.
 
+For single-junction JPAs, the [EM workflow](docs/em-extraction.md) extracts the
+shunt capacitor with openEMS, checks mesh/domain/duration refinements and
+back-annotates a circuit for JoSIM comparison. This is capacitor-coupon
+extraction; full interconnect/package extraction remains separate work.
+
 1. Inspect passive S11/S21 and passbands. Resolve poles and loading features
    before choosing pump, signal and idler.
 2. Reduce the probe amplitude and compare normalized gain in the linear regime.

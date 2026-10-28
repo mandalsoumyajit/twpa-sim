@@ -128,6 +128,16 @@ the simulator paper is not an attestation of those builds or quantum noise.
 
 ## Cite the software and the relevant physics
 
+<a id="openems"></a>
+**[openems]** Thorsten Liebig and openEMS contributors, *openEMS*.
+[Official documentation](https://docs.openems.de/),
+[ports and post-processing](https://docs.openems.de/en/latest/concepts/ports.html),
+[CSXCAD polygon primitives](https://docs.openems.de/en/latest/python/CSXCAD/CSPrimitives/CSPrimPolygon.html).
+The optional EM worker uses CSXCAD geometry and openEMS EC-FDTD port
+admittance for capacitor extraction. These external projects have their own
+licenses. Their documentation does not qualify this repository's illustrative
+material stack or replace numerical convergence checks.
+
 <a id="klayout"></a>
 **[klayout]** Matthias Köfferlein and KLayout contributors, *KLayout*.
 [Official project](https://www.klayout.de/),

@@ -1,0 +1,524 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-28",
+  "extraction": {
+    "source": {
+      "gds_sha256": "be18c31495ff136316c43c70a048a8db86674bd7d7dc4b037f97ee8df224f7ae",
+      "process_sha256": "ece09da4d1fa9b8ea75ac828a4aba296fa4248d2c70084412c045f3f7150cf77",
+      "design_sha256": "e0ff2ddc1f6200da0daa94d228174ad0d5a36f763fa6d0bc5b5a012fc93b2837",
+      "manifest_sha256": "782da97ea461c6eaf9d6405c87f8184db7e1f01f46d9b4c190ca80078571572e",
+      "process_id": "jj_overlap_illustrative",
+      "component_id": "CAP2",
+      "junction_id": "JJ1",
+      "junction_estimates": {
+        "drawn_area_um2": 4.0,
+        "fabricated_area_assumed_um2": 4.0,
+        "Ic_A": 1.9999999999999998e-05,
+        "Cj_F": 2.4000000000000004e-13
+      },
+      "nominal_capacitance_F": 1.4400000000000002e-13
+    },
+    "stack": {
+      "id": "mim_illustrative_v1",
+      "status": "illustrative",
+      "description": "Independent illustrative dielectric stack, not a vendor PDK. Approximately 1 fF/um2 parallel-plate density. No material dispersion, loss, kinetic inductance or junction barrier is simulated by this PEC capacitor coupon.",
+      "dielectric_thickness_um": 0.0664,
+      "dielectric_epsilon_r": 7.5,
+      "substrate_thickness_um": 3.0,
+      "substrate_epsilon_r": 11.7,
+      "electrode_model": "PEC"
+    },
+    "stack_sha256": "ea1661ed1c520b749f303bc4703d6f746028e9dd3754c6dea99f8b91a0f469b0",
+    "geometry": {
+      "polygons_um": {
+        "M1": [
+          [
+            [
+              -7.0,
+              -7.0
+            ],
+            [
+              -7.0,
+              7.0
+            ],
+            [
+              7.0,
+              7.0
+            ],
+            [
+              7.0,
+              -7.0
+            ]
+          ]
+        ],
+        "M2": [
+          [
+            [
+              -6.5,
+              -6.5
+            ],
+            [
+              -6.5,
+              6.5
+            ],
+            [
+              6.5,
+              6.5
+            ],
+            [
+              6.5,
+              -6.5
+            ]
+          ],
+          [
+            [
+              -1.5,
+              6.5
+            ],
+            [
+              -1.5,
+              7.0
+            ],
+            [
+              1.5,
+              7.0
+            ],
+            [
+              1.5,
+              6.5
+            ]
+          ]
+        ]
+      },
+      "electrode_areas_um2": {
+        "M1": 196.0,
+        "M2": 170.5
+      },
+      "marker_box_um": [
+        -6.0,
+        -6.0,
+        6.0,
+        6.0
+      ],
+      "crop_margin_um": 1.0,
+      "port_width_um": 2.0
+    },
+    "settings": {
+      "mesh_um": 0.5,
+      "margin_um": 7,
+      "z_cells": 3,
+      "frequencies_hz": [
+        10000000000.0,
+        20000000000.0,
+        40000000000.0,
+        60000000000.0,
+        80000000000.0,
+        100000000000.0
+      ],
+      "timesteps": 100000,
+      "port_resistance": 1.0,
+      "excitation_cutoff_hz": 2000000000000.0
+    },
+    "simulator": {
+      "name": "openEMS",
+      "version": "0.37.0",
+      "csxcad_version": "0.7.0"
+    },
+    "mesh": {
+      "lines": [
+        57,
+        57,
+        18
+      ],
+      "cells": 53312,
+      "min_steps_um": [
+        0.5,
+        0.5,
+        0.02213333333333333
+      ]
+    },
+    "frequency_hz": [
+      10000000000.0,
+      20000000000.0,
+      40000000000.0,
+      60000000000.0,
+      80000000000.0,
+      100000000000.0
+    ],
+    "capacitance_by_frequency_F": [
+      1.7848815091501773e-13,
+      1.7849602672107755e-13,
+      1.785275191630232e-13,
+      1.7857998855921712e-13,
+      1.7865346080601083e-13,
+      1.7874802378096516e-13
+    ],
+    "capacitance_F": 1.7858219499088523e-13,
+    "parallel_C_fit_max_relative_residual": 0.0009279928758288831,
+    "port_tail_relative": 2.3584326232810247e-07,
+    "negative_conductance_relative": 0.00015881879685285824,
+    "fit_accepted": true,
+    "convergence": {
+      "passed": true,
+      "max_relative_change": 0.02,
+      "comparisons": [
+        {
+          "control": "mesh",
+          "relative_change": 0.002028691217888179,
+          "primary_settings": {
+            "mesh_um": 0.5,
+            "z_cells": 3
+          },
+          "comparison_settings": {
+            "mesh_um": 1.0,
+            "z_cells": 2
+          },
+          "comparison_artifact_sha256": "bef38a5665a29156ad560eb6b2b9453571d83336198f7ddf61c088ffcf3d6166",
+          "passed": true
+        },
+        {
+          "control": "domain",
+          "relative_change": 2.036236365632327e-06,
+          "primary_settings": {
+            "margin_um": 7
+          },
+          "comparison_settings": {
+            "margin_um": 5
+          },
+          "comparison_artifact_sha256": "8cad40b4b11e2b7213a39ad3e30a5bdbb7d8b91cdc964e726587fea2d67bc60b",
+          "passed": true
+        },
+        {
+          "control": "duration",
+          "relative_change": 6.326492756336677e-07,
+          "primary_settings": {
+            "timesteps": 100000
+          },
+          "comparison_settings": {
+            "timesteps": 50000
+          },
+          "comparison_artifact_sha256": "64e05871049b7889bb57650222996c43d4cb8d2e6a3e6615ac85d2a36d9a89fa",
+          "passed": true
+        }
+      ]
+    },
+    "scope": "Component-level PEC MIM coupon from GDS. Interconnect, package, bias structures and junction barrier excluded.",
+    "worker_sha256": "97f9d700594d222d6272681f4b323de8226fed367155a22313c906a0362be9c7",
+    "source_artifact_sha256": "088e5e851a3bec2a4ff03572ce2644fc5d1a81e2fb10d1ed16342679a84c8774"
+  },
+  "response": {
+    "passed": true,
+    "simulator": {
+      "version": "JoSIM: Josephson Junction Superconductive SPICE Circuit Simulator\nCopyright (C) 2020 by Johannes Delport (jdelport@sun.ac.za)\nv2.7.0e0ed0f compiled on Oct 27 2026 at 17:34:54",
+      "corrector_supported": true,
+      "source_revision": "0e0ed0fbf380399a4f53d9d8e55b33bb4c64cfc6"
+    },
+    "circuit": {
+      "critical_current": 1.9999999999999998e-05,
+      "shunt_capacitance": 1.7858219499088523e-13,
+      "junction_capacitance": 2.4000000000000004e-13,
+      "junction_resistance": 1000000000.0,
+      "port_impedance": 5000.0,
+      "internal_resistance": 10000000.0
+    },
+    "model": {
+      "frequency": 60642468057.19079,
+      "kappa_external": 477803409.6848172,
+      "kappa_internal": 241290.72189083265,
+      "kerr": -290759477.45949286,
+      "internal_temperature": 0.0
+    },
+    "transient": {
+      "step": 2.5e-15,
+      "stop": 2e-07,
+      "start": 1e-07,
+      "output_step": 2e-13
+    },
+    "probe_power_W": 1e-24,
+    "passive": {
+      "measured": {
+        "signal_frequency": [
+          60604426468.646484,
+          60642468057.19079,
+          60680509645.73509
+        ],
+        "signal_real": [
+          -0.000361136142903119,
+          0.9989890855881854,
+          -0.000649889936354512
+        ],
+        "signal_imag": [
+          -0.9994706905824322,
+          0.0009903135677267138,
+          0.999518274543655
+        ],
+        "gain": [
+          0.9989417917526375,
+          0.997980173845281,
+          0.9990372035036545
+        ],
+        "idler_real": [
+          -8.681858737752228e-06,
+          1.091179223569694e-06,
+          2.085560074288961e-06
+        ],
+        "idler_imag": [
+          -6.288269257137622e-07,
+          -5.229571477649464e-06,
+          1.153903491396307e-06
+        ],
+        "idler_conversion": [
+          7.577009444478735e-11,
+          2.8539089937794952e-11,
+          5.681054090924764e-12
+        ]
+      },
+      "max_complex_s11_error": 0.000990314591825092,
+      "model_real": [
+        -0.0005047451036701567,
+        0.9989905097925549,
+        -0.0005047451036701567
+      ],
+      "model_imag": [
+        -0.9994952548962774,
+        0.0,
+        0.9994952548962774
+      ]
+    },
+    "pumped": {
+      "pump_frequency_Hz": 60599861478.021164,
+      "pump_power_W": 2.9034292002053477e-15,
+      "pump_photons": 0.460354782872094,
+      "measured": {
+        "signal_frequency": [
+          60618882272.29332,
+          60637903066.56547
+        ],
+        "signal_real": [
+          0.5675287238012364,
+          -0.1804737508532818
+        ],
+        "signal_imag": [
+          1.316815810061772,
+          1.128590170164286
+        ],
+        "gain": [
+          2.0560927299681007,
+          1.3062865469385043
+        ],
+        "idler_real": [
+          -0.8431129019290577,
+          -0.2129760482371672
+        ],
+        "idler_imag": [
+          0.588954584837565,
+          0.5115811295674343
+        ],
+        "idler_conversion": [
+          1.0577068684004252,
+          0.307074049252212
+        ]
+      },
+      "model_gain": [
+        2.051072866116299,
+        1.3049355135427736
+      ],
+      "model_idler_conversion": [
+        1.052660187719902,
+        0.3057658706855791
+      ],
+      "gain_error_db": [
+        0.010616081603254557,
+        0.004494036795029244
+      ],
+      "idler_error_db": [
+        0.020771265767246083,
+        0.018541076626073405
+      ]
+    },
+    "acceptance": {
+      "max_complex_s11_error": 0.02,
+      "max_gain_error_db": 0.25,
+      "max_idler_error_db": 0.25
+    },
+    "simulator_binary_sha256": "5bbfde365428722b3c6a9f24904c38a30ac78e346a34a68fcc553bc0e4fe8174",
+    "backannotation": {
+      "schema_version": 1,
+      "circuit_type": "ParallelJPA",
+      "circuit": {
+        "critical_current": 1.9999999999999998e-05,
+        "shunt_capacitance": 1.7858219499088523e-13,
+        "junction_capacitance": 2.4000000000000004e-13,
+        "junction_resistance": 1000000000.0,
+        "port_impedance": 5000.0,
+        "internal_resistance": 10000000.0
+      },
+      "reduced_model": {
+        "frequency": 60642468057.19079,
+        "kappa_external": 477803409.6848172,
+        "kappa_internal": 241290.72189083265,
+        "kerr": -290759477.45949286,
+        "internal_temperature": 0.0
+      },
+      "source": {
+        "gds_sha256": "be18c31495ff136316c43c70a048a8db86674bd7d7dc4b037f97ee8df224f7ae",
+        "manifest_sha256": "782da97ea461c6eaf9d6405c87f8184db7e1f01f46d9b4c190ca80078571572e",
+        "process_sha256": "ece09da4d1fa9b8ea75ac828a4aba296fa4248d2c70084412c045f3f7150cf77",
+        "design_sha256": "e0ff2ddc1f6200da0daa94d228174ad0d5a36f763fa6d0bc5b5a012fc93b2837"
+      },
+      "extraction_sha256": "088e5e851a3bec2a4ff03572ce2644fc5d1a81e2fb10d1ed16342679a84c8774",
+      "stack_sha256": "ea1661ed1c520b749f303bc4703d6f746028e9dd3754c6dea99f8b91a0f469b0",
+      "convergence": {
+        "passed": true,
+        "max_relative_change": 0.02,
+        "comparisons": [
+          {
+            "control": "mesh",
+            "relative_change": 0.002028691217888179,
+            "primary_settings": {
+              "mesh_um": 0.5,
+              "z_cells": 3
+            },
+            "comparison_settings": {
+              "mesh_um": 1.0,
+              "z_cells": 2
+            },
+            "comparison_artifact_sha256": "bef38a5665a29156ad560eb6b2b9453571d83336198f7ddf61c088ffcf3d6166",
+            "passed": true
+          },
+          {
+            "control": "domain",
+            "relative_change": 2.036236365632327e-06,
+            "primary_settings": {
+              "margin_um": 7
+            },
+            "comparison_settings": {
+              "margin_um": 5
+            },
+            "comparison_artifact_sha256": "8cad40b4b11e2b7213a39ad3e30a5bdbb7d8b91cdc964e726587fea2d67bc60b",
+            "passed": true
+          },
+          {
+            "control": "duration",
+            "relative_change": 6.326492756336677e-07,
+            "primary_settings": {
+              "timesteps": 100000
+            },
+            "comparison_settings": {
+              "timesteps": 50000
+            },
+            "comparison_artifact_sha256": "64e05871049b7889bb57650222996c43d4cb8d2e6a3e6615ac85d2a36d9a89fa",
+            "passed": true
+          }
+        ]
+      },
+      "nominal_shunt_capacitance_F": 1.4400000000000002e-13,
+      "extracted_shunt_capacitance_F": 1.7858219499088523e-13,
+      "parameter_origins": {
+        "shunt_capacitance": "openEMS PEC capacitor coupon from GDS electrodes",
+        "critical_current": "Actual GDS junction-window area times illustrative process Jc",
+        "junction_capacitance": "Actual GDS junction-window area times illustrative process Cj density; added once",
+        "port_impedance": "User-supplied external embedding",
+        "internal_resistance": "User-supplied lumped loss; not extracted from PEC",
+        "junction_resistance": "User-supplied RCSJ loss; not extracted from PEC"
+      },
+      "limitations": [
+        "Capacitor coupon extraction, not a full-chip electromagnetic model.",
+        "Lead/loop/package inductance, kinetic inductance, cross-coupling, bias and port geometry remain unextracted.",
+        "Physical stack and junction densities are illustrative, not calibrated foundry data."
+      ],
+      "artifact_sha256": "58c824fafb8c76c784f4b9365c189e8400e5af26bce596af5baded03c5325db2"
+    },
+    "nominal_resonance_Hz": 63314274014.37281,
+    "extracted_resonance_Hz": 60642468057.19079
+  },
+  "refinement_cases": [
+    {
+      "transient": {
+        "step": 2.5e-15,
+        "stop": 2e-07,
+        "start": 1e-07,
+        "output_step": 2e-13
+      },
+      "passed": true,
+      "passive_error": 0.000990314591825092,
+      "gain_error_db": [
+        0.010616081603254557,
+        0.004494036795029244
+      ],
+      "idler_error_db": [
+        0.020771265767246083,
+        0.018541076626073405
+      ]
+    },
+    {
+      "transient": {
+        "step": 5e-15,
+        "stop": 2e-07,
+        "start": 1e-07,
+        "output_step": 2e-13
+      },
+      "passed": true,
+      "passive_error": 0.003922787094813917,
+      "gain_error_db": [
+        0.022537477792044402,
+        0.009304471678620363
+      ],
+      "idler_error_db": [
+        0.044582970512920594,
+        0.038697260629715124
+      ]
+    },
+    {
+      "transient": {
+        "step": 1e-14,
+        "stop": 2e-07,
+        "start": 1e-07,
+        "output_step": 2e-13
+      },
+      "passed": true,
+      "passive_error": 0.015568990852700306,
+      "gain_error_db": [
+        0.07100681890821248,
+        0.028663448091725385
+      ],
+      "idler_error_db": [
+        0.13933793407902917,
+        0.11824087563633601
+      ]
+    },
+    {
+      "transient": {
+        "step": 1e-14,
+        "stop": 1e-07,
+        "start": 3e-08,
+        "output_step": 2e-13
+      },
+      "passed": false,
+      "passive_error": 0.015398713869589065,
+      "gain_error_db": [
+        0.17719717543874625,
+        -0.07935276885228348
+      ],
+      "idler_error_db": [
+        0.275461586446211,
+        -0.08522073076621339
+      ]
+    }
+  ],
+  "sensitivity": {
+    "timestep_final_vs_fine": {
+      "signal_gain_db": 0.01192139618878979,
+      "idler_conversion_db": 0.02381170474567431
+    },
+    "timestep_fine_vs_coarse": {
+      "signal_gain_db": 0.04846934111616823,
+      "idler_conversion_db": 0.09475496356610863
+    },
+    "window_coarse_vs_short": {
+      "signal_gain_db": 0.1080162169440088,
+      "idler_conversion_db": 0.20346160640255018
+    }
+  },
+  "scope": "Component-level PEC capacitor extraction and classical annotated-circuit validation. Not full-layout or fabricated-device validation."
+}

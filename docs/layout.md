@@ -157,6 +157,10 @@ explicitly reports `drc_executed=false`; it is not a substitute for a DRC run.
 Reports record hashes, qualification and rules executed. Editing a GDS changes
 its recorded hash but permits rechecking against the same design intent.
 
+The [JPA EM workflow](em-extraction.md) now implements capacitor-coupon
+extraction and circuit back-annotation, with [JoSIM comparison](em-jpa-validation.md).
+Full interconnect/package extraction remains separate work.
+
 See [validation evidence and remaining work](layout-validation.md). KLayout
 APIs are documented in its [standalone Python manual](https://www.klayout.org/klayout-pypi/)
 and [DRC runset manual](https://www.klayout.de/doc/manual/drc_runsets.html).

@@ -24,6 +24,10 @@ geometries. Install `.[layout]` and run `python examples/layout/generate_all.py`
 Profiles distinguish reference dimensions from assumed rules; JJ layouts need
 a real process adapter and EM extraction before fabrication.
 
+**EM:** [JPA extraction and back-annotation](docs/em-extraction.md) starts with
+openEMS simulation of actual capacitor electrode polygons, mesh/domain/time
+checks, and validation of the annotated circuit against JoSIM.
+
 ## Choose a model
 
 | Device / question | Python interface | What it calculates | Guide |
