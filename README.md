@@ -8,15 +8,38 @@
   &nbsp; Python 3.10+ &nbsp; · &nbsp; MIT License
 </p>
 
-Model kinetic-inductance traveling-wave amplifiers, Josephson junction chains,
-flux-biased rf-SQUID/SNAIL chains, and resonant JPAs with explicit circuit and
-operating parameters. Calculate dispersion, gain, pump depletion, internal
-loss and quantum noise. An optional **JoSIM** backend compares the Josephson
-models with physical RCSJ transient circuits.
+TWPA Sim is a Python toolkit for studying **superconducting microwave
+parametric amplifiers**. A strong microwave pump transfers energy to a weak
+signal through a nonlinear inductance. The simulation predicts the amplified
+signal, the generated idler frequency, and the effects of internal loss and
+quantum noise. These devices are useful where very small microwave signals
+must be measured without adding excessive noise.
 
-**Start here:** [HOWTO and commented examples](HOWTO.md) ·
+The supported physical circuits include kinetic-inductance transmission lines,
+Josephson-junction traveling-wave amplifiers, flux-biased junction loops and
+resonant Josephson parametric amplifiers. A traveling-wave amplifier builds
+gain along a line and is usually measured in transmission; a resonant JPA
+stores energy in a nonlinear mode and the examples measure its reflected
+signal. The [physical introduction](docs/physical-overview.md) explains those
+differences and links each device family to its literature.
+
+Start from an effective resonator when its resonance and damping are already
+known, or from a finite circuit when junction dynamics and port reflections
+matter. Supported layout extraction derives capacitance and inductance for
+back-annotation into a resonant JPA circuit. Optional **JoSIM** simulations
+independently compare classical circuit response; quantum noise is checked
+through quantum identities and analytic limits. The supplied examples use
+illustrative parameters and are not automatically calibrated to a fabricated
+device.
+
+**Start here:** [Physical introduction](docs/physical-overview.md) ·
+[HOWTO and commented examples](HOWTO.md) ·
 [Documentation](docs/README.md) · [Conventions](docs/conventions.md) ·
 [References](docs/references.md)
+
+For reading equations, use the [symbol glossary](docs/symbols.md). For
+harmonic balance, numerical refinement, stability and noise diagnostics, use
+[Understanding the numerical calculations](docs/numerical-methods.md).
 
 **Layout:** [Process profiles, GDS generators and KLayout checking](docs/layout.md)
 cover the research-grade NY CREATES KIT reference and illustrative JPA/JTWPA
@@ -76,6 +99,9 @@ print(noise.gain_db, noise.added_noise, noise.quantum_limit)
 ```
 
 This is a synthetic small-signal 4WM example: the idler is at 1.1 GHz.
+Four-wave mixing (4WM) couples a signal at `f_s` and an idler at `f_i` through
+a pump at `f_p`, with `f_s+f_i=2*f_p`. The example's output gain is a power
+ratio in decibels, and its added noise is referred back to the signal input.
 Input-referred noise uses vacuum variance 1/2; its finite-gain bound approaches
 half a quantum only at high gain. Use the [commented 4WM example](examples/howto/05_four_wave_jtwpa.py)
 for internal loss, and the [HOWTO](HOWTO.md) for other families and numerical checks.

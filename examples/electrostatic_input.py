@@ -1,4 +1,19 @@
-"""Simple cross-section example, not a KITWPA geometry extraction."""
+"""Turn a small electrostatic cross-section into an illustrative cell value.
+
+The grid holds a dielectric between boundaries fixed at 0 V and 1 V.
+Solving its potential gives electric energy and capacitance per invariant
+length. A selected strip of cells marks a region whose energy participation
+is measured. This region label does not independently change permittivity.
+Multiplying capacitance per length by an assumed finger length then creates
+a toy electrical capacitance; it is not a full interdigitated-capacitor or
+amplifier-layout extraction.
+
+er means dimensionless relative permittivity. fixed contains prescribed
+voltages (NaN means unknown), and oxide is a Boolean participation mask.
+dx/dy are mesh spacings in metres. The printed Cell has inductance in H,
+capacitance in F and dimensionless participation. See docs/kit-twpa.md and
+examples/howto/02_tls_loss.py for the dielectric-loss pipeline and references.
+"""
 import numpy as np
 from twpa import electrostatic, Cell
 

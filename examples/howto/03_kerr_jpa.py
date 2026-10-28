@@ -1,11 +1,30 @@
-"""Select a stable Kerr-JPA pump branch and calculate gain and loss noise."""
+"""Find the reflected gain of a pumped nonlinear microwave resonator.
+
+A Josephson parametric amplifier (JPA) is represented here by one effective
+mode, rather than individual junctions. Its Kerr coefficient makes resonance
+shift with stored photon number. We first find steady pump states, choose
+a stable one, and calculate the response to a weak signal plus its idler.
+
+The cavity photon count describes pump buildup. Signal gain is reflected
+power gain in dB; added quanta are symmetrized noise referred to the input.
+The 0.5 MHz signal offset gives an idler 0.5 MHz below the pump. All values
+are illustrative; internal temperature sets the loss bath's fluctuations.
+
+Read docs/resonant-jpa.md and HOWTO.md. Physical treatment:
+Eichler and Wallraff, EPJ Quantum Technology 1, 2 (2014),
+https://doi.org/10.1140/epjqt2.
+"""
 import json
 import numpy as np
 from twpa import jpa
 
 
 def main():
-    # Frequencies are Hz. Linewidths and Kerr coefficient are ANGULAR rates.
+    # The mode is at 5 GHz. kappa_external and kappa_internal are energy
+    # decay rates into the port and internal bath. Convert a linewidth in Hz
+    # to an angular rate with 2*pi. Field amplitude decays at total kappa/2.
+    # Negative Kerr shifts angular resonance downward by 2*pi*10 kHz per
+    # additional cavity photon. internal_temperature is 0.020 kelvin.
     resonator = jpa.Resonator(frequency=5e9, kappa_external=2*np.pi*10e6,
         kappa_internal=2*np.pi*.25e6, kerr=-2*np.pi*10e3,
         internal_temperature=.02)

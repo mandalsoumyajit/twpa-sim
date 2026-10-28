@@ -6,6 +6,22 @@ gain curve. The repository's finite-circuit harmonic balance, numerical
 convergence and JoSIM comparisons are described in its own guides/reports.
 Use the matching entries in [references.bib](../references.bib).
 
+## A reading path through the physics
+
+For an overall picture, begin with [the physical introduction](physical-overview.md).
+For resonant gain and dynamic range, read Eichler and Wallraff and the
+[JPA guide](resonant-jpa.md). For traveling-wave amplification, choose the
+material mechanism first: Eom/Malnou for kinetic-inductance lines,
+O'Brien for resonantly phase-matched junction chains, or Zorin/Frattini for
+flux-biased three-wave elements. Roudsari gives experimental SNAIL-line context.
+
+Read Caves alongside the [noise explanation](jtwpa-quantum-noise.md) when
+interpreting input-referred added noise; Peng adds context for distributed
+frequency channels. The JoSIM, openEMS, FastHenry and KLayout references
+describe tools or numerical methods, rather than establishing that this
+repository's illustrative material inputs match a particular foundry.
+Each annotated entry below states that narrower role explicitly.
+
 ## KIT and dielectric loss
 
 <a id="eom2012"></a>

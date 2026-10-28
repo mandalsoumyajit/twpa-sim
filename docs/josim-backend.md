@@ -1,9 +1,25 @@
 # JoSIM backend
 
+The Python models and JoSIM solve related circuits in different ways. The
+Python Josephson solvers usually work with steady frequency components;
+JoSIM evolves a physical circuit in time. Comparing measured pump/signal/idler
+response between them tests classical dynamics and numerical approximations.
+It does not make JoSIM an independent reference for quantum vacuum noise.
+
+A netlist, also called a deck, is a text list of components, connections,
+drives and requested traces. Its Josephson devices use the resistively and
+capacitively shunted junction (RCSJ) model: nonlinear supercurrent in parallel
+with capacitance and loss resistance. A trace is a saved voltage, current or
+phase history. For simulator background, see
+[Delport et al.](references.md#josim2019).
+
 The optional `twpa.backends.JoSIM` runner executes physical Josephson-junction
 netlists and reads CSV traces. It supports a native JoSIM executable or a Linux
 executable reached from Windows through WSL. JoSIM is installed separately;
 no binary or simulator source is bundled with this package.
+WSL means Windows Subsystem for Linux. The optional binary NPY output
+preserves float64 traces when the selected simulator build supports it;
+ordinary comma-separated-value (CSV) text remains the default.
 
 ## Configure and run
 
@@ -42,6 +58,14 @@ upstream compatibility rather than relying on fork-specific binary formats.
 
 ## Physical resonator circuits
 
+In this section `Ic` is a physical junction critical current (A), `Cj` is its
+capacitance (F), `C` is the total relevant mode capacitance (F), and `Z0` is
+the real port reference resistance (ohm). The reduced flux quantum is
+`phi_bar=Phi0/(2*pi)`, with flux quantum `Phi0=h/(2*e)`; `e` is positive
+elementary charge and `hbar=h/(2*pi)` is reduced Planck's constant.
+A Thevenin source means an ideal voltage source in series with its source
+resistor. That resistor also defines the incident/reflected-wave reference.
+
 `ParallelJPA` is an RCSJ junction in parallel with a shunt capacitor and internal
 resistance, driven through a Thevenin source resistor. The source resistance
 is also the port reference impedance. Junction capacitance appears **once** in
@@ -65,6 +89,11 @@ The stable zero-fluxoid branch solves
 
     chi + (L_arm*Ic/phi_bar)*sin(chi) = pi*Phi_external/Phi0
 
+`chi` is the circulating-phase coordinate of the symmetric two-junction
+loop, in radians. `L_arm` is each arm's inductance and `Phi_external` is the
+applied flux in webers. The sine term accounts for the loop's own screening
+current, so the applied flux is not simply imposed as a junction phase.
+
 Linearized arm/junction admittances determine the unpumped resonance, effective
 capacitance (half the susceptance slope), and loss. The effective flux pair
 drive comes from the derivative of that resonance with applied flux. It is not
@@ -79,7 +108,19 @@ decay rates are angular rates. The effective flux JPA frame is half the physical
 pump frequency. A single-mode rotating-wave approximation is used only by the
 reduced model; JoSIM integrates the RCSJ circuit itself.
 
+Here `omega_p` is the physical pump angular frequency, `t` is time, and
+`phase` is its sinusoidal phase. `omega_mode` is the resonator's angular
+frequency. In the pair-drive formula specifically, `flux` and `Phi_ac` are
+normalized by the flux quantum, so the derivative is per unit normalized
+flux and `lambda` has units rad/s. This `lambda` is a coupling rate, not the
+penetration length used by London extraction.
+
 ## Measure signals at the port
+
+`V` is the voltage at the circuit port and `I` is current entering it.
+`Z0` is the real reference impedance; `V_inc` and `V_ref` are incoming and
+reflected voltage-wave amplitudes. Separating those waves avoids confusing
+large internal resonator voltage with externally measured amplifier gain.
 
 `twpa.measurement.port_waves` uses instantaneous or peak-phasor voltage/current
 with current directed into the circuit:

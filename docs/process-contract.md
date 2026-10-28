@@ -1,5 +1,20 @@
 # Fabrication process JSON contract (v1)
 
+A process profile is a machine-readable statement of how drawn geometry
+maps to a fabrication stack and which geometric rules are being checked.
+It is separate from the amplifier's electrical design. For example, a
+junction's drawn area needs both a layer/contact definition and an assumed
+current density before it can imply a critical current. Recording the source
+and qualification of each value prevents an illustrative assumption from
+silently becoming a foundry rule.
+
+The JSON contract below is the exact reference for those files; begin with
+the [layout workflow](layout.md) for a worked physical description. GDS is
+the layout exchange format. Its database unit (DBU) is the length represented
+by one stored integer coordinate. A manufacturing grid constrains allowed
+drawn coordinates independently. A stream pair consists of a layer number
+and datatype; it identifies a particular category of geometry in the file.
+
 The authoritative semantic validator is
 [Process](../src/twpa/layout/process.py). It runs without the optional KLayout
 dependency. Load a profile with `load_process('name')` or an explicit JSON path.

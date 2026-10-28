@@ -1,4 +1,17 @@
-"""Kerr JPA gain and effective flux-pumped quadrature squeezing.
+"""Explore reflected gain and squeezing in effective resonant JPA models.
+
+A nonlinear microwave resonator stores pump energy and mixes a weaker signal
+with an idler. The Kerr case pumps through the signal port; the flux case
+uses an assumed pair-coupling rate for resonance modulation at twice the
+signal frequency. Their measured outputs are reflection gain and, when
+signal/idler coincide, two phase-quadrature gains and noise variances.
+
+Frequencies are Hz, power is W, and kappa/Kerr/pair-drive quantities are
+angular rates in rad/s. Cavity occupation counts stored pump photons; wave
+amplitude squared counts photons/s. Noise uses vacuum variance 0.5.
+See examples/howto/03_kerr_jpa.py and 04_flux_jpa.py before running this sweep.
+Physical background: Eichler and Wallraff, https://doi.org/10.1140/epjqt2;
+the guide docs/resonant-jpa.md defines all equation symbols and noise outputs.
 
 Run: python examples/resonant_jpa.py [--plot gain.png]
 All example parameters are illustrative, not a characterized device.

@@ -1,4 +1,17 @@
-"""Parameterized full nonlinear CMEs and spatial phase-integral gradients."""
+"""Explore how assumed spatial inductance variation changes finite-signal gain.
+
+The coupled-mode equations evolve coherent pump, signal and idler currents
+along a kinetic-inductance line. A finite signal can deplete the pump. Here a
+2% fractional inductance variation is applied through several normalized
+spatial profiles, and the resulting forward power gain and remaining peak
+pump current (A) are compared.
+
+Names such as 'folded' and 'spiral' label mathematical variation profiles.
+They do not insert bends, layout parasitics or a package field simulation.
+This is a classical propagation study, not a quantum-noise calculation.
+Start with examples/howto/01_kit.py; see docs/kit-twpa.md and its Malnou/Eom
+references for physical context, and docs/numerical-methods.md for refinement.
+"""
 from twpa import preset, nonlinear, route_profile
 
 design, bias = preset('v2-tls')

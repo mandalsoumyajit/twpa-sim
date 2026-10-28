@@ -1,4 +1,18 @@
-"""Coupled TLS/amplifier example; loss parameters are illustrative."""
+"""Calculate KIT gain and noise with a prescribed lossy-dielectric fraction.
+
+This version starts with electrical cells and assigns 3% electric-energy
+participation to a lossy dielectric rather than solving its geometry. A
+two-level-system (TLS) loss model supplies field-dependent absorption. The
+coupled solver evolves pump attenuation, weak signal/idler conversion and
+the loss environment's fluctuations together.
+
+The output gives pump/signal frequencies in GHz, gain in dB, and added noise
+in symmetrized quanta referred to the input. Material loss tangent,
+temperature, saturation field and current-to-field conversion are illustrative
+assumptions. They are not determined by assigning participation=0.03.
+Start with examples/howto/02_tls_loss.py; docs/kit-twpa.md explains the
+pipeline and connects it to the Martinis/Gao dielectric-loss references.
+"""
 from dataclasses import replace
 import json
 from twpa import preset, TLS, coupled

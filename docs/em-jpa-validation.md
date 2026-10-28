@@ -1,5 +1,20 @@
 # JPA extraction and annotated-circuit validation
 
+This initial benchmark asks whether the capacitance of actual drawn shunt
+electrodes, computed by openEMS, can replace an area estimate and predict
+the same resonant amplifier response as a physical JoSIM circuit. It keeps
+ideal intercomponent connections; the later [London-network report](magnetic-jpa-validation.md)
+adds finite metal inductance and pickup coupling. Read the
+[electric workflow](em-extraction.md) for the component domain and assumptions.
+
+EM means electromagnetic field extraction; GDS is the layout exchange file;
+PEC is the perfect-electric-conductor electrode approximation. `Ic` is
+junction critical current, `Cj` is junction capacitance, and shunt capacitance
+is a separate component. A femtofarad (fF) is `1e-15` F. RCSJ means resistively
+and capacitively shunted junction. Reported gain errors compare signal power,
+whereas idler conversion is a photon-flux ratio. The field solve and the
+subsequent nonlinear circuit comparison answer different validation questions.
+
 Validated on **2026-10-28** with actual openEMS **0.37.0**, CSXCAD **0.7.0**
 and JoSIM **v2.7.0e0ed0f**, using the enhanced build's four-iteration corrector
 and phase formulation. The full source-build identifier and exact simulator

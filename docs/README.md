@@ -1,8 +1,19 @@
 # TWPA Sim documentation
 
-Start with the [HOWTO](../HOWTO.md), which links eight commented, runnable
-examples. Use [conventions](conventions.md) to compare APIs safely, then
-follow a device guide for equations and numerical controls.
+Start with [What is being simulated?](physical-overview.md). It explains why
+the pump, signal and idler interact; how resonant and traveling-wave circuits
+differ; and what gain, conversion and added noise mean. Continue with the
+[HOWTO](../HOWTO.md), which walks through eight runnable examples and explains
+their parameters and output. The [examples index](../examples/README.md)
+identifies the more specialized layout, extraction and exploratory scripts.
+
+Use the [symbol glossary](symbols.md) as a lookup aid, then read the relevant
+device guide below. Each guide defines its own equation symbols and states
+the physical approximation being solved. The
+[numerical-method introduction](numerical-methods.md) explains harmonic
+balance, continuation, spectral refinement, stability and noise diagnostics.
+[Conventions](conventions.md) is a reference for exact API units, complex
+phases and mode ordering, rather than the starting explanation of the physics.
 
 ## Device guides
 
@@ -36,6 +47,14 @@ The reports state what was tested and its numerical sensitivity. A classical
 circuit comparison, quantum consistency test and fabricated-device measurement
 are distinct kinds of evidence. The current benchmarks use synthetic or
 documented example parameters; they are not a universal process calibration.
+
+Read a report as evidence for a particular circuit and set of numerical
+controls. “Residual” measures how well the chosen equations were solved;
+“refinement” measures how an observable changes when more numerical detail is
+retained. Neither alone establishes physical stability or validates omitted
+geometry. A JoSIM comparison checks classical response, while a quantum-limit
+check tests the fluctuation model. The [methods guide](numerical-methods.md)
+explains why these tests answer different questions.
 
 ## Working with the project
 

@@ -1,5 +1,23 @@
 # London-network JPA validation
 
+This benchmark tests a resonant Josephson parametric amplifier whose junction
+and shunt capacitor are connected by finite metal, with a nearby inductive
+pickup loop connected to the measurement port. It asks whether field-derived
+capacitance and inductance predict the same passive reflection and pumped
+signal/idler response as a physical JoSIM circuit. The passive field solvers
+and the nonlinear circuit comparison validate different stages of that chain.
+
+In the tables, a self inductance describes energy stored by one loop's current,
+and mutual inductance describes coupling between the tank and pickup currents.
+`L` is inductance, `C` is capacitance, and `Ic` is junction critical current.
+`Cs`/`Cj` distinguish the shunt and junction capacitances. A picohenry (pH)
+is `1e-12` H, a femtofarad (fF) is `1e-15` F, and a microampere is `1e-6` A.
+`S11` is the complex reflected wave relative to the incident wave. Signal gain
+is a power ratio; idler conversion is a photon-flux ratio. The
+[workflow](magnetic-extraction.md) gives the circuit and reference planes,
+and the [physical overview](physical-overview.md#how-to-read-the-results)
+explains how those output quantities are interpreted.
+
 Completed 2026-10-28. The [portable reference](../validation/magnetic-jpa-reference.json)
 records native signed matrices, field convergence controls, kinetic-energy
 checks and actual JoSIM response. The [workflow](magnetic-extraction.md)

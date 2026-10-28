@@ -1,5 +1,19 @@
 # 4WM quantum-noise validation
 
+The question here is whether the small-fluctuation model of a pumped junction
+line has the correct loss-bath noise and satisfies quantum constraints. It is
+separate from comparing classical circuit gain with JoSIM. Read the
+[noise guide](jtwpa-quantum-noise.md) for the fluctuation operators, covariance
+definitions and Caves/Peng references before interpreting these benchmarks.
+
+Below, `Lj` is junction inductance, `Ic` is critical current,
+`phi_bar` is reduced flux quantum, `Cg`/`Cj` are ground/junction capacitances,
+and `Rj`/`Rground`/`Rresonator` are the corresponding loss resistances.
+`R` is port resistance; `fp`, `fs`, `fi` are pump/signal/idler frequencies.
+RPM means resonant phase matching. Gain is a signal power ratio, while added
+noise is referred to the input in symmetrized quanta. A commutator defect
+checks the quantum transfer algebra; it is not a measured uncertainty in noise.
+
 The quantum extension is checked against canonical commutators,
 fluctuation-dissipation, covariance uncertainty, thermal equilibrium and
 analytic amplifier/attenuator limits. These are mathematical/physical

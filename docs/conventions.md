@@ -1,5 +1,19 @@
 # Units, conventions and model boundaries
 
+This page is a normalization reference for comparing calculations. For the
+physical devices and a first worked path, begin with the
+[overview](physical-overview.md) and [HOWTO](../HOWTO.md). In this page `f_p`,
+`f_s` and `f_i` mean pump, signal and idler frequencies, also written `fp`,
+`fs` and `fi` in code-style formulas. `omega=2*pi*f` is angular frequency;
+`t` is time and `i=sqrt(-1)` sets the phasor convention.
+
+`S11` denotes reflected wave amplitude divided by incoming amplitude at
+port 1, and `S21` denotes transmitted amplitude at port 2 relative to that
+input. For the stated real reference impedances, squared magnitudes give
+power ratios. A Bloch wavenumber is phase advance per repeated cell; a
+linewidth is the frequency width of a resonance. The JPA decay rate `kappa`
+sets the linear power linewidth `kappa/(2*pi)` in Hz.
+
 All APIs use SI electrical units. Frequency inputs are Hz; powers are watts;
 temperature is kelvin. A linewidth or coupling **rate** may instead be angular:
 the resonant JPA API explicitly uses rad/s for kappa, Kerr and pair drive.
@@ -12,7 +26,7 @@ the resonant JPA API explicitly uses rad/s for kappa, Kerr and pair drive.
 | Nonlinear drive | Peak current in A | Available incident power in W / effective pair rate | Available incident power in W |
 | Spatial coordinate | Cell index; extended-zone k in rad/cell | Single mode | Finite nodes; principal-zone k in rad/cell |
 | Capacitance | `Cell.capacitance` per finger; two per cell | Effective mode C or circuit-adapter values | Cg per interior node, Cj per junction/effective element |
-| End/reference behavior | Gain CMEs are forward only | Reflection input-output relation | Resistive two-port boundaries with half end shunts |
+| End/reference behavior | Gain coupled-mode equations are forward only | Reflection input-output relation | Resistive two-port boundaries with half end shunts |
 | Gain/noise arrays | Signal-frequency arrays | Signal-frequency arrays | One signal point per solve; scalar summary, multimode matrices |
 
 Do not directly interconnect complex scattering matrices across time
@@ -41,6 +55,11 @@ would give the wrong noise prediction.
 
 For a real port impedance R and peak voltage/current waves:
 
+`R` is measured in ohms; `V_wave` and `I_wave` are complex **peak**, rather
+than root-mean-square, voltage and current amplitudes. `P` is average wave
+power in watts, `h` is Planck's constant and `f` is physical frequency in Hz.
+The unit dBm measures power relative to 1 milliwatt.
+
     P = |V_wave|^2/(2*R) = R*|I_wave|^2/2
     photon_flux = P/(h*f)
     P[W] = 1e-3 * 10**(P[dBm]/10)
@@ -60,6 +79,12 @@ linear scale. The physical element's `critical_current` is the single
 rf-SQUID or large SNAIL junction Ic. They are not interchangeable.
 
 ## Quantum noise
+
+Here `G` means signal power gain, `n` means thermal photon occupation, and
+`I` in matrix expressions is an identity matrix rather than electrical
+current. A dagger denotes a creation operator or conjugate transpose as
+appropriate to the object. A covariance contains second moments of field
+fluctuations; it excludes the coherent pump or signal amplitude.
 
 Symmetrized spectral vacuum noise is 1/2 quantum. Gaussian quadratures use
 [x,p]=i and vacuum covariance I/2. Normally ordered occupation subtracts that
@@ -81,6 +106,11 @@ Josephson noise pipelines are separate models, not one universal loss adapter.
 | `jtwpa.quantum_noise` | Pump, signal, idler, then retained modes; frequency-major left/right ports |
 | `three_wave.quantum_noise` | Signal, idler, then Floquet ladders; frequency-major left/right ports; pump-only operating point |
 
+A Nambu vector groups annihilation and creation components, here signal and
+conjugate idler, because the pump couples them. A Floquet ladder groups
+frequencies linked by the periodic drive. These are choices of representation,
+not additional physical junctions or ports.
+
 For 4WM the primary outgoing signal channel is 3 and incoming left signal is
 2. For 3WM they are 1 and 0. Prefer named result summaries unless you need
 the full matrices. See [quantum noise](jtwpa-quantum-noise.md) and
@@ -98,8 +128,12 @@ the full matrices. See [quantum noise](jtwpa-quantum-noise.md) and
   limit; coherent depletion is available, quantum noise is pump-only.
 
 Distributed harmonic-balance convergence does not certify dynamical stability.
-These models do not perform layout extraction, quantum-induced switching or
+These propagation/noise models do not perform layout extraction, quantum-induced switching or
 general non-Gaussian dynamics. Consult the specific guide before extending a regime.
+
+The separate [layout-to-circuit workflow](magnetic-extraction.md) does provide
+supported JPA field extraction and back-annotation. It is not an automatic
+EM layout model inside every propagation or quantum API listed above.
 
 ## Troubleshooting
 

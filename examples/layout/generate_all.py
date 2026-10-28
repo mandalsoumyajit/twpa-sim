@@ -1,8 +1,23 @@
 """Generate and check every layout family; optional native KLayout Ruby DRC.
 
+An electrical amplifier model is not yet a fabrication mask. This script
+reads explicit process and geometric design profiles, constructs conductor,
+junction, capacitor and contact polygons, and writes GDS layout files.
+Each companion manifest records assumptions, component estimates and hashes.
+The independent checker then reads the serialized geometry to test intended
+connectivity and design rules (DRC: widths, spacing, enclosure and grid).
+
+PASS means the requested geometry/checks passed for that profile; it does
+not establish gain, extracted inductance or fabrication qualification.
+Physical nets are connected conductor groups. Intended nets also account
+for component annotations. Unassigned islands should be zero. The component
+area estimates still need the field/circuit workflow for electrical accuracy.
+
 python examples/layout/generate_all.py --output validation/runs/layout
 Add --full-kit for the 49,950-cell reference, --klayout path/to/klayout for Ruby.
 Outputs are regenerable GDS, manifests and geometry/DRC reports, not signoff data.
+Install twpa-sim[layout]. See docs/layout.md, docs/magnetic-extraction.md and
+the KLayout documentation at https://www.klayout.de/doc/manual/drc_runsets.html.
 """
 import argparse
 from collections import Counter

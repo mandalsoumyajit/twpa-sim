@@ -1,5 +1,20 @@
 # JPA EM extraction and circuit back-annotation
 
+A resonant amplifier's frequency depends on the energy stored in its
+capacitances and inductances. An area-times-capacitance estimate can miss
+electric fields near electrode edges and feed necks. This example therefore
+asks a field solver for the capacitance of the actual drawn electrodes before
+using that value in a nonlinear Josephson circuit. The field solve is passive;
+Python and JoSIM subsequently calculate the amplifier response.
+
+GDS is the layout exchange file. A metal–insulator–metal (MIM) capacitor has
+two electrodes separated by a dielectric. M1/M2 name the two metal layers;
+CAP is the capacitor annotation used to select a crop, or coupon, of the
+layout. A coupon is a deliberately limited component domain, not a complete
+chip simulation. Back-annotation means writing its extracted capacitance
+into the circuit in place of a nominal estimate. See the
+[openEMS reference](references.md#openems) for the external field solver.
+
 `twpa.em` starts the layout → EM → circuit workflow with the single-junction
 resonant JPA. It extracts a **MIM capacitor coupon from the exported GDS**,
 solves it with openEMS, checks numerical refinements, and replaces the nominal
@@ -56,6 +71,22 @@ the frequency band. `twpa` circuit calculations use `exp(-i omega t)`; a real
 capacitance transfers without a sign ambiguity. Small residual real
 admittance is recorded as a numerical/domain diagnostic and is not converted
 into a material-loss resistor.
+
+In this expression, `Y` is complex port admittance, current divided by voltage,
+in siemens. `Im(Y)` is its imaginary part, `f` is frequency in hertz and
+`C=Im(Y)/(2*pi*f)` is capacitance in farads for that time convention.
+`omega=2*pi*f`, `t` is time and `i=sqrt(-1)`. A parallel-capacitance fit asks
+whether the port response over the selected band behaves approximately like
+one frequency-independent capacitor, rather than silently accepting a
+multi-mode electromagnetic structure as a lumped circuit element.
+
+The film model here is a perfect electric conductor (PEC). The mesh-based
+time-domain solver is a finite-difference time-domain (FDTD) calculation.
+MUR names the absorbing boundary condition used at the finite simulation
+domain's outer surfaces. Neither PEC nor the numerical port resistance
+extracts the device's physical internal loss. The junction quantities `Ic`
+and `Cj` mean critical current (A) and junction capacitance (F), separately
+obtained from the process densities and junction area.
 
 ## Numerical acceptance and provenance
 

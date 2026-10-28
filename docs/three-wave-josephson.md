@@ -1,5 +1,28 @@
 # Flux-biased rf-SQUID and SNAIL traveling-wave amplifiers
 
+Three-wave mixing needs a nonlinear response that is asymmetric about the
+operating point. Here that asymmetry is created by applying magnetic flux
+to a Josephson loop. A transmission line made from repeated loops can then
+convert energy from a pump at frequency `f_p` into a signal at `f_s` and an
+idler at `f_i=f_p-f_s`. The principal example uses 1 GHz, 0.45 GHz and
+0.55 GHz, respectively.
+
+An **rf-SQUID** is a radio-frequency superconducting quantum interference
+device with one junction in an inductive loop. A **SNAIL**, or superconducting
+nonlinear asymmetric inductive element, puts a small junction on one branch
+and several larger series junctions on the other. The external flux changes
+the equilibrium phase and shape of each element's potential energy.
+[Zorin](references.md#zorin2016) and
+[Frattini et al.](references.md#frattini2017) provide the physical background
+for these two element classes.
+
+The simulation proceeds from static equilibrium to passive propagation,
+then to the pumped nonlinear circuit, and finally to small quantum fluctuations.
+Finite source/load resistors make reflection part of the same circuit.
+The full current law also generates harmonics and static phase shifts; it is
+not replaced by an isolated ideal 3WM coefficient. The examples are synthetic
+circuits, so their gain is not a prediction for an unspecified fabrication process.
+
 Start with the [rf-SQUID](../HOWTO.md#rf-squid-3wm) and
 [SNAIL](../HOWTO.md#snail-3wm) examples. Key physical references are
 [Zorin](references.md#zorin2016), [Frattini et al.](references.md#frattini2017)
@@ -15,12 +38,17 @@ loop inductors and flux-bias coils.
 ```python
 from twpa import three_wave as tw
 
-c = tw.example_chain('snail', cells=128, dispersion_engineered=True)
-pump = .5*c.port_impedance*(.18*c.linear_chain.critical_current)**2
-r = tw.three_wave_response(c, 1e9, pump, .45e9, pump*1e-6)
-q = tw.quantum_noise(c, 1e9, pump, .45e9,
+# This helper chooses illustrative circuit values and dispersion loading.
+chain = tw.example_chain('snail', cells=128, dispersion_engineered=True)
+# The derived linear current is physical I_c times potential curvature c2.
+# Use it to choose available incident power, not force every branch current.
+reference_current = .18*chain.linear_chain.critical_current
+pump_power = .5*chain.port_impedance*reference_current**2
+response = tw.three_wave_response(chain, pump_frequency=1e9,
+    pump_power=pump_power, signal_frequency=.45e9, signal_power=pump_power*1e-6)
+noise = tw.quantum_noise(chain, 1e9, pump_power, .45e9,
                     junction_temperature=.02, ground_temperature=.02)
-print(r.gain, r.idler_conversion, q.added_noise, q.quantum_limit)
+print(response.gain, response.idler_conversion, noise.added_noise, noise.quantum_limit)
 ```
 
 `example_chain` is a synthetic electrical benchmark, not a fabrication
@@ -30,6 +58,22 @@ Both types retain the full current law; they do not infer Josephson behavior
 from the phenomenological KIT nonlinearity coefficients.
 
 ## Potentials and equilibrium
+
+| Symbol | Meaning | Units or convention |
+| --- | --- | --- |
+| `Phi_0`, `phi_bar` | Flux quantum `h/(2*e)` and reduced flux quantum `Phi_0/(2*pi)` | Wb |
+| `h`, `e` | Planck's constant and positive elementary charge | J s; C |
+| `Phi_external`, `f` | Applied magnetic flux and normalized bias phase `f=2*pi*Phi_external/Phi_0` | Wb; dimensionless angle |
+| `delta`, `delta0` | Element/junction phase and its zero-current equilibrium value | rad |
+| `I_c` / `Ic`, `E_J` / `EJ` | rf-SQUID critical current or large-SNAIL-junction critical current; energy `E_J=phi_bar*I_c` | A; J |
+| `U`, `I` | Potential energy and total element current | J; A |
+| `Lloop`, `beta` | rf-SQUID geometric loop inductance and screening parameter `Lloop*Ic/phi_bar` | H; dimensionless |
+| `n`, `alpha` | Number of large SNAIL junctions and small/large critical-current ratio | Integer; dimensionless |
+
+The normalized bias `f` in the potential equations is **not a frequency**;
+the propagation sections use subscripted `f_p`, `f_s` and `f_i` for frequencies.
+The API `flux_bias` instead stores `Phi_external/Phi_0`, so its phase in the
+equations is `2*pi*flux_bias`.
 
 Write phi_bar=Phi0/(2*pi), f=2*pi*Phi_external/Phi0, and let delta denote
 the phase across the rf-SQUID's single junction or the SNAIL's small junction.
@@ -63,8 +107,16 @@ Ceff=(alpha+1/n)*Cj and Geff=(alpha+1/n)/Rj. All physical junctions within
 a cell share its specified bath temperature. Internal ground capacitance
 on the intermediate large-junction islands is omitted.
 
+Here `Cj` and `Rj` are the capacitance and loss resistance of one large
+junction. `Cs` and `Rs` refer to the small junction in this paragraph, not to
+the line's shunt capacitor. `Ceff` and `Geff` are the element's effective
+two-terminal capacitance and conductance, in farads and siemens. The latter
+is the inverse-resistance scale used for damping and bath noise.
+
 The SNAIL potential neglects geometric loop inductance. Its physical JoSIM
 adapter uses a small explicit loop inductor and requires Lgeom/Lj_large<=1e-3.
+`Lgeom` is that geometric loop inductance, while
+`Lj_large=phi_bar/Ic` is one large junction's zero-phase inductance.
 This is a model-domain guard, not a universal error estimate: verify the
 small-loop limit and conditioning for a new design. Large loop inductance,
 unequal series junctions and internal-island modes need a fuller circuit
@@ -76,6 +128,12 @@ not a reproduction of that device's periodic loading or gain curve.
 
     U/EJ = U0 + c2*x^2/2 + c3*x^3/6 + c4*x^4/24 + ... .
 
+The displacement is `x=delta-delta0`; `U0` is the normalized potential at
+equilibrium. `c2`, `c3` and `c4` are its second, third and fourth derivatives
+with respect to phase at that equilibrium. The first derivative vanishes
+because the static current is zero. Positive `c2` supplies a restoring force;
+the cubic potential term makes the local current response asymmetric.
+
 c3 generates 3WM, while c4 and cascaded higher-order effects also shift phases.
 Neither the model nor a small bare c4 is assumed universally Kerr free.
 The linear inductance is phi_bar/(Ic*c2); `chain.linear_chain` exposes the
@@ -86,6 +144,11 @@ Bloch wavenumber is rad/cell and attenuation is nepers/cell; divide by
 
 ## Classical harmonic balance
 
+Harmonic balance represents the circuit motion by sinusoidal components and
+solves their amplitudes. An alternating-current (AC) phase is measured relative
+to the static equilibrium. A direct-current (DC) shift is the change in its
+time average. These are separate unknowns in the following calculation.
+
 Node/branch AC phases are departures from equilibrium. The pump also
 rectifies the asymmetric current law. Each branch's static displacement d
 is solved from zero mean current,
@@ -94,6 +157,11 @@ is solved from zero mean current,
 
 The Jacobian includes the derivative of this DC solution, a local static
 Schur complement. Omitting it would give incorrect nonlinear phase shifts.
+In physical terms, a changed oscillating field also changes its rectified
+average. The small-signal equations must include that feedback rather than
+holding the average phase artificially fixed. “Schur complement” names the
+matrix elimination that retains this dependence after removing the static
+unknown from the alternating-current equations.
 `dc_phase` returns these branch displacements in radians.
 
 Fourier frequencies use the two-phase lattice
@@ -110,6 +178,13 @@ to check convergence, especially with a strong probe. The supported grid
 requires sidebands*|fs-fp/2|<fp/2, distinct nonoverlapping frequencies and
 nondegenerate signal/idler.
 
+In this frequency lattice, `h` and `m` are integer indices and `fp`/`fs` are
+pump/signal frequencies. The two independent Fourier phases describe the
+half-pump carrier and the signal's offset from it. Numerical `quadrature`
+counts integration samples over each phase; it is not the cosine/sine field
+quadrature used to describe squeezing. The mean-current equation above solves
+the static displacement `d`, while `x_ac(t)` is the oscillating phase.
+
 `three_wave_response` first solves the pump state and then linearizes for a
 weak signal. With `depleted=True` it solves all coherent tones together.
 The undepleted residual reports the pump solve; its probe response is first order.
@@ -124,6 +199,9 @@ Thevenin source with available power P and peak voltage sqrt(8*R*P).
 `transmitted_power`, `reflected_power` and `incident_power` include all
 retained modes. In a lossless three-tone truncation the photon changes obey
 -Delta_np=Delta_ns=Delta_ni; full harmonic solutions conserve total power.
+Here the three `Delta_n` quantities are changes in pump, signal and idler
+photon flux, respectively. Each lost pump photon supplies one photon in each
+of the two generated bands in that three-tone lossless approximation.
 
 ## Quantum fluctuations and internal loss
 
@@ -158,6 +236,15 @@ both commutator defects and the smallest covariance-uncertainty eigenvalue;
 the validation tools assert the corresponding quantum constraints. Canonicality alone does
 not establish harmonic convergence, model-domain validity or stability.
 
+In that noise formula, `C_signal` is the output signal's symmetrized spectral
+variance, `G` is signal power gain, and `n_input` is the incoming signal's
+thermal occupation. They are dimensionless in photon units. The subtracted
+one half is the incoming vacuum contribution. The result is therefore noise
+added by the amplifier referred back to its input, not total output noise.
+The [noise derivation](jtwpa-quantum-noise.md) defines the operator and matrix
+notation; the [numerical guide](numerical-methods.md#what-the-noise-diagnostics-check)
+explains the consistency checks in physical terms.
+
 ## JoSIM and validation
 
 `chain_netlist` generates individual physical RCSJ devices and flux loops.
@@ -173,7 +260,7 @@ from twpa.backends import JoSIM
 from twpa.jpa_circuit import Tone, Transient
 
 runner = JoSIM('/path/to/josim-cli', wsl_distribution='Ubuntu')
-deck = tw.chain_netlist(c, [Tone(1e9, pump, ramp_time=30e-9)],
+deck = tw.chain_netlist(chain, [Tone(1e9, pump_power, ramp_time=30e-9)],
                         Transient(1e-12, 600e-9, 400e-9, 10e-12))
 run = runner.run(deck, 'validation/runs/new-pump')
 ```

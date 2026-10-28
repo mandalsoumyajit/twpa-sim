@@ -1,13 +1,64 @@
 # Interconnect, kinetic inductance and coupling extraction
 
-Single-junction resonant JPA layouts now support a hybrid field-to-circuit
-flow: openEMS extracts the actual shunt-capacitor electrodes, and a
+An electrical schematic often treats metal connecting two components as a
+perfect wire. In a small superconducting amplifier, that approximation can
+miss enough stored magnetic and kinetic energy to move a resonance or change
+the loading seen by a junction. A nearby pickup loop adds another effect:
+its current induces flux in the amplifier, while the amplifier induces flux
+back into the pickup. That mutual coupling determines how energy enters and
+leaves the resonator through an external measurement circuit.
+
+This workflow starts from the drawn metal geometry and asks for the passive
+parameters needed by the nonlinear amplifier circuit. openEMS supplies the
+electric energy of the shunt capacitor. A superconducting FastHenry variant
+supplies the metal-current network's total inductance, including both field
+energy and the inertia of superconducting carriers. The Josephson junction
+then supplies the nonlinear current–phase law in Python and JoSIM. The field
+solvers do not themselves calculate pumped gain.
+
+The pickup benchmark reduces to the following circuit structure. The common
+return is a **reduced circuit node**; its physical metal and field energy
+remain included in the extracted matrix rather than being replaced by an
+ideal ground plane during extraction.
+
+```mermaid
+flowchart LR
+    C((C)) --- LT["Tank interconnect L_t"] --- J((J))
+    C --- CS["Shunt capacitor C_s"] --- G((Return))
+    J --- JJ["Josephson junction: I_c, C_j, R_j"] --- G
+    LP["Pickup L_p and external termination"] -. "Signed mutual M" .- LT
+```
+
+`C` and `J` label two internal circuit nodes. `L_t` and `L_p` are tank and
+pickup self inductances, `M` is mutual inductance, `C_s` is shunt capacitance,
+and `I_c`, `C_j`, `R_j` are junction critical current, capacitance and loss
+resistance. The letter `C` labeling a node is not an extra capacitance.
+Inductances are in henries, capacitances in farads, current in amperes and
+resistance in ohms. Keeping the two internal nodes distinct is essential
+when their connecting inductance is appreciable.
+
+For supported single-junction resonant JPA layouts, the hybrid field-to-circuit
+flow combines two extractions: openEMS solves the actual shunt-capacitor electrodes, and a
 London-aware Whiteley FastHenry build extracts the complete finite metal
 current network, including return paths, contacts and signed mutual coupling.
 The annotated full-sine circuit is compared with JoSIM without fitting a
 linewidth or gain. See the [numerical report](magnetic-jpa-validation.md).
 
 ## Materials and reference planes
+
+The layout's GDS file stores two-dimensional polygons. A material stack adds
+their heights, thicknesses and electromagnetic properties. M1 and M2 denote
+the first and second conducting layers; VIA denotes the metal connection
+between them. JJ and CAP are component annotations for a Josephson junction
+and a metal–insulator–metal capacitor (MIM), respectively.
+
+A reference plane specifies where an extracted element hands its voltage
+and current to the circuit. Here it is represented by a finite terminal
+patch on a conductor surface. Moving the patch changes which nearby fields
+are assigned to the extracted element. It is therefore part of the physical
+model, not just an arbitrary mesh label. The
+[Whiteley terminal documentation](references.md#whiteley_fasthenry) explains
+the importance of terminal positions and ordered pairs.
 
 Install `twpa-sim[layout]` to prepare jobs. The separate
 [magnetic stack JSON](../src/twpa/em/stacks/london_illustrative.json) specifies
@@ -51,7 +102,24 @@ Only then is `L = Im(Z_loop)/(2*pi*f)` formed. Reversing a port reverses its
 mutual entries. A negative mutual inductance is valid. Nonreciprocal,
 nonfinite, incomplete or nonpositive-energy matrices are rejected.
 
+Here `I_raw` lists currents in the declared native terminal pairs, while
+`I_loop` lists the two independent physical circuit currents. `T` maps those
+loop currents to terminal currents; `.T` means matrix transpose and `@` is
+matrix multiplication in NumPy. `Z_raw` and `Z_loop` are impedance matrices
+in ohms. `Im` takes their imaginary part, `f` is the extraction frequency
+in hertz, and `L` is the resulting inductance matrix in henries. Its diagonal
+entries are self inductances; off-diagonal entries are signed mutual
+inductances. The sign depends on the chosen current directions, just as the
+dot convention does for two coupled coils in a schematic.
+
 ## London energy and avoiding double counting
+
+The London model describes how superconducting current is distributed within
+a film and how deeply fields penetrate it. Its penetration depth `lambda` is
+a **length**, not the pair-drive rate with the same name in an effective
+flux-pumped JPA. Magnetoquasistatic (MQS) extraction retains magnetic induction
+while neglecting electromagnetic-wave propagation and radiation. It is a
+passive linear extraction at the specified material operating point.
 
 The Whiteley build uses `lambda` in the geometry length unit (um here).
 With positive penetration depth and `sigma=0`, the model is lossless London
@@ -63,7 +131,13 @@ For fixed terminal currents, the discrete lossless problem minimizes
 
 `U(s) = U_magnetic[J] + s U_kinetic[J]`,
 
-where all penetration depths are multiplied by `sqrt(s)`. At the stationary
+where `U` is stored energy in joules, `J` is current density in A/m² and `s`
+is an artificial dimensionless scaling parameter. The two energy functionals
+are evaluated for the same solved current distribution. `s=1` denotes the
+specified operating-temperature material. This scaling is a numerical energy
+diagnostic, not a sweep of applied amplifier pump power.
+
+All penetration depths are multiplied by `sqrt(s)`. At the stationary
 solution, the first-order change from redistribution of `J` vanishes, so
 
 `L_kinetic = dL/ds at s=1`, and `L_magnetic = L_total - L_kinetic`.
@@ -74,12 +148,25 @@ energy decomposition for the selected fixed current basis and linear London
 model, not a separate fitted series element. A uniform-wire native control
 checks `Lk = mu0*lambda^2*length/(width*thickness)` and lambda-squared scaling.
 
+In this wire formula, `mu0` is vacuum permeability in H/m; all four lengths
+must be converted to metres, giving kinetic inductance `Lk` in henries.
+It applies to the uniform-current control wire, not automatically to a wide
+film with current redistribution. `SC` below means the superconducting
+London solution, and `PEC` means a perfect-electric-conductor limiting model.
+
 `L_SC - L_PEC` is reported separately: it also includes changes in magnetic
 energy caused by current redistribution and is **not** the pure kinetic
 matrix. Exact `lambda=0,sigma=0` is not a valid native conductor. The PEC
 comparison is a positive-small-lambda limit, checked at factors 1e-3 and 1e-4.
 
 ## Run the flow
+
+The practical sequence is geometry checking → passive electric/magnetic
+extraction → numerical refinement → circuit back-annotation → pumped
+amplifier comparison. Back-annotation replaces assumed capacitance and
+inductance with extracted values while retaining the junction's nonlinear
+law. The [numerical guide](numerical-methods.md#refining-a-layout-extraction)
+explains why changing a mesh and changing a terminal model are different tests.
 
 The [commented example](../examples/em/london_jpa.py) prepares an audited
 pickup-loop GDS and input deck without starting a native solver:

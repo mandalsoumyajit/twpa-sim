@@ -1,5 +1,19 @@
 # JTWPA comparison with JoSIM circuits
 
+The physical test is a transmission line of nonlinear Josephson junctions,
+first without loading and then with added phase-matching resonators. We compare
+its frequency-domain prediction with a classical time-domain circuit using
+the same components. The [4WM guide](four-wave-jtwpa.md) explains the circuit,
+the role of phase matching and its O'Brien reference.
+
+In the parameter summary, `Lj` is zero-phase junction inductance,
+`Ic=phi_bar/Lj` is critical current, and `phi_bar` is the reduced flux quantum.
+`Cg` and `Cj` are node-to-ground and junction capacitances, `Rj` is junction
+loss resistance and `R` is the port resistance. `fp`, `fs` and `fi` mean pump,
+signal and idler frequencies. RPM means resonant phase matching. RCSJ means
+resistively and capacitively shunted junction. All are electrical parameters;
+the simulation does not derive them from a mask.
+
 The 4WM solver is checked against full-sine RCSJ transient circuits, using
 identical physical parameters and finite end loads. These are synthetic
 benchmarks for the implementation, not calibration to a fabricated device.

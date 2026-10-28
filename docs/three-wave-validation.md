@@ -1,5 +1,18 @@
 # rf-SQUID/SNAIL 3WM validation
 
+These benchmarks test finite transmission lines made from magnetically biased
+Josephson loops. The bias creates an asymmetric potential, allowing a pump
+to couple signal and idler by three-wave mixing. The
+[3WM guide](three-wave-josephson.md) explains the two loop constructions,
+their equations and the Zorin/Frattini/Roudsari references.
+
+Here `fp`, `fs` and `fi` label pump, signal and idler frequencies; `kp`, `ks`
+and `ki` label their phase advance per cell. The relation `kp=ks+ki` is linear
+phase matching, while `fp=fs+fi` is energy conservation. `Ic` is a physical
+junction critical current; `c2` is normalized potential curvature, so `Ic*c2`
+is a derived linear scale. Flux is quoted relative to the superconducting
+flux quantum. RCSJ means resistively and capacitively shunted junction.
+
 Classical response is compared with physical JoSIM RCSJ circuits. Quantum
 noise is checked separately against commutator identities, thermal
 fluctuation-dissipation, covariance uncertainty and finite-gain quantum

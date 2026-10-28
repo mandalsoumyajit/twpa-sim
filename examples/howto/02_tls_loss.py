@@ -1,4 +1,21 @@
-"""Connect IDC electrostatics to the coupled KIT/TLS gain and noise solver."""
+"""How does a lossy surface oxide affect a kinetic-inductance amplifier?
+
+An interdigitated capacitor (IDC) has interleaved metal fingers. Its edge
+electric field stores some energy in oxide, where two-level systems (TLS)
+can absorb energy. We solve a small coated/uncoated edge domain, use its
+energy ratio to adjust capacitance, then propagate pump loss, weak-signal
+conversion and bath noise together in the amplifier.
+
+Participation is the oxide's fraction of modeled electric energy, not a
+full-chip measurement. Capacitance scale is a coated/bare energy ratio.
+Gain is in dB; added quanta are noise referred to the signal input after
+subtracting that input's original noise. Material and field/current conversion
+values here are assumptions to calibrate, not measured process parameters.
+
+See docs/kit-twpa.md and HOWTO.md. Background: Martinis et al.,
+https://doi.org/10.1103/PhysRevLett.95.210503, and Gao et al.,
+https://doi.org/10.1063/1.2906373. These do not calibrate this example.
+"""
 from dataclasses import replace
 import json
 import numpy as np
@@ -15,8 +32,10 @@ def main():
     geometry = IDCGeometry(mesh=5e-9)
     coated, bare, fields = oxide_design(design, geometry, oxide_thickness=30e-9)
 
-    # These TLS numbers are illustrative. Calibrate field_per_amp and the
-    # material loss tangent for your device; linewidth is phenomenological.
+    # loss_tangent is dimensionless dielectric dissipation, temperature is K,
+    # critical_field is the saturation electric field in V/m, and
+    # field_per_amp maps line current (A) to local field (V/m).
+    # linewidth is the phenomenological pump-saturation hole width in Hz.
     tls = TLS(loss_tangent=.001, temperature=.02, critical_field=30.,
               field_per_amp=2e8, linewidth=1e6)
     grid = np.linspace(0., 11.5e9, 16385)

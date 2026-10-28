@@ -47,7 +47,8 @@ def main():
     p.add_argument('--run-examples',action='store_true')
     args=p.parse_args()
     root=Path(__file__).resolve().parents[1]
-    paths=sorted(set(root.glob('*.md'))|set((root/'docs').rglob('*.md')))
+    paths=sorted(set(root.glob('*.md'))|set((root/'docs').rglob('*.md'))|
+                 set((root/'examples').rglob('*.md')))
     parsed={path:parse(path) for path in paths}
     errors=[]
     for source,(_,_,links) in list(parsed.items()):

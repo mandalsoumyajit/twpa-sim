@@ -1,4 +1,19 @@
-"""A flux-pumped resonator at degeneracy: use quadratures, not two vacua."""
+"""Amplify one phase component and squeeze the other in a flux-pumped JPA.
+
+An effective magnetic-flux pump at 10 GHz modulates a 5 GHz resonator.
+Signal and idler coincide at 5 GHz (degenerate operation), so the useful
+observables are the cosine-like and sine-like field quadratures relative
+to the pump. One combination is amplified and the orthogonal one reduced.
+
+The output lists their two power gains and symmetrized spectral noise
+variances. Compare noise with vacuum=0.5; below 0.5 means quadrature
+squeezing in this normalization. A single phase-preserving added-noise
+figure is undefined here. The effective pair rate is assumed, not extracted
+from a physical coil's power or flux.
+
+See docs/resonant-jpa.md and its Eichler/Wallraff and Caves references:
+https://doi.org/10.1140/epjqt2 and https://doi.org/10.1103/PhysRevD.26.1817.
+"""
 import json
 import numpy as np
 from twpa import jpa

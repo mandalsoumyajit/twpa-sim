@@ -1,5 +1,19 @@
 # Layout validation
 
+This report tests generated geometry, not microwave amplification. It checks
+whether the generator preserves the intended conductor shapes and connections
+and whether exported GDS files satisfy the chosen profile's design rules.
+Begin with [the layout workflow](layout.md) for process assumptions and the
+KLayout reference.
+
+GDS is the layout exchange file, DRC means design-rule checking, and DBU is
+the length represented by a stored coordinate unit. XOR area is the symmetric
+difference between two polygon sets: zero means their retained shapes agree
+at that database resolution. A conductor island is a connected metal region;
+separate islands may be intentional circuit nets or a connectivity error,
+depending on the manifest's design intent. EM denotes electromagnetic
+extraction, which is a separate stage.
+
 Validation performed on 2026-10-27 using standalone KLayout **0.30.12** and
 the installed native KLayout **0.30.9** Ruby engine. The profiles are a research
 KIT reference and an illustrative JJ stack; passing these checks is not

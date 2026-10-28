@@ -1,5 +1,20 @@
 # Resonant JPA validation against JoSIM circuits
 
+This report compares a reduced nonlinear resonator with a physical Josephson
+circuit evolved in time. The question is whether circuit-derived resonance,
+damping and nonlinear coupling predict reflected signal gain, generated idler
+and quadrature response without fitting those quantities to the transient.
+Begin with the [JPA guide](resonant-jpa.md) for the model and its literature.
+
+`Ic` means junction critical current (A), `Cj` junction capacitance (F),
+`Phi0` the flux quantum and `phi_bar=Phi0/(2*pi)` its reduced value.
+`kappa` is an energy-decay rate, and the Kerr coefficient gives angular
+resonance shift per intracavity photon. RCSJ means resistively and capacitively
+shunted junction. “Complex reflection error” compares wave amplitudes and
+phases, while gain errors in dB compare signal power ratios. Idler conversion
+uses photon flux rather than power. The [methods guide](numerical-methods.md#comparing-with-a-transient-circuit-simulation)
+explains subtraction, fitting and settling/acquisition checks.
+
 Validated on 2026-10-27 using the RCSJ transient simulator JoSIM,
 build `v2.7.5f33997`, source revision
 `5f33997c7c8a7317e98e3aa8c49ce4503375d9a2` of

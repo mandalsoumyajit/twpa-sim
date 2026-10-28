@@ -1,4 +1,18 @@
-"""Run the IDC electrostatics -> lossy circuit -> amplifier-noise pipeline."""
+"""Connect surface-oxide electric fields to KIT gain and internal-loss noise.
+
+An interdigitated capacitor (IDC) stores some of its electric energy in an
+oxide that can contain absorbing two-level systems (TLS). A coated/uncoated
+edge-domain calculation supplies participation and a capacitance ratio. The
+coupled propagation model uses those values to evolve the attenuating pump,
+weak signal/idler conversion and thermal/vacuum bath noise together.
+
+Participation and capacitance scaling are dimensionless. Pump frequency is
+GHz, gain is in dB and added noise is in symmetrized quanta referred to the
+signal input. The field/current mapping and material loss parameters need
+calibration; this small domain is not an extraction of an entire chip.
+Begin with examples/howto/02_tls_loss.py. See docs/kit-twpa.md and its
+Martinis/Gao references for dielectric-loss context.
+"""
 from twpa import preset, IDCGeometry, oxide_design, TLS, coupled
 
 design, bias = preset('v2-tls')

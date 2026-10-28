@@ -1,5 +1,20 @@
 # Process-aware layout generation
 
+A circuit model specifies inductance, capacitance and junction properties;
+a mask layout specifies where material will be patterned. Converting between
+them requires a fabrication process: layer identities, contacts, minimum
+dimensions and the physical stack. This workflow generates candidate geometry
+from explicit process assumptions, checks it, and records enough information
+to pass supported structures to electromagnetic extraction.
+
+GDS is the geometry exchange file. A manifest is the accompanying record of
+design intent, process snapshot and parameter estimates. Design-rule checking
+(DRC) tests widths, spacings and related geometric constraints. Connectivity
+checking asks whether intended conductor regions are connected through actual
+contacts. These checks catch different errors; neither is a calculation of
+amplifier gain or a fabrication qualification. The
+[KLayout reference](references.md#klayout) describes the external geometry tool.
+
 The optional `twpa.layout` package writes GDS and self-contained design/process
 manifests, then checks the **exported** geometry using KLayout. It includes a
 parameterized port of the research-grade NY CREATES KIT serpentine and

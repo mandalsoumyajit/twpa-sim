@@ -1,5 +1,24 @@
 # Quantum noise in 4WM Josephson chains
 
+A classical gain calculation follows the average pump and signal waves.
+A quantum-noise calculation asks how small fluctuations around those waves
+reach the output. Even with no thermal noise, an unused idler port and a
+cold internal loss resistor carry vacuum fluctuations. Dissipation reduces
+coherent amplitudes, while its environment supplies additional fluctuations.
+
+This implementation first solves the pumped finite circuit used for classical
+gain, then linearizes its response to fluctuations. It treats them as Gaussian:
+means and second moments describe the state within this approximation. The
+outputs are frequency-resolved noise and correlation matrices, together with
+input-referred added noise. It does not evolve an arbitrary many-body
+wavefunction or infer vacuum noise from random classical JoSIM voltages.
+
+A phase-preserving amplifier must amplify both phase components while its
+output still obeys quantum commutation relations. The idler and loss
+environments supply additional degrees of freedom in that transformation.
+The [Caves references](references.md#caves1982) establish the physical limits;
+the circuit implementation below states its normalization and checks.
+
 For a runnable starting point see the [4WM HOWTO](../HOWTO.md#4wm-jtwpa).
 The annotated [Caves](references.md#caves1982),
 [Caves et al.](references.md#caves2012) and [Peng et al.](references.md#peng2022)
@@ -14,14 +33,16 @@ resonator loss. The default operating point is pump only.
 ```python
 from twpa import jtwpa
 
-c = jtwpa.Chain(critical_current=1.3e-7, ground_capacitance=1e-12,
+chain = jtwpa.Chain(critical_current=1.3e-7, ground_capacitance=1e-12,
                 junction_capacitance=1e-12, cells=256,
                 junction_resistance=20000., ground_resistance=100000.)
-r = jtwpa.quantum_noise(c, pump_frequency=1e9, pump_power=7e-14,
+# Internal resistors retain their chosen damping; 0.05 K sets their bath
+# occupations. The signal/idler are 0.9/1.1 GHz for this 1 GHz 4WM pump.
+noise = jtwpa.quantum_noise(chain, pump_frequency=1e9, pump_power=7e-14,
                         signal_frequency=.9e9,
                         junction_temperature=.05, ground_temperature=.05)
-print(r.gain_db, r.added_noise, r.quantum_limit, r.excess_noise)
-print(r.commutator_error, r.minimum_uncertainty_eigenvalue)
+print(noise.gain_db, noise.added_noise, noise.quantum_limit, noise.excess_noise)
+print(noise.commutator_error, noise.minimum_uncertainty_eigenvalue)
 ```
 
 Frequencies are Hz, powers W and temperatures K. Noise is a spectral density
@@ -34,12 +55,42 @@ noise spectrum; these bins do not represent a frequency integral.
 
 ## Circuit quantization and internal baths
 
+### Symbols and the physical meaning of a channel
+
+A channel is one incoming or outgoing frequency at one port. A bath channel
+is a fluctuation input associated with an internal resistor. The retained
+frequencies include signal, idler and any additional mixing bands selected
+by the numerical truncation.
+
+| Symbol | Meaning on this page |
+| --- | --- |
+| `a`, `b`, `c` | External incoming, external outgoing, and internal-bath incoming field-operator vectors |
+| `a_dagger` | Creation-operator vector, the Hermitian conjugate of annihilation operators; not another coherent tone |
+| `U`, `V` | External annihilation/creation transfer matrices |
+| `Ub`, `Vb` | Corresponding internal-bath transfer matrices |
+| `R`, `f`, `h` | Real reference resistance (ohm), physical frequency (Hz), Planck constant (J s) |
+| `Ic` | Physical junction critical current (A), used to normalize circuit currents |
+| `n(f,T)`, `nu` | Thermal photon occupation at temperature `T` (K), and symmetrized variance `nu=n+1/2` |
+| `C`, `M` | Ordinary symmetrized and anomalous output covariance matrices; `C` is not capacitance here |
+| `G`, `N_added` | Signal power gain and input-referred added noise (quanta) |
+
+Kirchhoff's current law (KCL) requires currents to balance at each node. Its
+Jacobian is the matrix of derivatives with respect to solved amplitudes.
+Linearizing around the pump gives the small-fluctuation response. The periodic
+pump can convert an input fluctuation into other frequency channels; this is
+the Floquet mixing explained in the [numerical guide](numerical-methods.md#what-the-noise-diagnostics-check).
+
 The classical pump and its harmonics solve the same nonlinear KCL as
 `four_wave_response`. Linearizing its real Jacobian gives a real-linear map
 between input and output peak phasors. Rescale each voltage wave by
 sqrt(2*R*h*f) to obtain photon-flux operators:
 
     b = U a + V a_dagger + Ub c + Vb c_dagger.
+
+Outgoing fluctuations contain transformed external inputs plus transformed
+loss-bath inputs. Creation terms account for pair generation. Keeping only
+`U` would miss that process; omitting `Ub`/`Vb` while retaining resistive
+damping would leave an incomplete quantum model.
 
 Here a contains both external ports at every retained frequency; c contains
 independent equilibrium bath inputs for every internal resistor at every
@@ -49,12 +100,23 @@ Jacobian already contains the resistor's damping. This normalization follows
 from a resistor modeled as a matched semi-infinite transmission-line port.
 It includes vacuum noise at zero temperature as well as thermal noise.
 
+In this current-source normalization paragraph only, `G` denotes electrical
+conductance, in siemens, rather than signal power gain. A Norton source is
+a current source in parallel with a resistor. It represents the resistor's
+environment, with a strength fixed by the conductance that causes damping.
+
 Junction-resistor current sources enter adjacent nodes with opposite signs.
 Ground-resistor conductance has half weight at either end, matching the
 finite circuit. A resonator's internal resistor is eliminated together with
 its node, giving an equivalent bath at the chain node with conductance
 
     G_eff(f) = |Yc/(Yc + Yparallel)|^2 / R_resonator.
+
+`Yc` is the coupling capacitor's admittance, `Yparallel` is the internal
+parallel resonator's admittance, and `R_resonator` is its loss resistance.
+`G_eff` is the conductance seen at the chain node, in siemens. The ratio in
+absolute-value bars describes how the coupling network filters that
+resistor's fluctuation current before it reaches the node.
 
 This equals the dissipative part of the effective resonator admittance.
 The end resonators have half this conductance. Each eliminated bath's complex
@@ -72,8 +134,18 @@ frequency/port inputs. `junction_temperature` accepts a scalar or one value
 per junction. `ground_temperature` and `resonator_temperature` accept scalars
 or one value per node, including the end nodes. Temperatures set occupations
 n(f,T)=1/[exp(h*f/(kB*T))-1]; they do not change the circuit parameters.
+Here `kB` is Boltzmann's constant, `T` is temperature in kelvin, and the
+zero-temperature limit gives `n=0`. The symmetrized variance remains `1/2`;
+zero thermal occupation does not mean zero vacuum noise.
 
 ## Results and quantum constraints
+
+In the matrix equations below, `dagger` means conjugate transpose,
+`transpose` means ordinary transpose, and angle brackets mean expectation
+value. Curly braces denote an anticommutator: `{A,B}=AB+BA`. `nu_port` and
+`nu_bath` are diagonal matrices of each independent input's thermal-plus-
+vacuum variance. Their entries are `n+1/2`, not occupation `n` alone. The
+symbol `M` here is a correlation matrix, not a mutual inductance.
 
 Port channels are frequency-major: left/right pump, left/right signal,
 left/right idler, followed by extra retained modes. Thus the transmitted
@@ -92,6 +164,12 @@ M=<{b_i,b_j}>/2. For independent thermal inputs with nu=n+1/2,
         + Ub nu_bath Vb_transpose + Vb nu_bath Ub_transpose.
 
 `quadrature_covariance` uses `[all x, all p]`, with [x,p]=i and vacuum I/2.
+For an output operator `b`, the field quadratures are
+`x=(b+b_dagger)/sqrt(2)` and `p=(b-b_dagger)/(i*sqrt(2))`.
+The commutator `[x,p]=xp-px=i` fixes normalization; `i=sqrt(-1)`.
+`I` is an identity matrix, so vacuum covariance `I/2` means one half in each
+independent quadrature. Anomalous covariance carries phase-sensitive pair
+correlations between two annihilation operators.
 `covariance_contributions` separates the port, junction, ground and resonator
 contributions to C. These are output noise contributions, not individually
 input-referred added-noise figures.
@@ -99,6 +177,11 @@ input-referred added-noise figures.
 For a phase-preserving signal response, G=|U[3,2]|^2 and
 
     N_added = C[3,3]/G - (n_input_signal + 1/2).
+
+`C[3,3]` is the transmitted signal's output noise variance in this ordering.
+`n_input_signal` is its incoming thermal occupation. Dividing by `G` asks
+what input noise would produce that output through a noiseless gain element;
+subtracting the actual incoming noise leaves the added contribution.
 
 The finite-gain vacuum lower bound is |1-1/G|/2, which becomes
 (1-1/G)/2 for an amplifier and approaches 1/2 only at high gain. For a passive
@@ -114,6 +197,9 @@ The code independently checks both canonical identities:
     U V_transpose - V U_transpose + Ub Vb_transpose - Vb Ub_transpose = 0.
 
 It reports their largest absolute defects and the smallest eigenvalue of
+the uncertainty matrix. Here `Omega` is the canonical quadrature commutator
+matrix `[[0,I],[-I,0]]` for the `[all x,all p]` ordering. Physical covariance
+requires the Hermitian matrix below to have nonnegative eigenvalues:
 `quadrature_covariance + i*Omega/2`. A commutator defect above
 `commutator_tolerance` (default 1e-6) raises an error. No matrix or covariance
 is renormalized or clipped to force a quantum-limit result. Numerical
