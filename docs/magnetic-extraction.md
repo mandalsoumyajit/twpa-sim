@@ -1,5 +1,11 @@
 # Interconnect, kinetic inductance and coupling extraction
 
+**Place in the design cycle:** this is the supported JPA field-extraction
+and circuit-feedback stage after geometry checking. Use the
+[worked cycle](design-workflow.md#worked-jpa-cycle) for the order of operations
+and revision decisions, and [Tools and setup](tools-and-setup.md) to configure
+KLayout, openEMS/CSXCAD, superconducting FastHenry and JoSIM.
+
 An electrical schematic often treats metal connecting two components as a
 perfect wire. In a small superconducting amplifier, that approximation can
 miss enough stored magnetic and kinetic energy to move a resonance or change

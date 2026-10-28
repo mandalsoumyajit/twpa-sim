@@ -1,5 +1,20 @@
 # Examples: what to run and what it means
 
+The scripts exercise stages of the [design cycle](../docs/design-workflow.md),
+not a single automatic all-family optimizer. Read
+[Tools and setup](../docs/tools-and-setup.md) before a stage that uses an
+external executable. The electrical tutorials need the Python core;
+generation/checking adds KLayout; the supported JPA field loop adds openEMS/
+CSXCAD and superconducting FastHenry; independent circuit validation adds JoSIM.
+
+| Stage | Example or driver | Output used by the next stage |
+| --- | --- | --- |
+| Electrical simulation | [Numbered tutorials](#guided-electrical-examples) | Circuit, drive and performance assumptions |
+| Layout/check | [All-family generator](layout/generate_all.py) | GDS, manifest and geometry/DRC reports |
+| Magnetic-job preparation | [London JPA example](em/london_jpa.py) | Audited geometry/current-basis inputs, not a solved inductance |
+| Supported extraction and circuit feedback | [JPA full driver](../tools/validate_magnetic_jpa.py) | Certified C/L, back-annotation and measured JoSIM comparison |
+| Revision | [Worked design cycle](../docs/design-workflow.md#5-decide-what-to-change) | New input/layout iteration, followed by fresh checks and affected extractions |
+
 Run scripts from the repository root after installing `twpa-sim`. Begin with
 the [physical introduction](../docs/physical-overview.md), then follow the
 [HOWTO](../HOWTO.md). The numbered scripts below are the smallest learning

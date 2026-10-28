@@ -1,5 +1,11 @@
 # What is being simulated?
 
+This page supplies the physical background. For the engineering sequence and
+software needed to carry it out, use the [design cycle](design-workflow.md)
+and [tools guide](tools-and-setup.md). The main loop is electrical simulation,
+candidate layout, geometry checking, supported extraction, circuit comparison
+and revision until the chosen targets are met.
+
 TWPA Sim models superconducting microwave **parametric amplifiers**. These
 devices use a strong microwave drive, called the **pump**, to transfer energy
 into a much weaker microwave **signal**. A nonlinear inductance makes this
@@ -152,6 +158,11 @@ flowchart LR
     F --> G
 ```
 
+This diagram shows how the descriptions exchange information. The
+[design-cycle diagram](design-workflow.md) adds the pass/fail decisions and
+revision loops; it also identifies which feedback paths are currently
+implemented for each device family.
+
 Choose an effective mode when resonance and damping are already known and you
 want fast operating-point sweeps. Choose a finite circuit when end reflections,
 junction capacitance, loop physics or generated harmonics matter. Choose field
@@ -198,7 +209,8 @@ while quantum identities and analytic limits check the noise calculation.
 
 ## A useful reading and simulation order
 
-Start with the [HOWTO](../HOWTO.md) and its small examples. Before applying a
+Use the [design cycle](design-workflow.md) for the overall process and the
+[HOWTO](../HOWTO.md) for its small electrical examples. Before applying a
 pump, inspect the passive circuit's transmission or reflection. Next choose
 supported pump, signal and idler frequencies and solve a weak-signal response.
 Add loss and noise only after understanding that classical response. Finally,

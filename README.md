@@ -32,26 +32,66 @@ through quantum identities and analytic limits. The supplied examples use
 illustrative parameters and are not automatically calibrated to a fabricated
 device.
 
-**Start here:** [Physical introduction](docs/physical-overview.md) ·
-[HOWTO and commented examples](HOWTO.md) ·
-[Documentation](docs/README.md) · [Conventions](docs/conventions.md) ·
-[References](docs/references.md)
+**Start here:** [Design cycle](docs/design-workflow.md) ·
+[Tools and setup](docs/tools-and-setup.md) ·
+[Physical introduction](docs/physical-overview.md) ·
+[HOWTO](HOWTO.md) · [Documentation index](docs/README.md)
 
 For reading equations, use the [symbol glossary](docs/symbols.md). For
 harmonic balance, numerical refinement, stability and noise diagnostics, use
 [Understanding the numerical calculations](docs/numerical-methods.md).
 
-**Layout:** [Process profiles, GDS generators and KLayout checking](docs/layout.md)
-cover the research-grade NY CREATES KIT reference and illustrative JPA/JTWPA
-geometries. Install `.[layout]` and run `python examples/layout/generate_all.py`.
-Profiles distinguish reference dimensions from assumed rules; JJ layouts need
-a real process adapter and EM extraction before fabrication.
+## Follow the design cycle
 
-**EM:** [JPA interconnect, kinetic and coupling extraction](docs/magnetic-extraction.md)
-combines London-aware FastHenry finite-conductor matrices with openEMS
-capacitor extraction. It retains physical returns, contacts and signed mutual
-coupling, then validates the full-sine annotated circuit against JoSIM.
-See the [numerical agreement](docs/magnetic-jpa-validation.md).
+Start with an electrical model and explicit performance targets. Generate a
+candidate layout only after the electrical response is understood. Check its
+geometry, extract supported physical parameters, simulate the updated circuit,
+and revise if either the numerical comparison or device performance fails.
+
+```mermaid
+flowchart LR
+    A[Simulate in Python] --> B[Generate layout]
+    B --> C{Geometry and DRC pass?}
+    C -- Fix geometry --> B
+    C -- Yes --> D[Extract C and L]
+    D --> E[Back-annotate and compare with JoSIM]
+    E --> F{Agreement and targets met?}
+    F -- Revise design or numerical controls --> A
+    F -- Yes --> G[Record accepted iteration]
+```
+
+DRC means design-rule checking; `C` and `L` mean capacitance and inductance.
+An electrical study can stop before layout. The complete generated-layout →
+field extraction → circuit comparison path currently covers a **single-junction
+resonant JPA**. Other device families have the documented electrical models,
+candidate layouts/checks and Josephson circuit comparisons, but not equivalent
+automatic layout back-annotation. The
+[workflow and coverage table](docs/design-workflow.md) explain the inputs,
+outputs, checks and revision decisions at every stage. Its
+[worked JPA cycle](docs/design-workflow.md#worked-jpa-cycle) gives commands
+from the initial circuit to checked layout and back-annotated response.
+
+## Required and optional tools
+
+Optional tools become required when you choose their corresponding stage.
+They are not all installed by `pip install -e .`.
+
+| Tool | What it does here | When needed |
+| --- | --- | --- |
+| Python 3.10+, NumPy, SciPy | Electrical simulation, gain, quantum noise and workflow orchestration | Core requirement; pip installs declared NumPy/SciPy dependencies |
+| Matplotlib | Plot results in scripts that offer plots | Optional `.[plot]` extra |
+| KLayout Python module | Generate/read GDS; check geometry, connectivity and profile rules | Required for layout and preparing field geometry; `.[layout]` extra |
+| KLayout application | View layouts/markers and run the independent native Ruby DRC deck | Separate installation for these additional checks |
+| JoSIM | Independently simulate physical Josephson circuits in time | Separate executable for actual circuit comparisons; dry-run netlist generation needs none |
+| openEMS + CSXCAD | Solve the supported capacitor geometry and extract capacitance | Separate compiled libraries/Python environment for electric extraction |
+| Whiteley superconducting FastHenry | Extract interconnect, return, kinetic and signed mutual inductance | Separate Linux/WSL executable for the magnetic JPA flow |
+
+The [tools guide](docs/tools-and-setup.md) gives installation sources, runtime
+checks, environment separation, Windows/WSL requirements and JoSIM capability
+requirements. The [layout guide](docs/layout.md) explains the process profiles;
+the [extraction guide](docs/magnetic-extraction.md) explains what the field
+solvers pass back to the circuit. Tool agreement, clean DRC and useful amplifier
+performance are separate checks in the design loop.
 
 ## Choose a model
 
@@ -81,9 +121,12 @@ python -m venv .venv
 ```
 
 On Linux/macOS replace `.\.venv\Scripts\python` with `.venv/bin/python`.
-NumPy and SciPy are the core dependencies. Install `-e ".[plot]"` for optional
-plots. JoSIM is installed separately and is not needed for the Python models,
-the HOWTO's default examples, or ordinary tests. MATLAB and KLayout are not required.
+This is the minimal electrical-simulation installation. Add Python layout and
+plot dependencies with `python -m pip install -e '.[layout,plot]'` when needed.
+JoSIM, openEMS/CSXCAD, superconducting FastHenry and the full KLayout application
+are installed/configured separately as described in [Tools and setup](docs/tools-and-setup.md).
+The HOWTO's default electrical examples need no external simulator. MATLAB
+and Octave are not required by this Python workflow.
 
 ## A first traveling-wave calculation
 

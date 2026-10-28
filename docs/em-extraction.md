@@ -1,5 +1,12 @@
 # JPA EM extraction and circuit back-annotation
 
+**Place in the design cycle:** run electric extraction after checking the
+layout, refine its numerical controls, and pass accepted capacitance back
+to the circuit. Revised geometry requires new extraction. Use the
+[design-cycle guide](design-workflow.md) for the full iteration and
+[openEMS/CSXCAD setup](tools-and-setup.md#add-openems-and-csxcad-for-electric-extraction)
+for the required external runtime.
+
 A resonant amplifier's frequency depends on the energy stored in its
 capacitances and inductances. An area-times-capacitance estimate can miss
 electric fields near electrode edges and feed necks. This example therefore

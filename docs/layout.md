@@ -1,5 +1,12 @@
 # Process-aware layout generation
 
+**Place in the design cycle:** start with an electrical candidate, then use
+this guide to generate and check its geometry. Failed geometric checks send
+you back to the design/process inputs. A clean supported JPA proceeds to
+[field extraction](magnetic-extraction.md), then updated circuit simulation.
+See the [whole cycle](design-workflow.md) and
+[KLayout setup](tools-and-setup.md#check-klayout-generation-and-independent-drc).
+
 A circuit model specifies inductance, capacitance and junction properties;
 a mask layout specifies where material will be patterned. Converting between
 them requires a fabrication process: layer identities, contacts, minimum

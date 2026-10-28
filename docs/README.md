@@ -1,11 +1,31 @@
 # TWPA Sim documentation
 
-Start with [What is being simulated?](physical-overview.md). It explains why
-the pump, signal and idler interact; how resonant and traveling-wave circuits
-differ; and what gain, conversion and added noise mean. Continue with the
-[HOWTO](../HOWTO.md), which walks through eight runnable examples and explains
-their parameters and output. The [examples index](../examples/README.md)
-identifies the more specialized layout, extraction and exploratory scripts.
+Use these pages as an engineering workflow: **simulate → lay out → check →
+extract → simulate/compare → revise**. The [design-cycle guide](design-workflow.md)
+is the organizing route, with a worked JPA iteration and a table showing
+which stages are implemented for each family. Start with
+[Tools and setup](tools-and-setup.md) to choose the required software for your
+path; the Python core, KLayout, JoSIM, openEMS/CSXCAD and superconducting
+FastHenry each have a different role.
+
+For the physics behind the stages, read
+[What is being simulated?](physical-overview.md). For small electrical
+calculations, follow the [HOWTO](../HOWTO.md), then the relevant family guide.
+The [examples index](../examples/README.md) maps scripts to the stage they
+exercise. The family and validation tables below are references within this
+workflow rather than a required front-to-back reading order.
+
+## Work through a design
+
+| Stage | Read / run | What comes next |
+| --- | --- | --- |
+| Set up the tools | [Required/optional software and runtime checks](tools-and-setup.md) | Install only what the chosen path needs |
+| Simulate an electrical candidate | [Design targets and first simulation](design-workflow.md#1-simulate-an-initial-electrical-candidate), [HOWTO](../HOWTO.md) | Revise circuit/drive until the response is useful |
+| Generate layout | [Process/layout workflow](layout.md), [worked iteration](design-workflow.md#2-generate-iteration-001) | Keep GDS and its design/process manifest |
+| Check geometry/connectivity/DRC | [Check and repair](design-workflow.md#3-check-the-exported-layout-and-fix-geometric-failures) | Regenerate and recheck failures before extraction |
+| Extract physical parameters | [Electric component extraction](em-extraction.md), [London network](magnetic-extraction.md) | Refine numerical controls and retain accepted results |
+| Back-annotate and compare | [Supported JPA field/circuit run](design-workflow.md#4-extract-back-annotate-and-compare), [JoSIM backend](josim-backend.md) | Check agreement separately from design targets |
+| Modify and repeat, or accept | [What to change](design-workflow.md#5-decide-what-to-change), [record the iteration](design-workflow.md#6-keep-a-reproducible-accepted-iteration) | Preserve provenance and repeat affected stages |
 
 Use the [symbol glossary](symbols.md) as a lookup aid, then read the relevant
 device guide below. Each guide defines its own equation symbols and states
@@ -16,6 +36,10 @@ balance, continuation, spectral refinement, stability and noise diagnostics.
 phases and mode ordering, rather than the starting explanation of the physics.
 
 ## Device guides
+
+Use this table during the electrical-model stage. Layout generation does not
+automatically supply extracted electrical parameters for every family; see
+the [stage coverage](design-workflow.md#coverage-by-device-family).
 
 | You want to model | Read | Start with |
 | --- | --- | --- |

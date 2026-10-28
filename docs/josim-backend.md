@@ -1,5 +1,12 @@
 # JoSIM backend
 
+**Place in the design cycle:** use JoSIM to compare the Python prediction
+with an independently integrated physical circuit, before or after supported
+layout back-annotation. It checks circuit response, while KLayout checks
+geometry and the field tools extract passive parameters. Start with
+[JoSIM setup](tools-and-setup.md#add-josim-for-an-independent-circuit-calculation)
+and the [overall design cycle](design-workflow.md).
+
 The Python models and JoSIM solve related circuits in different ways. The
 Python Josephson solvers usually work with steady frequency components;
 JoSIM evolves a physical circuit in time. Comparing measured pump/signal/idler

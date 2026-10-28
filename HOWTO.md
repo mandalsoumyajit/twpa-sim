@@ -1,5 +1,14 @@
 # HOWTO: simulate the main amplifier families
 
+This is the **electrical-simulation stage** of the
+[overall design cycle](docs/design-workflow.md). Use
+[Tools and setup](docs/tools-and-setup.md) to choose your environment first.
+The numbered examples below use the Python core; actual JoSIM runs, layout
+checks and field extraction add the external tools described there. After an
+electrical candidate is useful, follow the cycle through layout, checking,
+extraction and revised simulation rather than assuming that a successful
+electrical example is an accepted physical design.
+
 These examples simulate superconducting microwave amplifiers. A strong
 microwave pump transfers energy into a weaker signal through a nonlinear
 inductance; an additional frequency, the idler, participates in the process.
