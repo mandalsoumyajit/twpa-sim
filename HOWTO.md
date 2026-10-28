@@ -185,6 +185,14 @@ and port-wave extraction. Pin the simulator binary throughout a study.
 
 ## Check a new design
 
+For mask geometry, follow the [layout HOWTO](docs/layout.md): select a process
+JSON, set device geometry in an [example design](examples/layout/kit_small.json),
+generate GDS, then run independent geometry/connectivity and DRC checks. The
+[commented all-family script](examples/layout/generate_all.py) covers KIT,
+JPA, SQUID JPA, 4WM, rf-SQUID and SNAIL layouts. Electrical sizing for a bare
+JPA or uniform 4WM chain rejects incompatible junction current/capacitance
+targets; loop inductance and parasitics still require extraction.
+
 1. Inspect passive S11/S21 and passbands. Resolve poles and loading features
    before choosing pump, signal and idler.
 2. Reduce the probe amplitude and compare normalized gain in the linear regime.

@@ -128,6 +128,15 @@ the simulator paper is not an attestation of those builds or quantum noise.
 
 ## Cite the software and the relevant physics
 
+<a id="klayout"></a>
+**[klayout]** Matthias Köfferlein and KLayout contributors, *KLayout*.
+[Official project](https://www.klayout.de/),
+[standalone Python API](https://www.klayout.org/klayout-pypi/) and
+[DRC runsets](https://www.klayout.de/doc/manual/drc_runsets.html).
+The optional layout package uses KLayout for polygon construction,
+connectivity geometry, GDS exchange and DRC. KLayout is a separate dependency
+with its own license; its documentation does not qualify the example processes.
+
 Use [CITATION.cff](../CITATION.cff) for the software and record the exact
 version/commit and numerical controls used. Add the references appropriate
 to your device and noise model from [references.bib](../references.bib).

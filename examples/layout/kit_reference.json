@@ -1,0 +1,8 @@
+{
+  "family": "kit",
+  "geometry": {
+    "rows": 16,
+    "periods_per_row": 55,
+    "die_size": 5000
+  }
+}

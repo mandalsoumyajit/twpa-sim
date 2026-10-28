@@ -17,3 +17,19 @@ jobs:
       - run: python -m pip install -e .
       - run: python -m unittest discover -s tests -v
       - run: python tools/check_documentation.py --run-examples
+  layout:
+    runs-on: ubuntu-latest
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      TWPA_KLAYOUT_EXECUTABLE: klayout
+      QT_QPA_PLATFORM: offscreen
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: sudo apt-get update && sudo apt-get install -y klayout
+      - run: python -m pip install -e '.[layout]'
+      - run: python -m unittest discover -s tests -p test_layout.py -v
+      - run: python examples/layout/generate_all.py --klayout klayout

@@ -15,6 +15,7 @@ follow a device guide for equations and numerical controls.
 | rf-SQUID/SNAIL 3WM | [Josephson 3WM](three-wave-josephson.md) | [rf-SQUID](../examples/howto/06_rf_squid.py), [SNAIL](../examples/howto/07_snail.py) |
 | Quantum scattering, internal baths and added-noise conventions | [Quantum-noise derivation](jtwpa-quantum-noise.md) | Family-specific quantum APIs |
 | Physical RCSJ circuits and native/WSL simulation | [JoSIM backend](josim-backend.md) | [Dry-run circuit example](../examples/howto/08_josim.py) |
+| Process profiles, mask geometry and KLayout checking | [Layout workflow](layout.md), [process contract](process-contract.md) | [All-family GDS examples](../examples/layout/generate_all.py) |
 
 ## Validation and provenance
 
@@ -25,6 +26,7 @@ follow a device guide for equations and numerical controls.
 | 4WM Gaussian noise, thermal equilibrium and quantum limits | [4WM noise](jtwpa-quantum-validation.md) |
 | rf-SQUID/SNAIL classical response and Gaussian noise | [3WM validation](three-wave-validation.md) |
 | KIT source ports, normalization and regression history | [Source audit](source-audit.md) |
+| Layout geometry, circuit connectivity and process DRC | [Layout validation](layout-validation.md), [process source review](process-source-review.md) |
 
 The reports state what was tested and its numerical sensitivity. A classical
 circuit comparison, quantum consistency test and fabricated-device measurement

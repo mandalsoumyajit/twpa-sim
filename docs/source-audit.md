@@ -15,6 +15,7 @@ serving as an independent experimental or literature validation.
 | `generate_presentation_figures.py` | Alternative symmetric cell topology |
 | `kitwpa_nycreates_v1.m` | Four historical electrical presets |
 | `KI_TWPA_Design_Report.md` | Final device counts and pipeline prescription |
+| `generate_v2_gds.py` | Parameterized straight, U-turn and launch primitives in `twpa.layout.kit`; [geometry/provenance audit](layout-validation.md) |
 
 The coupled TLS solver is present in the earlier sources. It uses a constant
 pump and lossy signal/idler Bloch parameters in a rotating-frame transfer and

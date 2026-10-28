@@ -1,0 +1,430 @@
+{
+  "schema_version": 1,
+  "id": "jj_overlap_illustrative",
+  "revision": "1",
+  "status": "illustrative",
+  "description": "Illustrative two-metal overlap-junction and MIM-capacitor process. Independent example values, not SeeQC or another foundry process.",
+  "units": "um",
+  "dbu_um": 0.001,
+  "grid_um": 0.001,
+  "layers": {
+    "DIE": {
+      "gds": [
+        1,
+        0
+      ],
+      "purpose": "Die outline",
+      "semantics": "boundary",
+      "source": "assumptions"
+    },
+    "M1": {
+      "gds": [
+        10,
+        0
+      ],
+      "purpose": "Lower superconducting metal",
+      "semantics": "conductor",
+      "source": "assumptions"
+    },
+    "M2": {
+      "gds": [
+        20,
+        0
+      ],
+      "purpose": "Upper superconducting metal over dielectric",
+      "semantics": "conductor",
+      "source": "assumptions"
+    },
+    "VIA": {
+      "gds": [
+        30,
+        0
+      ],
+      "purpose": "Galvanic M1-M2 contact opening",
+      "semantics": "opening",
+      "source": "assumptions"
+    },
+    "JJ": {
+      "gds": [
+        40,
+        0
+      ],
+      "purpose": "Active tunnel-barrier window within M1/M2 overlap",
+      "semantics": "junction",
+      "source": "assumptions"
+    },
+    "CAP": {
+      "gds": [
+        50,
+        0
+      ],
+      "purpose": "MIM dielectric area annotation, not an extra mask",
+      "semantics": "capacitor",
+      "source": "assumptions"
+    },
+    "IND": {
+      "gds": [
+        60,
+        0
+      ],
+      "purpose": "Inductor extraction cut annotation, not a mask",
+      "semantics": "inductor",
+      "source": "assumptions"
+    }
+  },
+  "rules": [
+    {
+      "id": "DIE.GRID",
+      "kind": "grid",
+      "layers": [
+        "DIE"
+      ],
+      "value_um": 0.001,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "M1.GRID",
+      "kind": "grid",
+      "layers": [
+        "M1"
+      ],
+      "value_um": 0.001,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "M1.DIE",
+      "kind": "enclosure",
+      "layers": [
+        "M1",
+        "DIE"
+      ],
+      "value_um": 5,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "M1.W",
+      "kind": "width",
+      "layers": [
+        "M1"
+      ],
+      "value_um": 0.2,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "M1.S",
+      "kind": "space",
+      "layers": [
+        "M1"
+      ],
+      "value_um": 0.3,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "M2.GRID",
+      "kind": "grid",
+      "layers": [
+        "M2"
+      ],
+      "value_um": 0.001,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "M2.DIE",
+      "kind": "enclosure",
+      "layers": [
+        "M2",
+        "DIE"
+      ],
+      "value_um": 5,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "M2.W",
+      "kind": "width",
+      "layers": [
+        "M2"
+      ],
+      "value_um": 0.2,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "M2.S",
+      "kind": "space",
+      "layers": [
+        "M2"
+      ],
+      "value_um": 0.3,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "VIA.GRID",
+      "kind": "grid",
+      "layers": [
+        "VIA"
+      ],
+      "value_um": 0.001,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "VIA.DIE",
+      "kind": "enclosure",
+      "layers": [
+        "VIA",
+        "DIE"
+      ],
+      "value_um": 5,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "VIA.W",
+      "kind": "width",
+      "layers": [
+        "VIA"
+      ],
+      "value_um": 0.2,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "VIA.S",
+      "kind": "space",
+      "layers": [
+        "VIA"
+      ],
+      "value_um": 0.3,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "JJ.GRID",
+      "kind": "grid",
+      "layers": [
+        "JJ"
+      ],
+      "value_um": 0.001,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "JJ.DIE",
+      "kind": "enclosure",
+      "layers": [
+        "JJ",
+        "DIE"
+      ],
+      "value_um": 5,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "JJ.W",
+      "kind": "width",
+      "layers": [
+        "JJ"
+      ],
+      "value_um": 0.2,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "JJ.S",
+      "kind": "space",
+      "layers": [
+        "JJ"
+      ],
+      "value_um": 0.3,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "CAP.GRID",
+      "kind": "grid",
+      "layers": [
+        "CAP"
+      ],
+      "value_um": 0.001,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "CAP.DIE",
+      "kind": "enclosure",
+      "layers": [
+        "CAP",
+        "DIE"
+      ],
+      "value_um": 5,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "CAP.W",
+      "kind": "width",
+      "layers": [
+        "CAP"
+      ],
+      "value_um": 0.2,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "CAP.S",
+      "kind": "space",
+      "layers": [
+        "CAP"
+      ],
+      "value_um": 0.3,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "IND.GRID",
+      "kind": "grid",
+      "layers": [
+        "IND"
+      ],
+      "value_um": 0.001,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "IND.DIE",
+      "kind": "enclosure",
+      "layers": [
+        "IND",
+        "DIE"
+      ],
+      "value_um": 5,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "IND.W",
+      "kind": "width",
+      "layers": [
+        "IND"
+      ],
+      "value_um": 0.2,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "IND.S",
+      "kind": "space",
+      "layers": [
+        "IND"
+      ],
+      "value_um": 0.3,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "VIA.M1",
+      "kind": "enclosure",
+      "layers": [
+        "VIA",
+        "M1"
+      ],
+      "value_um": 0.3,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "VIA.M2",
+      "kind": "enclosure",
+      "layers": [
+        "VIA",
+        "M2"
+      ],
+      "value_um": 0.3,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "JJ.M1",
+      "kind": "enclosure",
+      "layers": [
+        "JJ",
+        "M1"
+      ],
+      "value_um": 0.3,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "JJ.M2",
+      "kind": "enclosure",
+      "layers": [
+        "JJ",
+        "M2"
+      ],
+      "value_um": 0.3,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "CAP.M1",
+      "kind": "enclosure",
+      "layers": [
+        "CAP",
+        "M1"
+      ],
+      "value_um": 0.3,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "CAP.M2",
+      "kind": "enclosure",
+      "layers": [
+        "CAP",
+        "M2"
+      ],
+      "value_um": 0.3,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    }
+  ],
+  "sources": {
+    "assumptions": "Independently chosen twpa-sim illustrative values; no vendor rule table, stack, or calibrated model is reproduced.",
+    "method": "Process-contract organization informed by local SFQ/spec2si-seeqc work: explicit provenance, drawn/fabricated dimensions, contact semantics and unresolved qualifications. No customer-rule values imported."
+  },
+  "parameters": {
+    "critical_current_density": {
+      "value": 5,
+      "unit": "uA/um2",
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    "junction_specific_capacitance": {
+      "value": 60,
+      "unit": "fF/um2",
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    "capacitor_specific_capacitance": {
+      "value": 1,
+      "unit": "fF/um2",
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    }
+  },
+  "limitations": [
+    "All dimensions, densities and stream mappings are illustrative engineering assumptions.",
+    "JJ and CAP layers define intent inside dielectric-separated metal overlap; fabrication requires a real barrier/dielectric patterning flow.",
+    "CAP and IND are nonmanufacturing annotations. No junction bias or lithographic correction is applied.",
+    "Loop, lead and resonator inductance, parasitic capacitance, coupling and flux bias require EM extraction.",
+    "Not a SeeQC, SFQ5ee, NY CREATES JJ process, or a foundry signoff deck."
+  ]
+}

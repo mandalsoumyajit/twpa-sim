@@ -1,0 +1,39 @@
+# KLayout batch runset. All rules are read from the selected process JSON.
+# klayout -b -r process.drc -rd input=design.gds -rd process=profile.json -rd report=design.lyrdb
+require 'json'
+raise 'input, process and report paths are required' unless $input && $process && $report
+profile = JSON.parse(File.read($process))
+raise 'Unsupported process contract' unless profile['schema_version'] == 1 && profile['units'] == 'um'
+raise 'Unsupported qualification' unless ['research_reference','illustrative','local_unqualified'].include?(profile['status'])
+source($input)
+report('twpa-sim research process DRC', $report)
+layers = {}
+profile.fetch('layers').each do |name, record|
+  pair = record.fetch('gds')
+  raise 'Unresolved stream mapping' unless pair.length == 2 && pair.all? { |n| n.is_a?(Integer) }
+  layers[name] = input(*pair)
+end
+profile.fetch('rules').each do |rule|
+  names = rule.fetch('layers')
+  a = layers.fetch(names[0])
+  d = rule.fetch('value_um').to_f
+  angle = rule.fetch('ignore_angle_deg',90).to_f
+  id = rule.fetch('id')
+  bad = case rule.fetch('kind')
+    when 'width' then a.width(d, angle_limit(angle))
+    when 'space' then a.space(d, angle_limit(angle))
+    when 'grid' then a.dup.raw.ongrid(d)
+    when 'inside' then a - layers.fetch(names[1])
+    when 'enclosure'
+      b = layers.fetch(names[1])
+      (a - b).output(id + '.MISSING', 'Inner geometry outside outer layer')
+      a.enclosed(b,d)
+    else raise 'Unimplemented rule kind: ' + rule['kind']
+  end
+  bad.output(id, rule['kind'] + ': ' + names.join(', '))
+end
+# Structural checks independent of the manifest (connectivity uses geometry.py).
+(layers.fetch('DIE').odd_polygons).output('GEO.INVALID_DIE')
+layers.each do |name,a|
+  (a-layers.fetch('DIE')).output('GEO.OUTSIDE.'+name) unless name == 'DIE'
+end

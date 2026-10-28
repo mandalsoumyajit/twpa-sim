@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-27",
+  "design": "kit_reference",
+  "distributed_cells": 49950,
+  "klayout_python": "0.30.12",
+  "klayout_native": "0.30.9",
+  "gds_sha256": "234273cd445a7d8178a0cea719c0aec98ce8353807abe5eb6c15ef7f253b0bf0",
+  "process_sha256": "185e8794f08a7522322c4628b0b4d7b116b87be7b5b4d703734a0dcf3a99bc00",
+  "design_sha256": "d1b0a0aaa620c09e53eaa501710296e5703cebeb344c3cbdc6e4c22f1d19185b",
+  "qualification": "research_reference",
+  "geometry_and_drc_passed": true,
+  "native_drc_violations": 0,
+  "connectivity": {
+    "physical_nets": 3,
+    "intended_nets": 3,
+    "unassigned_islands": 0
+  },
+  "rule_count": 17,
+  "generation_and_python_check_seconds": 159.01481676101685
+}

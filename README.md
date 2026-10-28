@@ -18,6 +18,12 @@ models with physical RCSJ transient circuits.
 [Documentation](docs/README.md) · [Conventions](docs/conventions.md) ·
 [References](docs/references.md)
 
+**Layout:** [Process profiles, GDS generators and KLayout checking](docs/layout.md)
+cover the research-grade NY CREATES KIT reference and illustrative JPA/JTWPA
+geometries. Install `.[layout]` and run `python examples/layout/generate_all.py`.
+Profiles distinguish reference dimensions from assumed rules; JJ layouts need
+a real process adapter and EM extraction before fabrication.
+
 ## Choose a model
 
 | Device / question | Python interface | What it calculates | Guide |

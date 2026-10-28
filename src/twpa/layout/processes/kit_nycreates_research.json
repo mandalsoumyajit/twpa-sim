@@ -1,0 +1,336 @@
+{
+  "schema_version": 1,
+  "id": "kit_nycreates_research",
+  "revision": "1",
+  "status": "research_reference",
+  "description": "Research-grade NY CREATES single-routing-layer NbN KIT reference; not a foundry PDK.",
+  "units": "um",
+  "dbu_um": 0.001,
+  "grid_um": 0.001,
+  "layers": {
+    "DIE": {
+      "gds": [
+        1,
+        0
+      ],
+      "purpose": "Die outline (nonmanufacturing boundary)",
+      "semantics": "boundary",
+      "source": "original"
+    },
+    "M1": {
+      "gds": [
+        2,
+        0
+      ],
+      "purpose": "Retained NbN conductor",
+      "semantics": "conductor",
+      "source": "original"
+    },
+    "GND_PAD": {
+      "gds": [
+        3,
+        0
+      ],
+      "purpose": "Ground bump pad footprint",
+      "semantics": "conductor",
+      "source": "original"
+    },
+    "SIG_PAD": {
+      "gds": [
+        4,
+        0
+      ],
+      "purpose": "Signal bump pad footprint",
+      "semantics": "conductor",
+      "source": "original"
+    },
+    "OXIDE": {
+      "gds": [
+        5,
+        0
+      ],
+      "purpose": "Passivation opening",
+      "semantics": "opening",
+      "source": "original"
+    }
+  },
+  "rules": [
+    {
+      "id": "M1.W",
+      "kind": "width",
+      "layers": [
+        "M1"
+      ],
+      "value_um": 0.2,
+      "source": "assumptions",
+      "status": "engineering_assumption",
+      "ignore_angle_deg": 80
+    },
+    {
+      "id": "M1.S",
+      "kind": "space",
+      "layers": [
+        "M1"
+      ],
+      "value_um": 0.2,
+      "source": "assumptions",
+      "status": "engineering_assumption",
+      "ignore_angle_deg": 80
+    },
+    {
+      "id": "DIE.GRID",
+      "kind": "grid",
+      "layers": [
+        "DIE"
+      ],
+      "value_um": 0.001,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "M1.GRID",
+      "kind": "grid",
+      "layers": [
+        "M1"
+      ],
+      "value_um": 0.001,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "M1.DIE",
+      "kind": "inside",
+      "layers": [
+        "M1",
+        "DIE"
+      ],
+      "value_um": 0,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "GND_PAD.GRID",
+      "kind": "grid",
+      "layers": [
+        "GND_PAD"
+      ],
+      "value_um": 0.001,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "GND_PAD.DIE",
+      "kind": "inside",
+      "layers": [
+        "GND_PAD",
+        "DIE"
+      ],
+      "value_um": 0,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "SIG_PAD.GRID",
+      "kind": "grid",
+      "layers": [
+        "SIG_PAD"
+      ],
+      "value_um": 0.001,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "SIG_PAD.DIE",
+      "kind": "inside",
+      "layers": [
+        "SIG_PAD",
+        "DIE"
+      ],
+      "value_um": 0,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "OXIDE.GRID",
+      "kind": "grid",
+      "layers": [
+        "OXIDE"
+      ],
+      "value_um": 0.001,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "OXIDE.DIE",
+      "kind": "inside",
+      "layers": [
+        "OXIDE",
+        "DIE"
+      ],
+      "value_um": 0,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "GND_PAD.W",
+      "kind": "width",
+      "layers": [
+        "GND_PAD"
+      ],
+      "value_um": 10,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "GND_PAD.METAL",
+      "kind": "enclosure",
+      "layers": [
+        "GND_PAD",
+        "M1"
+      ],
+      "value_um": 0.1,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "GND_PAD.OPEN",
+      "kind": "inside",
+      "layers": [
+        "GND_PAD",
+        "OXIDE"
+      ],
+      "value_um": 0,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "SIG_PAD.W",
+      "kind": "width",
+      "layers": [
+        "SIG_PAD"
+      ],
+      "value_um": 10,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "SIG_PAD.METAL",
+      "kind": "enclosure",
+      "layers": [
+        "SIG_PAD",
+        "M1"
+      ],
+      "value_um": 0.1,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    },
+    {
+      "id": "SIG_PAD.OPEN",
+      "kind": "inside",
+      "layers": [
+        "SIG_PAD",
+        "OXIDE"
+      ],
+      "value_um": 0,
+      "source": "assumptions",
+      "status": "engineering_assumption"
+    }
+  ],
+  "sources": {
+    "original": "User-supplied NY_CREATES/scripts/generate_v2_gds.py and KI_TWPA_Design_Report.md, research reference. Layer map and nominal geometry only.",
+    "assumptions": "twpa-sim engineering checks for generated geometry. Minimum dimensions are conservative test thresholds, not documented NY CREATES fabrication limits."
+  },
+  "parameters": {
+    "film_thickness": {
+      "value": 60,
+      "unit": "nm",
+      "source": "original",
+      "status": "reference_geometry"
+    },
+    "sheet_inductance": {
+      "value": 20,
+      "unit": "pH/sq",
+      "source": "original",
+      "status": "reference_geometry"
+    },
+    "pitch": {
+      "value": 1.5,
+      "unit": "um",
+      "source": "original",
+      "status": "reference_geometry"
+    },
+    "spine_width": {
+      "value": 0.58,
+      "unit": "um",
+      "source": "original",
+      "status": "reference_geometry"
+    },
+    "spine_gap": {
+      "value": 0.5,
+      "unit": "um",
+      "source": "original",
+      "status": "reference_geometry"
+    },
+    "finger_width": {
+      "value": 0.5,
+      "unit": "um",
+      "source": "original",
+      "status": "reference_geometry"
+    },
+    "finger_gap": {
+      "value": 0.25,
+      "unit": "um",
+      "source": "original",
+      "status": "reference_geometry"
+    },
+    "finger_length": {
+      "value": 75.5,
+      "unit": "um",
+      "source": "original",
+      "status": "reference_geometry"
+    },
+    "loaded_finger_length": {
+      "value": 27.5,
+      "unit": "um",
+      "source": "original",
+      "status": "reference_geometry"
+    },
+    "turn_radius": {
+      "value": 154,
+      "unit": "um",
+      "source": "original",
+      "status": "reference_geometry"
+    },
+    "launch_width": {
+      "value": 103.418,
+      "unit": "um",
+      "source": "original",
+      "status": "reference_geometry"
+    },
+    "launch_gap": {
+      "value": 24.581,
+      "unit": "um",
+      "source": "original",
+      "status": "reference_geometry"
+    },
+    "launch_length": {
+      "value": 155,
+      "unit": "um",
+      "source": "original",
+      "status": "reference_geometry"
+    },
+    "taper_length": {
+      "value": 88,
+      "unit": "um",
+      "source": "original",
+      "status": "reference_geometry"
+    }
+  },
+  "limitations": [
+    "No foundry-qualified fabrication minima are available in this reference.",
+    "Single routing layer, with separate bump pad and passivation masks; grounds require package connections.",
+    "Turn-width matching is a sheet-squares approximation, not an EM impedance or stopband validation.",
+    "No automatic lithographic bias, mask inversion, or process corners.",
+    "Width/space checks ignore edge angles >=80 degrees, explicitly avoiding false acute corners caused by grid-snapped rotated rectangles. This is a research checking convention."
+  ]
+}

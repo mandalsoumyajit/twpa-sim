@@ -1,0 +1,31 @@
+{
+  "source_sha256": "7d7b5d339b0396fc83ba59f635a71d24ae3093319675815fc10b254869a207eb",
+  "primitives": {
+    "straight": {
+      "xor_area_um2": 0.0,
+      "area_um2": 20502.0,
+      "islands": 3
+    },
+    "turn_right": {
+      "xor_area_um2": 0.0,
+      "area_um2": 136109.27541099998,
+      "islands": 3
+    },
+    "turn_left": {
+      "xor_area_um2": 0.0,
+      "area_um2": 136109.27541099998,
+      "islands": 3
+    },
+    "launch_left": {
+      "xor_area_um2": 0.0,
+      "area_um2": 65035.636999999995,
+      "islands": 3
+    },
+    "launch_right": {
+      "xor_area_um2": 0.0,
+      "area_um2": 65035.636999999995,
+      "islands": 3
+    }
+  },
+  "turn_max_width_um": 1.1571445906404483
+}
