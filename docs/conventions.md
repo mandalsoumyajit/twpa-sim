@@ -131,9 +131,11 @@ Distributed harmonic-balance convergence does not certify dynamical stability.
 These propagation/noise models do not perform layout extraction, quantum-induced switching or
 general non-Gaussian dynamics. Consult the specific guide before extending a regime.
 
-The separate [layout-to-circuit workflow](magnetic-extraction.md) does provide
-supported JPA field extraction and back-annotation. It is not an automatic
-EM layout model inside every propagation or quantum API listed above.
+The separate [layout-to-circuit workflow](layout-backannotation.md) assembles
+finite Josephson circuits from supported field extraction, and KIT periodic
+circuits from explicitly supplied calibration. These are distinct APIs with
+recorded parameter origins; extraction does not automatically modify every
+propagation or quantum API listed above.
 
 ## Troubleshooting
 

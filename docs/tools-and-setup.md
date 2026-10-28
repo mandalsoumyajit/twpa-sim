@@ -230,8 +230,12 @@ print(runner.probe())
 Pass this file explicitly with `--installation`. This avoids depending on
 another project's default installation location. The runner compares the
 binary hash, requires the expected Whiteley banner, and uses GNU wall-time
-and address-space limits. Each default case is capped at 180 s and 4 GiB
-address space with single-thread BLAS. The CLI supports one or two such
+and address-space limits. GNU coreutils `stdbuf` flushes diagnostic output
+before a timeout; `timeout`, `prlimit` and `sha256sum` are also required.
+Each default case is capped at 180 s and 4 GiB
+address space. The runner explicitly bounds dense-library threads to two
+by default (`FastHenry(..., threads=...)` accepts 1–4); the local accelerated
+Whiteley build also honors its recorded dense-backend thread setting. The CLI supports one or two such
 workers; these limits bound jobs, not the RAM needed by every possible design.
 
 The [magnetic guide](magnetic-extraction.md) explains finite terminal patches,
@@ -251,3 +255,11 @@ External executables have their own installation requirements and licenses;
 they are not redistributed inside TWPA Sim. Use explicit paths, record tool
 versions, and preserve the layout/material snapshots and run inputs so the
 next design iteration can be compared with the previous one.
+
+The general [layout-network driver](layout-backannotation.md) has separate,
+explicit 8 GiB/900 s starting limits and up to two workers. Its Cartesian
+film mesh has a 40,000-filament guard. These bounds can reject larger designs;
+the adapter does not silently replace a failed full network with a uniform
+inductance estimate. Its total-L certificate does not include the dedicated
+JPA's separate kinetic-energy decomposition. The KIT calibration example
+requires KLayout and the Python core, with no native EM executable.

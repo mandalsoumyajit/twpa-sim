@@ -7,11 +7,12 @@ extract supported physical parameters, and simulate the updated circuit.
 Revise the circuit, geometry or numerical settings according to what failed.
 
 You can stop after an electrical study if layout is outside your question.
-The complete layout/field/circuit feedback path currently has a resonant
-single-junction JPA benchmark. Other families have electrical solvers,
-layout generators and, for Josephson circuits, JoSIM comparisons, but do not
-yet have equivalent automatic layout back-annotation. The coverage table
-below makes that boundary explicit.
+The dedicated single-JJ JPA has an accepted field/circuit benchmark.
+[General back-annotation](layout-backannotation.md) now assembles finite
+SQUID/4WM/rf-SQUID/SNAIL circuits, while KIT uses an explicit calibration-backed
+periodic reduction. The [validation report](layout-network-validation.md)
+distinguishes native circuit agreement from field-convergence acceptance;
+the coverage table below states the model boundaries.
 
 Before starting, read [Tools and setup](tools-and-setup.md). Python with NumPy
 and SciPy is the core. KLayout enters at layout checking, openEMS/CSXCAD and
@@ -62,17 +63,22 @@ root, a stable pump, and an adequate physical model are different requirements.
 
 | Family | Electrical model and quantum noise | Candidate layout/checks | Independent circuit comparison | Layout-derived circuit feedback |
 | --- | --- | --- | --- | --- |
-| KIT, including coupled TLS loss/amplifier | Yes, within the documented propagation/loss approximations | KIT generator and process-profile checks | Analytic/source regressions; the JoSIM adapters target Josephson circuits | No complete generated-KIT EM/back-annotation flow yet; the separate oxide edge calculation is not a full mask extraction |
+| KIT, including coupled TLS loss/amplifier | Yes, within the documented propagation/loss approximations | KIT generator and process-profile checks | Analytic/source regressions; the JoSIM adapters target Josephson circuits | Checked geometry and explicit calibration feed the periodic solver, including coupled TLS; no full serpentine EM extraction |
 | Resonant single-junction JPA | Effective-mode models and physical circuit models; quantum noise is available in the effective model | Bare or pickup-loop generator and checks | JoSIM passive/pumped classical comparisons | Supported hybrid MIM-capacitance plus London-interconnect/pickup extraction; full extracted five-state comparison is classical |
-| Flux/SQUID JPA | Effective flux model and physical SQUID adapter | Illustrative SQUID layout/checks | JoSIM flux/sideband/quadrature comparisons | General SQUID-layout extraction/back-annotation is not implemented |
-| 4WM JTWPA | Finite circuit, depletion and Gaussian internal-loss noise | Uniform junction-chain generator/checks; constrained sizing helper | JoSIM circuit comparisons | Generated-chain EM extraction/back-annotation is not implemented |
-| rf-SQUID/SNAIL 3WM JTWPA | Flux-biased elements, finite circuit and pump-only Gaussian noise | Illustrative loop/chain generators and checks | Physical loop/coil JoSIM comparisons | Generated-loop/chain EM extraction/back-annotation is not implemented |
+| Flux/SQUID JPA | Effective flux model and physical SQUID adapter | Illustrative SQUID layout/checks | JoSIM flux/sideband/quadrature comparisons | General finite-terminal adapter retains both junctions and loop screening; see field/circuit acceptance report |
+| 4WM JTWPA | Finite circuit, depletion and Gaussian internal-loss noise | Uniform junction-chain generator/checks; constrained sizing helper | JoSIM circuit comparisons | General finite-terminal adapter retains all junctions, individual end/interior capacitors and signed metal coupling; bounded local extraction envelope |
+| rf-SQUID/SNAIL 3WM JTWPA | Flux-biased elements, finite circuit and pump-only Gaussian noise | Illustrative loop/chain generators and checks | Physical loop/coil JoSIM comparisons | General finite-terminal adapter retains loop geometry and every SNAIL junction; prescribed external flux, bounded local extraction envelope |
 
 For the supported JPA path, extraction covers a MIM capacitor component and
 the finite metal-current network. Electric stray capacitance outside that
 component, package/radiation effects and process qualification remain outside
 the benchmark. A final acceptance record should state those boundaries along
 with the numerical results.
+
+For the other families, follow the [commented preparation examples and full
+back-annotation route](layout-backannotation.md). The general network response
+is classical; it does not inherit uniform-chain quantum noise or dynamical
+stability certification automatically.
 
 ## Worked JPA cycle
 

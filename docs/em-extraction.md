@@ -186,3 +186,8 @@ interconnect, return, contacts, kinetic energy and inductive coupling. Electric
 stray capacitance beyond the MIM coupon, packages, dielectric/material loss,
 bias structures and SQUID/SNAIL/JTWPA back-annotation remain separate work.
 Neither benchmark establishes a fabricated amplifier's measured performance.
+
+For SQUID JPAs, 4WM chains and rf-SQUID/SNAIL chains, use the
+[general finite-terminal back-annotation guide](layout-backannotation.md).
+That page also explains the separate calibration-backed KIT route and the
+[field/circuit acceptance report](layout-network-validation.md).

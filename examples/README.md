@@ -69,6 +69,15 @@ for material inputs, numerical refinement, electric capacitance extraction
 and circuit back-annotation. A locally generated deck is not yet an accepted
 inductance matrix.
 
+[layout_network.py](em/layout_network.py) prepares every Josephson terminal and
+individual capacitor coupon for a chosen SQUID/4WM/rf-SQUID/SNAIL layout. Run
+with `--family` and a fresh `--output` directory; it needs KLayout but launches
+no native field solve. [kit_backannotation.py](em/kit_backannotation.py) instead
+uses checked KIT geometry and explicitly supplied reference calibration to
+produce a periodic propagation model. Its printed scope identifies the
+turn approximation. Read the [back-annotation guide](../docs/layout-backannotation.md)
+before treating either route as quantitative design evidence.
+
 ## Longer exploratory scripts
 
 These scripts explore more cases or larger circuits. Read the related guide

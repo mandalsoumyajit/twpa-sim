@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "twpa-sim"
-version = "0.9.0"
+version = "0.10.0"
 description = "Traveling-wave and resonant parametric amplifier circuit, gain, and noise models"
 readme = "README.md"
 license = {file = "LICENSE"}

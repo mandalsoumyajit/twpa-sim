@@ -1,4 +1,4 @@
-"""Prepare a capacitor coupon from actual exported JPA conductor polygons."""
+"""Prepare component capacitor coupons from checked Josephson conductor polygons."""
 import hashlib
 from pathlib import Path
 
@@ -9,8 +9,8 @@ from ..layout.validate import validate
 
 def capacitor_job(gds, stack, *, mesh_um=1., margin_um=5., z_cells=2,
                   frequencies_hz=(10e9,20e9,40e9,60e9,80e9,100e9),
-                  timesteps=100000, port_resistance=1., crop_margin_um=1.):
-    """Extract the shunt-capacitor electrode footprint from a checked JPA GDS.
+                  timesteps=100000, port_resistance=1., crop_margin_um=1.,component_id=None):
+    """Extract the selected capacitor electrode footprint from a checked GDS.
 
     The crop is explicit: disconnected leads outside the capacitor coupon are
     not modeled. Film thickness is zero (PEC sheets). Junction capacitance
@@ -28,8 +28,8 @@ def capacitor_job(gds, stack, *, mesh_um=1., margin_um=5., z_cells=2,
         raise ValueError('At least three positive increasing extraction frequencies required')
     gds=Path(gds); manifest_path=gds.with_suffix('.manifest.json')
     m=_json(manifest_path.read_text(encoding='utf-8-sig'))
-    if m['family']!='jpa':
-        raise ValueError('Initial EM extraction supports single-junction jpa layouts only')
+    if m['family'] not in ('jpa','squid_jpa','jtwpa4wm','rfsquid3wm','snail3wm'):
+        raise ValueError('MIM extraction requires a supported two-metal Josephson layout')
     checked=validate(gds)
     if not checked['passed'] or not checked['gds_matches_manifest']:
         raise ValueError('GDS must pass geometry/DRC and match its manifest before extraction')
@@ -37,8 +37,9 @@ def capacitor_job(gds, stack, *, mesh_um=1., margin_um=5., z_cells=2,
     ly=db.Layout(); ly.read(str(gds)); top=ly.top_cell()
     caps=[c for c in m['components'] if c['kind']=='CAP']
     jjs=[c for c in m['components'] if c['kind']=='JJ']
-    if len(caps)!=1 or len(jjs)!=1:
-        raise ValueError('Exactly one capacitor and one JJ required')
+    if component_id is not None:caps=[c for c in caps if c['id']==component_id]
+    if len(caps)!=1 or not jjs:
+        raise ValueError('Select exactly one capacitor component; Josephson junctions required')
     cap=caps[0]; bb=db.Box(*(p.coordinate(v) for v in cap['box_um']))
     crop=bb.enlarged(p.coordinate(crop_margin_um))
     center=bb.center(); polygons={}; areas={}
@@ -67,7 +68,10 @@ def capacitor_job(gds, stack, *, mesh_um=1., margin_um=5., z_cells=2,
                 manifest_sha256=hashlib.sha256(manifest_path.read_bytes()).hexdigest(),
                 process_id=p.id,component_id=cap['id'],junction_id=jjs[0]['id'],
                 junction_estimates=junction,nominal_capacitance_F=cap['estimates']['C_F'])
-    return dict(schema_version=1,kind='jpa_mim_capacitor',source=source,
+    if len(jjs)>1:
+        source['junction_id']=None
+        source['junction_estimates']=None
+    return dict(schema_version=1,kind='jpa_mim_capacitor' if m['family']=='jpa' else 'layout_mim_capacitor',source=source,
                 stack=stack.to_dict(),stack_sha256=digest(stack.to_dict()),
                 geometry=dict(polygons_um=polygons,electrode_areas_um2=areas,
                               marker_box_um=marker_um,crop_margin_um=crop_margin_um,

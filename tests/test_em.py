@@ -80,6 +80,14 @@ class EMContract(unittest.TestCase):
         r=deepcopy(others[0]); r['settings']['mesh_um']=.25
         with self.assertRaisesRegex(ValueError,'finest'): certify(p,[seal(r),*others[1:]])
 
+    def test_optional_source_impedance_invariance(self):
+        p=synthetic();p['settings']['port_resistance']=10.;p=seal(p);controls=[]
+        for key,value in [('mesh_um',1.),('margin_um',5),('timesteps',50000),('port_resistance',20.)]:
+            d=deepcopy(p);d['settings'][key]=value;controls.append(seal(d))
+        result=certify(p,controls)
+        self.assertTrue(result['convergence']['passed'])
+        self.assertIn('port_impedance',{r['control'] for r in result['convergence']['comparisons']})
+
 
 @unittest.skipUnless(HAVE_LAYOUT,'Install twpa-sim[layout]')
 class GeometryBinding(unittest.TestCase):

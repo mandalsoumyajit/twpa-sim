@@ -34,4 +34,10 @@ jobs:
       - run: python -m unittest discover -s tests -p test_layout.py -v
       - run: python -m unittest discover -s tests -p 'test_em*.py' -v
       - run: python -m unittest discover -s tests -p 'test_magnetic*.py' -v
+      - run: python -m unittest discover -s tests -p test_layout_annotation.py -v
       - run: python examples/layout/generate_all.py --klayout klayout
+      - run: |
+          for family in squid_jpa jtwpa4wm rfsquid3wm snail3wm; do
+            python examples/em/layout_network.py --family "$family" --output "validation/runs/network-${family}"
+          done
+          python examples/em/kit_backannotation.py --output validation/runs/kit-backannotation

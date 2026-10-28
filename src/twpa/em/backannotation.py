@@ -18,12 +18,39 @@ def read_extraction(path_or_dict):
     if recorded!=digest(data):
         raise ValueError('Extraction artifact hash mismatch')
     data['artifact_sha256']=recorded
-    if data.get('schema_version')!=1 or data.get('kind')!='jpa_mim_capacitor' or data.get('simulator',{}).get('name')!='openEMS':
+    if data.get('schema_version')!=1 or data.get('kind') not in ('jpa_mim_capacitor','layout_mim_capacitor') or data.get('simulator',{}).get('name')!='openEMS':
         raise ValueError('Unsupported extraction artifact')
     if not data.get('fit_accepted'):
         raise ValueError('Extraction failed its fit/tail/passivity gates')
     positive(data['capacitance_F'],'extracted capacitance')
+    if 'reused_native_extraction' in data:
+        parent=data['reused_native_extraction']
+        if 'reused_native_extraction' in parent:raise ValueError('Nested capacitor reuse is unsupported')
+        parent=read_extraction(parent)
+        for key in ('geometry','stack','stack_sha256','settings','simulator','capacitance_F','capacitance_by_frequency_F','convergence'):
+            if data[key]!=parent[key]:raise ValueError('Reused native coupon changes physical/numerical evidence')
     return data
+
+
+def reuse_capacitor(gds,component_id,certified):
+    """Reuse a native result only for identical translated electrode geometry.
+
+    The full original sealed artifact is retained. This is not a new field run,
+    and a half-height end capacitor is never inferred from half an interior C.
+    """
+    from .geometry import capacitor_job
+    from .stack import EMStack
+    parent=read_extraction(certified)
+    if 'reused_native_extraction' in parent:parent=parent['reused_native_extraction']
+    if not isinstance(parent.get('convergence'),dict) or not parent['convergence'].get('passed'):
+        raise ValueError('Certified native capacitor required')
+    keys=('mesh_um','margin_um','z_cells','frequencies_hz','timesteps','port_resistance')
+    settings={k:parent['settings'][k] for k in keys};settings['crop_margin_um']=parent['geometry']['crop_margin_um']
+    job=capacitor_job(gds,EMStack(**parent['stack']),component_id=component_id,**settings)
+    if job['geometry']!=parent['geometry'] or job['settings']!=parent['settings']:raise ValueError('Actual coupon differs; new electric extraction required')
+    d=deepcopy(parent);d.pop('artifact_sha256');d.update(kind=job['kind'],source=job['source'],reused_native_extraction=parent)
+    d['artifact_sha256']=digest(d)
+    return d
 
 
 def certify(primary, refinements, *, max_relative_change=.02):
@@ -32,13 +59,14 @@ def certify(primary, refinements, *, max_relative_change=.02):
     Each refinement changes exactly one group of controls relative to primary:
     mesh=(mesh_um,z_cells), domain=margin_um, duration=timesteps. Comparison of
     coarse/fine spatial meshes is symmetric; labels retain both resolutions.
+    An optional port_resistance comparison checks source-impedance invariance.
     Neither port-tail decay nor an RLC fit alone establishes convergence.
     """
     positive(max_relative_change,'max_relative_change')
     if max_relative_change>.05:
         raise ValueError('Convergence gate must be <=5%')
     p=read_extraction(primary); rows=[]; covered=set()
-    groups={'mesh':{'mesh_um','z_cells'},'domain':{'margin_um'},'duration':{'timesteps'}}
+    groups={'mesh':{'mesh_um','z_cells'},'domain':{'margin_um'},'duration':{'timesteps'},'port_impedance':{'port_resistance'}}
     for value in refinements:
         r=read_extraction(value)
         for key in ('source','geometry','stack','stack_sha256','simulator'):
@@ -49,7 +77,7 @@ def certify(primary, refinements, *, max_relative_change=.02):
         changed={key for key in p['settings'] if p['settings'][key]!=r['settings'][key]}
         names=[name for name,keys in groups.items() if changed and changed<=keys]
         if len(names)!=1:
-            raise ValueError('Each convergence case must change only mesh, domain or duration')
+            raise ValueError('Each convergence case must change only mesh, domain, duration or port impedance')
         name=names[0]
         a=np.asarray(p['capacitance_by_frequency_F']); b=np.asarray(r['capacitance_by_frequency_F'])
         change=float(np.max(abs(b/a-1)))
@@ -58,7 +86,7 @@ def certify(primary, refinements, *, max_relative_change=.02):
                          comparison_settings={k:r['settings'][k] for k in groups[name]},
                          comparison_artifact_sha256=r['artifact_sha256'],passed=change<=max_relative_change))
         covered.add(name)
-    if covered!=set(groups):
+    if not {'mesh','domain','duration'}<=covered:
         raise ValueError('Mesh, domain and duration comparisons are all required')
     # Verify the final primary uses the finest/longest/largest compared controls.
     for value in refinements:
@@ -128,13 +156,23 @@ def back_annotate_jpa(gds, extraction, *, port_impedance=5000., internal_resista
 
 
 def load_circuit(path):
-    """Load a checked back-annotation artifact for existing JPA/JoSIM APIs."""
+    """Load a sealed back-annotation artifact into its recorded circuit type."""
     data=_json(Path(path).read_text(encoding='utf-8'))
     stored=data.pop('artifact_sha256',None)
     if stored!=digest(data):
         raise ValueError('Back-annotation artifact hash mismatch')
     if data.get('schema_version')!=1:
         raise ValueError('Unsupported back-annotated circuit')
+    if data.get('circuit_type')=='KITPeriodicModel':
+        from .kit_annotation import load_kit_data
+        if not data.get('checks',{}).get('geometry_passed'):raise ValueError('Checked KIT geometry required')
+        return load_kit_data(data['circuit'])
+    if data.get('circuit_type')=='LayoutNetwork':
+        from .network import LayoutNetwork
+        c=data.get('certification',{})
+        if not c.get('magnetic',{}).get('passed') or not c.get('electric') or not all(v.get('passed') for v in c['electric'].values()):
+            raise ValueError('Complete certified extraction required')
+        return LayoutNetwork(data['circuit'])
     if data.get('circuit_type') in ('CoupledJPA','GalvanicJPA'):
         from .coupled_jpa import CoupledJPA,GalvanicJPA
         if not all(data.get('certification',{}).get(k,{}).get('passed') for k in ('electric','magnetic')):

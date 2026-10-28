@@ -208,7 +208,8 @@ The installation JSON has `variant: "Whiteley superconducting FastHenry"`,
 `linux_binary`, `binary_sha256`, and, on Windows, `wsl_distro`. Instead of a
 configuration file, instantiate `FastHenry(executable, wsl_distribution,
 binary_sha256)` directly. Native Linux runs use GNU `timeout` and `prlimit`.
-The runner pins the binary SHA, uses single-thread BLAS, and imposes 180 s
+The runner pins the binary SHA, explicitly bounds dense-library threads (two by
+default, selectable from one to four), and imposes 180 s
 and 4 GiB address-space limits per case. The CLI permits one or two concurrent
 cases; use `--workers 1` on smaller machines. Dense direct LU is selected for
 a single frequency; iterative direct-field solves serve frequency sweeps.
@@ -265,3 +266,8 @@ at 100 GHz. Recheck the model boundary and reference planes for another layout.
 See [FastHenry and Whiteley references](references.md#fasthenry1994), especially
 the [terminal definition](https://wrcad.com/manual/xicmanual/node499.html)
 and [geometry construction](https://wrcad.com/manual/xicmanual/node498.html).
+
+For SQUID JPAs, 4WM chains and rf-SQUID/SNAIL chains, use the
+[general finite-terminal back-annotation guide](layout-backannotation.md).
+That page also explains the separate calibration-backed KIT route and the
+[field/circuit acceptance report](layout-network-validation.md).

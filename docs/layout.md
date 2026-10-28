@@ -190,3 +190,8 @@ Electric stray capacitance outside the MIM coupon and packages remain separate w
 See [validation evidence and remaining work](layout-validation.md). KLayout
 APIs are documented in its [standalone Python manual](https://www.klayout.org/klayout-pypi/)
 and [DRC runset manual](https://www.klayout.de/doc/manual/drc_runsets.html).
+
+For SQUID JPAs, 4WM chains and rf-SQUID/SNAIL chains, use the
+[general finite-terminal back-annotation guide](layout-backannotation.md).
+That page also explains the separate calibration-backed KIT route and the
+[field/circuit acceptance report](layout-network-validation.md).

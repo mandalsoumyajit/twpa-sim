@@ -362,6 +362,15 @@ against JoSIM. London L already contains kinetic inductance; add it only once.
 Electric stray capacitance outside the MIM coupon and packaging remain outside
 this hybrid model. See the [numerical report](docs/magnetic-jpa-validation.md).
 
+For the other families, the [general back-annotation guide](docs/layout-backannotation.md)
+explains every parameter source and the acceptance/revision loop. The
+[finite-network example](examples/em/layout_network.py) prepares SQUID, 4WM,
+rf-SQUID or SNAIL field jobs; the
+[KIT example](examples/em/kit_backannotation.py) binds explicit research
+calibration to a checked mask. Neither example invents field results. KIT
+uses a declared periodic turn reduction, and the extracted Josephson network
+has its own classical response rather than a uniform-cell parameter average.
+
 1. Inspect passive S11/S21 and passbands. Resolve poles and loading features
    before choosing pump, signal and idler.
 2. Reduce the probe amplitude and compare normalized gain in the linear regime.

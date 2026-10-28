@@ -26,7 +26,7 @@ differences and links each device family to its literature.
 Start from an effective resonator when its resonance and damping are already
 known, or from a finite circuit when junction dynamics and port reflections
 matter. Supported layout extraction derives capacitance and inductance for
-back-annotation into a resonant JPA circuit. Optional **JoSIM** simulations
+back-annotation into resonant and traveling-wave Josephson circuits; KIT layouts have an explicit calibration-backed periodic route. Optional **JoSIM** simulations
 independently compare classical circuit response; quantum noise is checked
 through quantum identities and analytic limits. The supplied examples use
 illustrative parameters and are not automatically calibrated to a fabricated
@@ -61,12 +61,17 @@ flowchart LR
 ```
 
 DRC means design-rule checking; `C` and `L` mean capacitance and inductance.
-An electrical study can stop before layout. The complete generated-layout →
-field extraction → circuit comparison path currently covers a **single-junction
-resonant JPA**. Other device families have the documented electrical models,
-candidate layouts/checks and Josephson circuit comparisons, but not equivalent
-automatic layout back-annotation. The
-[workflow and coverage table](docs/design-workflow.md) explain the inputs,
+An electrical study can stop before layout. The dedicated single-JJ JPA
+flow has a complete accepted field/circuit benchmark. General finite-terminal
+adapters now cover SQUID JPAs, 4WM chains and rf-SQUID/SNAIL 3WM chains;
+KIT layouts have a process/calibration-backed periodic reduction. All four
+new Josephson fixtures passed native field refinement and classical circuit
+comparisons. The [back-annotation guide](docs/layout-backannotation.md)
+explains the inputs, assumptions and acceptance gates; the
+[validation report](docs/layout-network-validation.md) records exact numerical
+coverage, including rejected attempts and the limits on longer designs.
+
+The [workflow and coverage table](docs/design-workflow.md) explain the inputs,
 outputs, checks and revision decisions at every stage. Its
 [worked JPA cycle](docs/design-workflow.md#worked-jpa-cycle) gives commands
 from the initial circuit to checked layout and back-annotated response.
@@ -84,7 +89,7 @@ They are not all installed by `pip install -e .`.
 | KLayout application | View layouts/markers and run the independent native Ruby DRC deck | Separate installation for these additional checks |
 | JoSIM | Independently simulate physical Josephson circuits in time | Separate executable for actual circuit comparisons; dry-run netlist generation needs none |
 | openEMS + CSXCAD | Solve the supported capacitor geometry and extract capacitance | Separate compiled libraries/Python environment for electric extraction |
-| Whiteley superconducting FastHenry | Extract interconnect, return, kinetic and signed mutual inductance | Separate Linux/WSL executable for the magnetic JPA flow |
+| Whiteley superconducting FastHenry | Extract interconnect, return, kinetic and signed mutual inductance | Separate Linux/WSL executable for London network extraction |
 
 The [tools guide](docs/tools-and-setup.md) gives installation sources, runtime
 checks, environment separation, Windows/WSL requirements and JoSIM capability
@@ -161,6 +166,7 @@ JoSIM comparisons cover resonant JPA and 3WM/4WM Josephson circuits.
 | Uniform/RPM 4WM scattering, harmonics and depletion | [4WM vs JoSIM](docs/jtwpa-josim-validation.md) |
 | rf-SQUID/SNAIL gain, DC phase, loss and depletion | [3WM vs JoSIM and quantum limits](docs/three-wave-validation.md) |
 | 4WM vacuum/thermal loss baths and finite-gain limits | [Quantum-noise checks](docs/jtwpa-quantum-validation.md) |
+| Multi-family layout terminal circuits and calibrated KIT feedback | [General layout validation](docs/layout-network-validation.md) |
 | JPA London interconnect, kinetic energy, pickup coupling and full-sine response | [Field extraction and JoSIM](docs/magnetic-jpa-validation.md) |
 
 Reports record physical parameters, numerical sensitivity and run provenance.

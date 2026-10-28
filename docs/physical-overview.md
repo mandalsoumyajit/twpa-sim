@@ -142,16 +142,20 @@ pipeline for every family:
 | JoSIM transient comparison | A physical circuit netlist and time-dependent drives | Classical circuit evolution in time | Voltage/phase traces from which gain and conversion are measured |
 
 **Back-annotation** means replacing assumed circuit parameters with values
-extracted from geometry. The current layout-to-field-to-amplifier benchmark
-is for a single-junction resonant JPA. It combines a shunt-capacitor extraction
-with finite interconnect, return and pickup-loop inductances. It does not yet
-perform the equivalent extraction for every TWPA cell family.
+extracted from geometry. The dedicated single-JJ JPA benchmark combines
+shunt-capacitor extraction with finite interconnect, return and pickup-loop
+inductances. The [general adapter](layout-backannotation.md) extends finite
+terminal circuits to SQUID/4WM/rf-SQUID/SNAIL layouts. KIT uses an explicitly
+calibrated periodic reduction. Each route has its own
+[field/circuit acceptance evidence](layout-network-validation.md); an
+extracted classical circuit does not automatically acquire the reduced
+models' quantum-noise or dynamical-stability guarantees.
 
 ```mermaid
 flowchart LR
     A[Electrical parameters and pump] --> B[Python amplifier model]
     C[Process profile and layout] --> D[Supported electric and magnetic extraction]
-    D --> E[Back-annotated JPA circuit]
+    D --> E[Back-annotated circuit]
     E --> B
     E --> F[JoSIM classical circuit simulation]
     B --> G[Compare gain and conversion]

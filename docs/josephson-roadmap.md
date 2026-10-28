@@ -206,3 +206,11 @@ Initial exclusions: full electromagnetic layout extraction, arbitrary
 multi-pump Floquet networks, strong quantum non-Gaussian effects and claims of
 universal junction-process accuracy. The current circuit validation uses
 synthetic benchmark parameters and is not a fabrication-process calibration.
+
+The [layout-derived terminal-network adapter](layout-backannotation.md) now
+retains nonuniform junctions, geometric loops, SNAIL internal nodes and the
+full signed London matrix for classical simulation. This extends layout
+feedback without changing the reduced electrical APIs above. Its current
+[field/circuit acceptance status](layout-network-validation.md), local mesh
+size guard, omitted electric cross-capacitance and lack of dynamical pump
+stability/noise certification remain explicit boundaries.

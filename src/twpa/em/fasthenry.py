@@ -41,6 +41,7 @@ class FastHenry:
     timeout: float = 180.
     memory_GiB: float = 4.
     solver: str = 'auto'
+    threads: int = 2
 
     @classmethod
     def from_installation(cls,path=None,**overrides):
@@ -70,6 +71,7 @@ class FastHenry:
 
     def run(self,job,directory):
         positive(self.timeout,'timeout');positive(self.memory_GiB,'memory_GiB')
+        if type(self.threads) is not int or not 1<=self.threads<=4:raise ValueError('FastHenry threads must be 1..4')
         info=self.probe();root=Path(directory).resolve();root.mkdir(parents=True,exist_ok=False)
         (root/'input.inp').write_text(job['deck'],encoding='utf-8',newline='\n')
         (root/'job.json').write_text(json.dumps(job,indent=2,allow_nan=False)+'\n',encoding='utf-8')
@@ -78,7 +80,8 @@ class FastHenry:
         solver=('ludecomp' if len(job['settings']['frequencies_hz'])==1 else 'iterative') if self.solver=='auto' else self.solver
         if solver not in ('ludecomp','iterative'):raise ValueError('Unsupported FastHenry solver')
         args=[self.executable,'input.inp','-a','off','-s',solver,'-m','direct','-p','diag','-t','1e-9','-b','1e-9','-c','1000']
-        args=['env','OPENBLAS_NUM_THREADS=1','OMP_NUM_THREADS=1','MKL_NUM_THREADS=1',*args]
+        args=['env',f'OPENBLAS_NUM_THREADS={self.threads}',f'OMP_NUM_THREADS={self.threads}',f'MKL_NUM_THREADS={self.threads}',
+              f'SEEQC_FASTHENRY_BLAS_THREADS={self.threads}','stdbuf','-oL','-eL',*args]
         if self.wsl_distribution:
             cmd=['wsl','-d',self.wsl_distribution,'--cd',wsl_path(root),'--exec','timeout','--signal=TERM','--kill-after=5s',str(self.timeout),
                  'prlimit',f'--as={int(self.memory_GiB*2**30)}','--core=0','--',*args]

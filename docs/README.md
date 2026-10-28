@@ -52,6 +52,7 @@ the [stage coverage](design-workflow.md#coverage-by-device-family).
 | Physical RCSJ circuits and native/WSL simulation | [JoSIM backend](josim-backend.md) | [Dry-run circuit example](../examples/howto/08_josim.py) |
 | Process profiles, mask geometry and KLayout checking | [Layout workflow](layout.md), [process contract](process-contract.md) | [All-family GDS examples](../examples/layout/generate_all.py) |
 | JPA capacitor EM extraction and circuit back-annotation | [EM workflow](em-extraction.md) | [openEMS/JoSIM tool](../tools/validate_em_jpa.py) |
+| SQUID/4WM/3WM layout-derived finite circuits and calibrated KIT reduction | [General back-annotation](layout-backannotation.md) | [Josephson preparation](../examples/em/layout_network.py), [KIT calibration](../examples/em/kit_backannotation.py) |
 | JPA interconnect, kinetic energy and signed inductive coupling | [London-network workflow](magnetic-extraction.md) | [Commented example](../examples/em/london_jpa.py), [full validation tool](../tools/validate_magnetic_jpa.py) |
 
 ## Validation and provenance
@@ -65,6 +66,7 @@ the [stage coverage](design-workflow.md#coverage-by-device-family).
 | KIT source ports, normalization and regression history | [Source audit](source-audit.md) |
 | Layout geometry, circuit connectivity and process DRC | [Layout validation](layout-validation.md), [process source review](process-source-review.md) |
 | Component-level JPA EM extraction and annotated amplifier response | [EM/JPA validation](em-jpa-validation.md) |
+| Multi-family terminal networks: accepted/provisional field and JoSIM results | [Layout-network validation](layout-network-validation.md) |
 | London-network field convergence, kinetic energy and JoSIM comparison | [Magnetic JPA validation](magnetic-jpa-validation.md) |
 
 The reports state what was tested and its numerical sensitivity. A classical

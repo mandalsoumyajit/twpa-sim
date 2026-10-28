@@ -191,8 +191,11 @@ Deriving them from junction capacitance, loop screening or a physical flux
 drive requires a circuit model, and extra modes can limit a single-mode
 description. The [JoSIM backend](josim-backend.md) supplies physical RCSJ and
 mutually coupled SQUID circuits. The [layout workflow](magnetic-extraction.md)
-adds supported single-junction JPA capacitance and interconnect extraction;
-it is not a general SQUID circuit extractor.
+adds the dedicated single-junction JPA extraction. The
+[general terminal-network adapter](layout-backannotation.md) retains both
+SQUID junctions and finite loop/return inductance, with explicitly prescribed
+flux and its own classical response. It does not silently fit that circuit
+to the effective single-mode parameters.
 
 The validation reports compare classical Kerr and flux-pump response,
 including quadrature gains, in specified weak-phase and weak-modulation

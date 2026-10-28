@@ -1,7 +1,7 @@
 """GDS film-current mesh and fixed finite electrodes for London FastHenry.
 
-Method follows the finite-patch/explicit-return workflow reviewed in the local
-spec2si-seeqc project. This independent adapter imports no vendor process data.
+Finite surface electrodes and explicit returns define oriented native ports.
+Physical M1/M2 metal and filled contacts remain in the London current mesh.
 """
 from dataclasses import asdict,dataclass
 from importlib.resources import files
@@ -55,8 +55,9 @@ def _cuts(values,pitch,bands):
     return out
 
 
-def jpa_magnetic_job(gds,stack=None,*,pitch_um=3.,local_pitch_um=.5,nh=3,
-                     patch_side_um=1.,lambda_scale=1.,frequencies_hz=(1e6,1e7,1e8,1e9,1e10,1e11)):
+def _magnetic_job(gds,stack=None,*,pitch_um=3.,local_pitch_um=.5,nh=3,
+                     patch_side_um=1.,lambda_scale=1.,frequencies_hz=(1e6,1e7,1e8,1e9,1e10,1e11),
+                     terminal_patches=None,max_filaments=20000):
     """Mesh ALL M1/M2 conductors, filled contacts and an optional pickup loop.
 
     Electrode footprints are held fixed when refining the current basis.
@@ -67,12 +68,16 @@ def jpa_magnetic_job(gds,stack=None,*,pitch_um=3.,local_pitch_um=.5,nh=3,
     stack=stack or MagneticStack()
     for n,v in [('pitch_um',pitch_um),('local_pitch_um',local_pitch_um),('patch_side_um',patch_side_um)]: positive(v,n)
     integer(nh,'nh')
+    integer(max_filaments,'max_filaments')
+    if max_filaments>40000:raise ValueError('Explicit local extraction envelope is at most 40,000 filaments')
     if isinstance(lambda_scale,bool) or not math.isfinite(lambda_scale) or lambda_scale<=0: raise ValueError('Positive lambda_scale required; use an explicitly converged small-lambda PEC limit')
     fs=np.asarray(frequencies_hz,float)
     if fs.ndim!=1 or len(fs)<1 or np.any(~np.isfinite(fs)) or np.any(fs<=0) or np.any(np.diff(fs)<=0):
         raise ValueError('Increasing positive finite frequencies required')
     path=Path(gds); m=_json(path.with_suffix('.manifest.json').read_text(encoding='utf-8'))
-    if m['family']!='jpa': raise ValueError('Magnetic extraction currently supports single-JJ JPAs')
+    if m['family'] not in ('jpa','squid_jpa','jtwpa4wm','rfsquid3wm','snail3wm'):
+        raise ValueError('This film adapter requires a supported two-metal Josephson layout')
+    if terminal_patches is None and m['family']!='jpa':raise ValueError('JPA magnetic wrapper requires a single-JJ JPA')
     checked=validate(path)
     if not checked['passed'] or not checked['gds_matches_manifest']: raise ValueError('Layout must pass DRC and match its manifest')
     db=database(); ly=db.Layout(); ly.read(str(path)); top=ly.top_cell()
@@ -89,13 +94,15 @@ def jpa_magnetic_job(gds,stack=None,*,pitch_um=3.,local_pitch_um=.5,nh=3,
     components={c['kind']:c for c in m['components'] if c['kind'] in ('JJ','CAP')}
     if set(components)!= {'JJ','CAP'}: raise ValueError('Single JJ and shunt capacitor required')
     patches=[]
-    for kind in ('JJ','CAP'):
+    for kind in (() if terminal_patches is not None else ('JJ','CAP')):
         b=components[kind]['box_um'];x=(b[0]+b[2])/2;y=(b[1]+b[3])/2
         if patch_side_um>min(b[2]-b[0],b[3]-b[1]):raise ValueError('Electrode patch exceeds device window')
         for role in ('M1','M2'): patches.append(dict(name=kind+'_'+role,role=role,box=[x-patch_side_um/2,y-patch_side_um/2,x+patch_side_um/2,y+patch_side_um/2]))
     pins={p['name']:p for p in m['pins']}
     coupled=m['design'].get('inductive_coupler',False)
-    if coupled:
+    if terminal_patches is not None:
+        patches=terminal_patches
+    elif coupled:
         for name in ('coil_lo','coil_hi'):
             x,y=pins[name]['at_um'];patches.append(dict(name=name,role='M1',box=[x-patch_side_um/2,y-patch_side_um/2,x+patch_side_um/2,y+patch_side_um/2]))
     else:
@@ -171,10 +178,12 @@ def jpa_magnetic_job(gds,stack=None,*,pitch_um=3.,local_pitch_um=.5,nh=3,
                 for a,c,lam in zip(chain,chain[1:],[l1,stack.via_lambda_um,l2]):edge(a,c,r[2]-r[0],r[3]-r[1],lam,'z','via_film_or_fill',True)
                 area+=(r[2]-r[0])*(r[3]-r[1])
         if not math.isclose(area,(b[2]-b[0])*(b[3]-b[1]),abs_tol=1e-7):raise ValueError('Incomplete via fill')
-    ports=[dict(name='signal_path',positive=terminals['CAP_M2'],negative=terminals['JJ_M1'],positive_patch='CAP_M2',negative_patch='JJ_M1'),
-           dict(name='return_path',positive=terminals['JJ_M2'],negative=terminals['CAP_M1'],positive_patch='JJ_M2',negative_patch='CAP_M1')]
-    if coupled:ports.append(dict(name='pickup',positive=terminals['coil_lo'],negative=terminals['coil_hi'],positive_patch='coil_lo',negative_patch='coil_hi'))
-    else:
+    ports=[]
+    if terminal_patches is None:
+        ports=[dict(name='signal_path',positive=terminals['CAP_M2'],negative=terminals['JJ_M1'],positive_patch='CAP_M2',negative_patch='JJ_M1'),
+               dict(name='return_path',positive=terminals['JJ_M2'],negative=terminals['CAP_M1'],positive_patch='JJ_M2',negative_patch='CAP_M1')]
+    if terminal_patches is None and coupled:ports.append(dict(name='pickup',positive=terminals['coil_lo'],negative=terminals['coil_hi'],positive_patch='coil_lo',negative_patch='coil_hi'))
+    elif terminal_patches is None:
         definitions=[('jj_signal','EXT','JJ_M1'),('cap_signal','EXT','CAP_M2'),
                      ('jj_return','JJ_M2','GROUND'),('cap_return','CAP_M1','GROUND')]
         ports=[dict(name=name,positive=terminals[a],negative=terminals[b],positive_patch=a,negative_patch=b) for name,a,b in definitions]
@@ -184,23 +193,64 @@ def jpa_magnetic_job(gds,stack=None,*,pitch_um=3.,local_pitch_um=.5,nh=3,
         while parent[n]!=n:parent[n]=parent[parent[n]];n=parent[n]
         return n
     for a,b in [(e['a'],e['b']) for e in segments]+equivs:parent[find(a)]=find(b)
+    if terminal_patches is not None:
+        groups={}
+        for name,n in terminals.items():groups.setdefault(find(n),[]).append(name)
+        if set(groups)!={find(n) for n in coords}:raise ValueError('Metal component lacks a declared terminal')
+        for names in groups.values():
+            names=sorted(names);reference=names[0]
+            if len(names)<2:raise ValueError('Isolated single-terminal metal component is unsupported')
+            for name in names[1:]:
+                ports.append(dict(name='metal'+str(len(ports)),positive=terminals[name],negative=terminals[reference],
+                                  positive_patch=name,negative_patch=reference))
     for port in ports:
         if find(port['positive'])!=find(port['negative']):raise ValueError('Disconnected FastHenry physical port')
         lines.append('.external '+port['positive']+' '+port['negative'])
-    if sum(e['nhinc'] for e in segments)>20000:raise ValueError('Current basis exceeds the declared 20,000-filament local envelope')
+    if sum(e['nhinc'] for e in segments)>max_filaments:raise ValueError(f'Current basis exceeds declared {max_filaments}-filament local envelope')
     decades=math.log10(fs[-1]/fs[0]);ndec=1 if len(fs)==1 else (len(fs)-1)/decades
     expected=np.geomspace(fs[0],fs[-1],round(decades*ndec)+1)
     if len(expected)!=len(fs) or not np.allclose(expected,fs,rtol=1e-10):raise ValueError('FastHenry frequency grid must be logarithmic')
     lines += [f'.freq fmin={fs[0]:.12g} fmax={fs[-1]:.12g} ndec={ndec:.12g}','.end','']
-    transform=[[1.,0.],[1.,0.],[0.,1.]] if coupled else [[1.,0.],[0.,1.],[1.,0.],[0.,1.]]
-    return dict(schema_version=1,kind='jpa_london_network',deck='\n'.join(lines),
+    transform=np.eye(len(ports)).tolist() if terminal_patches is not None else ([[1.,0.],[1.,0.],[0.,1.]] if coupled else [[1.,0.],[0.,1.],[1.,0.],[0.,1.]])
+    return dict(schema_version=1,kind='layout_london_network' if terminal_patches is not None else 'jpa_london_network',deck='\n'.join(lines),
                 source={k:m[k] for k in ('gds_sha256','process_sha256','design_sha256')},
                 manifest_sha256=hashlib.sha256(path.with_suffix('.manifest.json').read_bytes()).hexdigest(),
                 stack=asdict(stack),settings=dict(pitch_um=pitch_um,local_pitch_um=local_pitch_um,nh=nh,
                   patch_side_um=patch_side_um,lambda_scale=lambda_scale,frequencies_hz=fs.tolist()),
-                ports=ports,reduction=transform,patches=patches,topology='pickup' if coupled else 'galvanic',
+                ports=ports,reduction=transform,patches=patches,topology='terminal_network' if terminal_patches is not None else ('pickup' if coupled else 'galvanic'),
                 audit=dict(conductor_areas_um2=areas,conductor_components=len({find(n) for n in coords}),
                            nodes=len(coords),segments=len(segments),filaments=sum(e['nhinc'] for e in segments),
                            vias_um=vias,physical_ports_connected=True,ideal_equivalence_scope='within each declared fixed local electrode only'),
                 segments=segments,coordinates=coords,
                 scope='Full actual M1/M2 finite-film current grid and filled contacts; London MQS. JJ and shunt electric energy are separate circuit elements. Local electrode feeds excluded.')
+
+
+def jpa_magnetic_job(gds,stack=None,**settings):
+    """Prepare the existing two-loop single-JJ JPA extraction."""
+    if 'terminal_patches' in settings:raise ValueError('Use layout_magnetic_job for a general network')
+    return _magnetic_job(gds,stack,**settings)
+
+
+def layout_magnetic_job(gds,stack=None,*,patch_side_um=.5,**settings):
+    """Retain every JJ/capacitor and external terminal in a finite metal network.
+
+    A spanning star inside each physical conductor is only a current basis;
+    its complete signed mutual matrix is retained, without ideal net merging.
+    """
+    path=Path(gds);m=_json(path.with_suffix('.manifest.json').read_text(encoding='utf-8'))
+    if m['design'].get('inductive_coupler'):raise ValueError('Use the dedicated pickup JPA adapter')
+    patches=[]
+    def patch(name,role,x,y):
+        h=patch_side_um/2;patches.append(dict(name=name,role=role,box=[x-h,y-h,x+h,y+h]))
+    for c in m['components']:
+        if c['kind'] not in ('JJ','CAP'):continue
+        b=c['box_um'];x=(b[0]+b[2])/2;y=(b[1]+b[3])/2
+        if patch_side_um>min(b[2]-b[0],b[3]-b[1]):raise ValueError('Electrode patch exceeds device window')
+        if patch_side_um>min(b[2]-b[0],b[3]-b[1]):raise ValueError('Patch exceeds component window')
+        for role in ('M1','M2'):patch(c['id']+'_'+role,role,x,y)
+    pins={v['name']:v for v in m['pins']}
+    patch('INPUT','M1',*pins['in']['at_um']);patch('GROUND0','M1',*pins['ground_rail']['at_um'])
+    if 'out' in pins:
+        patch('OUTPUT','M1',*pins['out']['at_um'])
+        patch('GROUND1','M1',pins['out']['at_um'][0],pins['ground_rail']['at_um'][1])
+    return _magnetic_job(gds,stack,patch_side_um=patch_side_um,terminal_patches=patches,**settings)

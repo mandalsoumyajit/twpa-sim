@@ -15,7 +15,7 @@ from .coupled_jpa import CoupledJPA,GalvanicJPA
 def read_magnetic(value):
     d=deepcopy(value) if isinstance(value,dict) else _json(Path(value).read_text(encoding='utf-8'))
     h=d.pop('artifact_sha256',None)
-    if h!=digest(d) or d.get('kind')!='jpa_london_network':raise ValueError('Magnetic artifact hash/type mismatch')
+    if h!=digest(d) or d.get('kind') not in ('jpa_london_network','layout_london_network'):raise ValueError('Magnetic artifact hash/type mismatch')
     d['artifact_sha256']=h
     return d
 
@@ -27,7 +27,11 @@ def _matrix(d):
 
 
 def certify_magnetic(primary,controls):
-    """Require bulk, film, contact, PEC-limit and kinetic derivative checks.
+    """Require independent fixed-terminal numerical controls.
+
+    General terminal networks accept four total-L controls (bulk, film,
+    contact, frequency). Separate energy decomposition additionally requires
+    the six PEC/derivative controls used by the dedicated JPA workflow.
 
     London kinetic-energy matrix is dL/ds at s=1, with lambda -> sqrt(s)*lambda.
     For the stationary lossless quadratic current problem this is the kinetic
@@ -35,10 +39,12 @@ def certify_magnetic(primary,controls):
     """
     p=read_magnetic(primary);l=_matrix(p);records={};loaded={}
     required={'bulk','thickness','contact','frequency','pec','pec_refined','plus','minus','plus_refined','minus_refined'}
+    total_only=p['kind']=='layout_london_network' and set(controls)=={'bulk','thickness','contact','frequency'}
+    if total_only:required=set(controls)
     if set(controls)!=required:raise ValueError('All declared magnetic convergence and kinetic-energy controls required')
     for name,v in controls.items():
         d=read_magnetic(v)
-        for key in ('source','manifest_sha256','stack','patches','reduction'):
+        for key in ('kind','source','manifest_sha256','stack','patches','reduction'):
             if d[key]!=p[key]:raise ValueError(f'Control changes physical {key}')
         # Mesh node numbers change on refinement. Compare physical finite
         # terminal identities/orientations, never their arbitrary node labels.
@@ -57,7 +63,14 @@ def certify_magnetic(primary,controls):
         other=_matrix(d);delta=other-l
         diag=float(max(abs(np.diag(delta)/np.diag(l))))
         mutual=float(abs(delta[0,1])/max(abs(l[0,1]),1e-15)) if l.shape[0]>1 else 0
-        records[name]=dict(max_self_relative=diag,mutual_relative=mutual,passed=diag<.02 and mutual<.05)
+        if p['kind']=='layout_london_network':
+            scale=np.sqrt(np.outer(np.diag(l),np.diag(l)));mask=~np.eye(len(l),dtype=bool)
+            strong=mask & (abs(l)/scale>=.01)
+            mutual=float(np.max(abs(delta[strong]/l[strong]))) if np.any(strong) else 0.
+            coupling_error=float(np.max(abs(delta[mask])/scale[mask])) if np.any(mask) else 0.
+            records[name]=dict(max_self_relative=diag,mutual_relative=mutual,coupling_absolute=coupling_error,
+                               passed=diag<.02 and mutual<.05 and coupling_error<.005)
+        else:records[name]=dict(max_self_relative=diag,mutual_relative=mutual,passed=diag<.02 and mutual<.05)
     if (p['settings']['pitch_um']>loaded['bulk']['settings']['pitch_um'] or
         p['settings']['nh']<loaded['thickness']['settings']['nh'] or
         p['settings']['local_pitch_um']>loaded['contact']['settings']['local_pitch_um']):raise ValueError('Primary must use finest declared numerical controls')
@@ -66,6 +79,15 @@ def certify_magnetic(primary,controls):
         raise ValueError('Independent high-frequency control at fixed physical/current basis required')
     ferror=float(np.max(abs(_matrix(fcontrol)-l))/np.max(abs(l)))
     records['frequency']=dict(matrix_relative=ferror,passed=ferror<1e-7)
+    if total_only:
+        result=deepcopy(p);result.pop('artifact_sha256')
+        result['primary_artifact_sha256']=p['artifact_sha256']
+        result['certification']=dict(passed=all(r['passed'] for r in records.values()),checks=records,
+            comparison_artifacts={k:d['artifact_sha256'] for k,d in loaded.items()},self_gate=.02,
+            strong_mutual_gate=.05,strong_coupling_threshold=.01,absolute_coupling_gate=.005,
+            scope='Total London network; no separate kinetic-energy or PEC-limit decomposition claimed')
+        result['inductance_H']=l.tolist();result['artifact_sha256']=digest(result)
+        return result
     for name in required-set(expected)-{'frequency'}:
         changed={k for k in p['settings'] if k!='frequencies_hz' and loaded[name]['settings'][k]!=p['settings'][k]}
         if changed!={'lambda_scale'}:raise ValueError('London controls must keep geometry/current mesh fixed')
