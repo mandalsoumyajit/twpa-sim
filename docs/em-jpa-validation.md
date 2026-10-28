@@ -104,6 +104,7 @@ solver; the dedicated layout job also exercises geometry binding. Optional
 live openEMS integration is enabled by `TWPA_OPENEMS_PYTHON` and, on Windows,
 `TWPA_OPENEMS_DLL_DIRECTORY`.
 
-The next stage is full-layout multiport extraction and passive-network
-back-annotation, including lead/return inductance and coupling structures.
-Passing this capacitor-level benchmark does not validate those omitted effects.
+The subsequent [London-network benchmark](magnetic-jpa-validation.md) adds
+finite lead/return/contact inductance, kinetic energy and signed pickup
+coupling, using a five-state circuit and independent JoSIM comparison.
+This initial capacitor-only benchmark remains a distinct component check.

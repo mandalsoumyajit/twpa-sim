@@ -17,6 +17,7 @@ follow a device guide for equations and numerical controls.
 | Physical RCSJ circuits and native/WSL simulation | [JoSIM backend](josim-backend.md) | [Dry-run circuit example](../examples/howto/08_josim.py) |
 | Process profiles, mask geometry and KLayout checking | [Layout workflow](layout.md), [process contract](process-contract.md) | [All-family GDS examples](../examples/layout/generate_all.py) |
 | JPA capacitor EM extraction and circuit back-annotation | [EM workflow](em-extraction.md) | [openEMS/JoSIM tool](../tools/validate_em_jpa.py) |
+| JPA interconnect, kinetic energy and signed inductive coupling | [London-network workflow](magnetic-extraction.md) | [Commented example](../examples/em/london_jpa.py), [full validation tool](../tools/validate_magnetic_jpa.py) |
 
 ## Validation and provenance
 
@@ -29,6 +30,7 @@ follow a device guide for equations and numerical controls.
 | KIT source ports, normalization and regression history | [Source audit](source-audit.md) |
 | Layout geometry, circuit connectivity and process DRC | [Layout validation](layout-validation.md), [process source review](process-source-review.md) |
 | Component-level JPA EM extraction and annotated amplifier response | [EM/JPA validation](em-jpa-validation.md) |
+| London-network field convergence, kinetic energy and JoSIM comparison | [Magnetic JPA validation](magnetic-jpa-validation.md) |
 
 The reports state what was tested and its numerical sensitivity. A classical
 circuit comparison, quantum consistency test and fabricated-device measurement

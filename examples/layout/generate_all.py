@@ -23,7 +23,7 @@ def main():
     parser.add_argument('--summary',type=Path,help='Optional compact JSON evidence record')
     args=parser.parse_args()
     folder=Path(__file__).parent
-    names=['kit_reference' if args.full_kit else 'kit_small','jpa','squid_jpa',
+    names=['kit_reference' if args.full_kit else 'kit_small','jpa','jpa_inductive','squid_jpa',
            'jtwpa4wm','rfsquid3wm','snail3wm']
     records=[]
     for name in names:
@@ -42,8 +42,8 @@ def main():
             if not native['passed']:
                 raise RuntimeError(f'{name}: native DRC {native}')
         print(name, 'PASS', result['connectivity'],flush=True)
-        # Component estimates bind geometry to circuit quantities; loop/lead
-        # inductance and coupling remain explicitly unextracted.
+        # Component area estimates do not replace field extraction. See the
+        # London JPA example for interconnect/return and pickup coupling.
         if manifest['components']:
             print('  first component:',manifest['components'][0],flush=True)
         records.append(dict(design=name,passed=result['passed'],

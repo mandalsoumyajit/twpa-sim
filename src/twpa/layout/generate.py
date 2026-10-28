@@ -97,6 +97,10 @@ class JosephsonLayout:
     cell_pitch: float = 60.
     branch_height: float = 20.
     die_margin: float = 20.
+    inductive_coupler: bool = False
+    coupler_gap: float = 8.
+    coupler_height: float = 10.
+    coupler_length: float = 40.
 
     def validate(self, p):
         if self.family not in ('jpa', 'squid_jpa', 'jtwpa4wm', 'rfsquid3wm', 'snail3wm'):
@@ -105,7 +109,7 @@ class JosephsonLayout:
         if self.family in ('jpa', 'squid_jpa') and self.cells != 1:
             raise ValueError('A resonant JPA uses cells=1')
         for f in fields(self):
-            if f.name in ('family', 'cells', 'large_junctions'):
+            if f.name in ('family', 'cells', 'large_junctions', 'inductive_coupler'):
                 continue
             v = getattr(self, f.name); positive(v, f.name); p.coordinate(v)
         if not .5 <= self.junction_width <= 4:
@@ -118,6 +122,11 @@ class JosephsonLayout:
             raise ValueError('Capacitor dimensions exceed primitive support')
         if self.cell_pitch < 40 or self.branch_height < 16 or self.die_margin < 6:
             raise ValueError('Insufficient routing/branch/die clearance')
+        if not isinstance(self.inductive_coupler,bool):
+            raise ValueError('inductive_coupler must be boolean')
+        if self.inductive_coupler and (self.family!='jpa' or self.coupler_gap<5 or
+                self.coupler_height<10 or self.coupler_length<12):
+            raise ValueError('Inductive coupler requires a single JJ JPA and sufficient routing clearance')
         p.require_roles(dict(DIE='boundary',M1='conductor',M2='conductor',VIA='opening',
                              JJ='junction',CAP='capacitor',IND='inductor'))
 
@@ -217,6 +226,17 @@ def _josephson(c, d):
         c.capacitor(d.cells*span,f'n{d.cells}',d.capacitor_width,d.capacitor_height/2,w,d.via_width,ground_y)
     c.wire([(-12,ground_y),(d.cells*span+12,ground_y)],w)
     c.pin('ground_rail','gnd',0,ground_y)
+    if d.inductive_coupler:
+        # A physical return around the pickup loop; only the local RF feed gap
+        # is external. IND is an extraction annotation, never a missing wire.
+        x1=10.; x2=x1+d.coupler_length; y1=d.coupler_gap; y2=y1+d.coupler_height
+        mid=(y1+y2)/2
+        c.wire([(x1,mid-2),(x1,y1),(x2,y1),(x2,y2),(x1,y2),(x1,mid+2)],w)
+        xm=(x1+x2)/2
+        c.component('IND','coil_hi','coil_lo',xm-2,y2-w/2-.5,xm+2,y2+w/2+.5,
+                    inductance_H=None,requires_em_extraction=True)
+        c.pin('coil_hi','coil_hi',x1,mid+2.5)
+        c.pin('coil_lo','coil_lo',x1,mid-2.5)
     bbox=c.top.bbox().enlarged(c.p.coordinate(d.die_margin))
     c.insert('DIE',bbox)
     c.notes += ['Illustrative overlap stack; ports are galvanic pads/terminals with external coupling and bias circuitry.',

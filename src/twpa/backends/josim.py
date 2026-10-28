@@ -43,6 +43,26 @@ def load_csv(path):
     return dict(zip(names, data.T))
 
 
+def load_npy(path):
+    """Read JoSIM's named float64 binary traces without pickle or time rounding."""
+    try:
+        data=np.load(path,allow_pickle=False)
+    except (OSError,ValueError) as exc:
+        raise JoSIMError(f'Cannot read simulator NPY: {path}') from exc
+    if not isinstance(data,np.ndarray) or data.ndim!=1 or len(data)<2 or not data.dtype.names:
+        if hasattr(data,'close'):data.close()
+        raise JoSIMError('Expected a one-dimensional structured float64 trace array')
+    names=data.dtype.names
+    if names[0].casefold()!='time' or len({n.casefold() for n in names})!=len(names):
+        raise JoSIMError('missing or duplicate binary trace names')
+    for name in names:
+        dtype=data.dtype.fields[name][0]
+        if dtype.kind!='f' or dtype.itemsize!=8 or dtype.shape or not np.all(np.isfinite(data[name])):
+            raise JoSIMError('Expected finite scalar float64 binary traces')
+    if np.any(np.diff(data[names[0]])<=0):raise JoSIMError('simulator output time must strictly increase')
+    return {name:data[name] for name in names}
+
+
 @dataclass
 class SimulationResult:
     directory: Path
@@ -52,6 +72,10 @@ class SimulationResult:
     @property
     def time(self):
         return next(iter(self.traces.values()))
+
+    @property
+    def waveform_path(self):
+        return self.directory/('output.'+self.manifest.get('output_format','csv'))
 
     def trace(self, name):
         for key, value in self.traces.items():
@@ -68,6 +92,7 @@ class JoSIM:
     corrector: int = 0  # Optional enhanced-fork feature; checked before use.
     source_revision: str | None = None
     analysis: int = 1  # JoSIM's default phase formulation preserves loop-flux constraints.
+    output_format: str = 'csv'  # npy requires a build advertising structured float64 output.
 
     def __post_init__(self):
         if not self.executable or not np.isfinite(self.timeout) or self.timeout <= 0:
@@ -76,6 +101,8 @@ class JoSIM:
             raise ValueError('corrector must be a nonnegative integer')
         if self.analysis not in (0, 1):
             raise ValueError('analysis must be 0 (voltage) or 1 (phase)')
+        if self.output_format not in ('csv','npy'):
+            raise ValueError('output_format must be csv or npy')
 
     def _command(self, directory=None):
         if self.wsl_distribution:
@@ -97,6 +124,7 @@ class JoSIM:
         help_text = help_run.stdout+help_run.stderr
         return dict(version=(version.stdout+version.stderr).strip(),
                     corrector_supported='--corrector' in help_text,
+                    npy_supported='.npy' in help_text,
                     source_revision=self.source_revision)
 
     def run(self, netlist, directory, *, metadata=None):
@@ -109,10 +137,13 @@ class JoSIM:
         info = self.probe()
         if self.corrector and not info['corrector_supported']:
             raise JoSIMError('This JoSIM does not advertise the requested corrector feature')
+        if self.output_format=='npy' and not info['npy_supported']:
+            raise JoSIMError('This JoSIM does not advertise float64 NPY output support')
         root = Path(directory).resolve()
         root.mkdir(parents=True, exist_ok=False)
         (root/'input.cir').write_text(netlist, encoding='utf-8', newline='\n')
-        command = self._command(root)+['-a', str(self.analysis), '-m', '-o', 'output.csv']
+        output_name='output.'+self.output_format
+        command = self._command(root)+['-a', str(self.analysis), '-m', '-o', output_name]
         # GNU timeout terminates the Linux simulator even if the Windows WSL
         # launcher does not propagate process termination to its child.
         if self.wsl_distribution:
@@ -123,6 +154,7 @@ class JoSIM:
             command += ['-c', str(self.corrector)]
         command += ['input.cir']
         manifest = dict(simulator=info, command=command,
+                        output_format=self.output_format,
                         started_utc=datetime.now(timezone.utc).isoformat(),
                         netlist_sha256=hashlib.sha256(netlist.encode()).hexdigest(),
                         metadata={} if metadata is None else metadata)
@@ -143,6 +175,7 @@ class JoSIM:
         (root/'manifest.json').write_text(json.dumps(manifest, indent=2)+'\n')
         if code != 0:
             raise JoSIMError(f'JoSIM failed or timed out (returncode={code}); see {root}')
-        if not (root/'output.csv').is_file():
-            raise JoSIMError(f'JoSIM produced no output.csv; see {root}')
-        return SimulationResult(root, load_csv(root/'output.csv'), manifest)
+        if not (root/output_name).is_file():
+            raise JoSIMError(f'JoSIM produced no {output_name}; see {root}')
+        traces=load_csv(root/output_name) if self.output_format=='csv' else load_npy(root/output_name)
+        return SimulationResult(root, traces, manifest)

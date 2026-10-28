@@ -1,0 +1,12 @@
+{
+  "family": "jpa",
+  "geometry": {
+    "junction_width": 2,
+    "capacitor_width": 12,
+    "capacitor_height": 12,
+    "inductive_coupler": true,
+    "coupler_gap": 8,
+    "coupler_height": 10,
+    "coupler_length": 40
+  }
+}

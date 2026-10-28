@@ -36,8 +36,11 @@ revision, once its stack/contact semantics and distribution conditions are
 settled. Public literature alone should not override a selected local process
 revision.
 
-The next integration work is process-specific: qualified JJ primitives,
-conditional DRC, bias/area calibration, inductance/capacitance extraction,
-coupling/bias structures and extracted-circuit comparison with JoSIM. The
-current repository supplies the process → geometry → independent checking
-workflow and reproducible examples, rather than claiming those qualifications.
+The reviewed `spec2si-seeqc` finite-patch FastHenry workflow also informed the
+independent [London-network adapter](magnetic-extraction.md): explicit finite
+returns, fixed physical electrodes, shared film/contact paths and raw signed
+matrices. It uses the selected installed Whiteley runtime without copying
+customer PDK values or local process code. The illustrative JPA benchmark now
+includes electric/magnetic extraction and an extracted-circuit JoSIM comparison.
+Qualified JJ primitives, conditional DRC, bias/area and material calibration,
+bias structures and other device families remain process-specific work.

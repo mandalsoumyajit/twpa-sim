@@ -24,9 +24,11 @@ geometries. Install `.[layout]` and run `python examples/layout/generate_all.py`
 Profiles distinguish reference dimensions from assumed rules; JJ layouts need
 a real process adapter and EM extraction before fabrication.
 
-**EM:** [JPA extraction and back-annotation](docs/em-extraction.md) starts with
-openEMS simulation of actual capacitor electrode polygons, mesh/domain/time
-checks, and validation of the annotated circuit against JoSIM.
+**EM:** [JPA interconnect, kinetic and coupling extraction](docs/magnetic-extraction.md)
+combines London-aware FastHenry finite-conductor matrices with openEMS
+capacitor extraction. It retains physical returns, contacts and signed mutual
+coupling, then validates the full-sine annotated circuit against JoSIM.
+See the [numerical agreement](docs/magnetic-jpa-validation.md).
 
 ## Choose a model
 
@@ -90,6 +92,7 @@ JoSIM comparisons cover resonant JPA and 3WM/4WM Josephson circuits.
 | Uniform/RPM 4WM scattering, harmonics and depletion | [4WM vs JoSIM](docs/jtwpa-josim-validation.md) |
 | rf-SQUID/SNAIL gain, DC phase, loss and depletion | [3WM vs JoSIM and quantum limits](docs/three-wave-validation.md) |
 | 4WM vacuum/thermal loss baths and finite-gain limits | [Quantum-noise checks](docs/jtwpa-quantum-validation.md) |
+| JPA London interconnect, kinetic energy, pickup coupling and full-sine response | [Field extraction and JoSIM](docs/magnetic-jpa-validation.md) |
 
 Reports record physical parameters, numerical sensitivity and run provenance.
 Classical JoSIM traces validate deterministic response; they do not measure

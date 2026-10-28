@@ -8,7 +8,7 @@ import unittest
 from unittest.mock import patch
 import numpy as np
 from numpy.testing import assert_allclose
-from twpa.backends.josim import JoSIM, JoSIMError, load_csv, wsl_path
+from twpa.backends.josim import JoSIM, JoSIMError, load_csv, load_npy, wsl_path
 from twpa.jpa_circuit import ParallelJPA, SQUIDJPA, Tone, Transient, jpa_netlist, PHIBAR
 from twpa.measurement import fit_tones, port_waves
 
@@ -75,6 +75,37 @@ class BackendTests(unittest.TestCase):
             with self.assertRaises(JoSIMError): load_csv(p)
             p.write_text('time,V\n1,0\n0,1\n')
             with self.assertRaises(JoSIMError): load_csv(p)
+
+    def test_binary_preserves_subpicosecond_timestamps_and_rejects_bad_arrays(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=Path(tmp)/'output.npy'
+            data=np.zeros(4,dtype=[('time','<f8'),('V(PORT)','<f8')])
+            data['time']=1.3e-6+np.arange(4)*2e-13;data['V(PORT)']=[1,2,3,4]
+            np.save(path,data)
+            actual=load_npy(path)
+            np.testing.assert_array_equal(actual['time'],data['time'])
+            for bad in [np.zeros((3,2)),np.zeros(3,dtype=[('time','f4'),('V','f4')]),
+                        np.zeros(3,dtype=[('time','f8'),('TIME','f8')])]:
+                np.save(path,bad)
+                with self.assertRaises(JoSIMError):load_npy(path)
+            data['time'][1]=data['time'][0];np.save(path,data)
+            with self.assertRaises(JoSIMError):load_npy(path)
+
+    def test_binary_runner_capability_and_output_contract(self):
+        def process(command,**kwargs):
+            if command[-1]=='-v':return subprocess.CompletedProcess(command,0,'test JoSIM','')
+            if command[-1]=='-h':return subprocess.CompletedProcess(command,0,'Supported: .npy','')
+            array=np.array([(0.,1.),(1e-13,2.)],dtype=[('time','<f8'),('V(PORT)','<f8')])
+            np.save(kwargs['cwd']/'output.npy',array)
+            return subprocess.CompletedProcess(command,0,'completed','')
+        with tempfile.TemporaryDirectory() as tmp,patch('twpa.backends.josim.subprocess.run',side_effect=process):
+            result=JoSIM('fake',output_format='npy').run('.end',Path(tmp)/'binary')
+            self.assertEqual(result.waveform_path.name,'output.npy')
+            self.assertEqual(result.manifest['output_format'],'npy')
+            assert_allclose(result.trace('V(PORT)'),[1,2])
+        JoSIM.probe.cache_clear()
+        with tempfile.TemporaryDirectory() as tmp,patch('twpa.backends.josim.subprocess.run',return_value=subprocess.CompletedProcess([],0,'old build','')):
+            with self.assertRaisesRegex(JoSIMError,'NPY'):JoSIM('old',output_format='npy').run('.end',Path(tmp)/'fail')
 
 
 class CircuitMeasurementTests(unittest.TestCase):

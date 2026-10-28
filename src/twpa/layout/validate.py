@@ -122,7 +122,7 @@ def validate(gds, manifest=None, report=None, *, drc=True):
         d=m['design']; n=d['cells']; family=m['family']
         expected['JJ']=n*(1+(d['large_junctions'] if family=='snail3wm' else 1 if family=='squid_jpa' else 0))
         expected['CAP']=1 if family in ('jpa','squid_jpa') else n+1
-        expected['IND']=n if family=='rfsquid3wm' else 0
+        expected['IND']=(n if family=='rfsquid3wm' else 0)+int(d.get('inductive_coupler',False))
         for kind,count in expected.items():
             if regs[kind].count()!=count or sum(c['kind']==kind for c in m['components'])!=count:
                 fail('GEO.COMPONENT_COUNT',f'Expected {count} {kind} components')

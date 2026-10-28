@@ -193,10 +193,15 @@ JPA, SQUID JPA, 4WM, rf-SQUID and SNAIL layouts. Electrical sizing for a bare
 JPA or uniform 4WM chain rejects incompatible junction current/capacitance
 targets; loop inductance and parasitics still require extraction.
 
-For single-junction JPAs, the [EM workflow](docs/em-extraction.md) extracts the
-shunt capacitor with openEMS, checks mesh/domain/duration refinements and
-back-annotates a circuit for JoSIM comparison. This is capacitor-coupon
-extraction; full interconnect/package extraction remains separate work.
+For single-junction JPAs, the [London-network workflow](docs/magnetic-extraction.md)
+combines openEMS capacitor extraction with FastHenry interconnect, return,
+contact, kinetic energy and signed coupling extraction. The
+[commented example](examples/em/london_jpa.py) prepares either a physical pickup
+loop or the original galvanic-port geometry without launching a solver.
+The full driver checks field convergence and the annotated full-sine circuit
+against JoSIM. London L already contains kinetic inductance; add it only once.
+Electric stray capacitance outside the MIM coupon and packaging remain outside
+this hybrid model. See the [numerical report](docs/magnetic-jpa-validation.md).
 
 1. Inspect passive S11/S21 and passbands. Resolve poles and loading features
    before choosing pump, signal and idler.

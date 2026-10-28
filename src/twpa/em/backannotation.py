@@ -133,8 +133,18 @@ def load_circuit(path):
     stored=data.pop('artifact_sha256',None)
     if stored!=digest(data):
         raise ValueError('Back-annotation artifact hash mismatch')
-    if data.get('schema_version')!=1 or data.get('circuit_type')!='ParallelJPA':
+    if data.get('schema_version')!=1:
         raise ValueError('Unsupported back-annotated circuit')
+    if data.get('circuit_type') in ('CoupledJPA','GalvanicJPA'):
+        from .coupled_jpa import CoupledJPA,GalvanicJPA
+        if not all(data.get('certification',{}).get(k,{}).get('passed') for k in ('electric','magnetic')):
+            raise ValueError('Certified electric and magnetic extraction required')
+        cls=CoupledJPA if data['circuit_type']=='CoupledJPA' else GalvanicJPA
+        circuit=cls(**data['circuit'])
+        if not np.allclose([m['frequency'] for m in circuit.modes()],[m['frequency'] for m in data['mode_parameters']],rtol=1e-12):
+            raise ValueError('Stored circuit modes differ')
+        return circuit
+    if data.get('circuit_type')!='ParallelJPA':raise ValueError('Unsupported back-annotated circuit')
     if not data.get('convergence',{}).get('passed'):
         raise ValueError('Uncertified extraction')
     circuit=ParallelJPA(**data['circuit'])

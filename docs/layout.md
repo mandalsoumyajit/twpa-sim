@@ -50,7 +50,7 @@ full-size boolean geometry and DRC take longer.
 | Family | Geometry / topology | Example |
 | --- | --- | --- |
 | KIT | Straight IDC loading supercells, biased sheet-squares-matched U-turns, constant-width radial fingers, CPW launches, bump landings and opening | [Small](../examples/layout/kit_small.json), [reference size](../examples/layout/kit_reference.json) |
-| Resonant JPA | One JJ in parallel with one MIM capacitor, exposed signal and ground terminals | [JPA](../examples/layout/jpa.json) |
+| Resonant JPA | One JJ and one MIM capacitor, exposed signal/ground or optional physical M1 pickup loop | [Bare JPA](../examples/layout/jpa.json), [inductive pickup](../examples/layout/jpa_inductive.json) |
 | SQUID JPA | Two parallel JJs forming a loop, with a shunt capacitor | [SQUID](../examples/layout/squid_jpa.json) |
 | 4WM JTWPA | Series JJ chain with shunts and symmetric half-shunts at both endpoints | [4WM](../examples/layout/jtwpa4wm.json) |
 | rf-SQUID 3WM | JJ in parallel with an uncalibrated wire-loop inductor, repeated along a shunted line | [rf-SQUID](../examples/layout/rfsquid3wm.json) |
@@ -114,7 +114,10 @@ For `jtwpa.Chain`, `cell_length` supplies the layout pitch unless explicitly
 overridden; the primitive requires at least 40 um. Resonant phase-matching
 loads are rejected by this sizing helper. Port impedances, internal-loss
 resistors, bias coils, coupling capacitors and bias tees are external to the
-initial layouts. SQUID/SNAIL loop geometries do not yet synthesize a target
+initial layouts. A single-JJ JPA can add `inductive_coupler=true` with
+`coupler_gap`, `coupler_height` and `coupler_length` in um; its actual M1
+conductor and separate coil pins enter geometry/DRC checking and the
+[London extraction](magnetic-extraction.md). SQUID/SNAIL loop geometries do not yet synthesize a target
 inductance or flux bias. Use the manifest estimates to build or check a
 consistent circuit after extraction; the previous JoSIM benchmarks do not
 validate a newly generated mask's parasitics.
@@ -157,9 +160,10 @@ explicitly reports `drc_executed=false`; it is not a substitute for a DRC run.
 Reports record hashes, qualification and rules executed. Editing a GDS changes
 its recorded hash but permits rechecking against the same design intent.
 
-The [JPA EM workflow](em-extraction.md) now implements capacitor-coupon
-extraction and circuit back-annotation, with [JoSIM comparison](em-jpa-validation.md).
-Full interconnect/package extraction remains separate work.
+The [JPA London-network workflow](magnetic-extraction.md) combines capacitor
+extraction with finite interconnect/return/contact, kinetic energy and signed
+mutual extraction, with [native validation](magnetic-jpa-validation.md).
+Electric stray capacitance outside the MIM coupon and packages remain separate work.
 
 See [validation evidence and remaining work](layout-validation.md). KLayout
 APIs are documented in its [standalone Python manual](https://www.klayout.org/klayout-pypi/)

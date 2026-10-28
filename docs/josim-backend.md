@@ -132,6 +132,16 @@ Simulator references: [Delport et al. (2019)](references.md#josim2019),
 [JoSIM documentation](https://joeydelp.github.io/JoSIM/)
 and [thermal-noise implementation](https://joeydelp.github.io/JoSIM/tech_disc/).
 
+## Precision-preserving binary traces
+
+For long, finely sampled transients, `JoSIM(..., output_format='npy')` reads
+native named float64 binary output when the selected build advertises it.
+The reader disallows pickle, checks named scalar float64 fields and requires
+a strictly increasing time axis. CSV remains the default for compatibility;
+neither reader reconstructs or repairs repeated timestamps. The
+[London-network JPA comparison](magnetic-jpa-validation.md) uses binary output
+because six-digit CSV precision was insufficient beyond 1 us in that build.
+
 ## Four-wave traveling-wave circuits
 
 `twpa.jtwpa.chain_netlist` generates finite RCSJ chains with physical source

@@ -152,3 +152,26 @@ version/commit and numerical controls used. Add the references appropriate
 to your device and noise model from [references.bib](../references.bib).
 Synthetic benchmark outputs should be identified as calculations, not
 independent experimental measurements.
+
+## Inductance extraction
+
+<a id="fasthenry1994"></a>
+**[fasthenry1994]** M. Kamon, M. J. Tsuk and J. K. White,
+“FASTHENRY: A Multipole-Accelerated 3-D Inductance Extraction Program,”
+*IEEE Transactions on Microwave Theory and Techniques* **42**(9),
+1750–1758 (1994). [DOI](https://doi.org/10.1109/22.310584).
+The [author-hosted earlier DAC 1993 version](https://www.rle.mit.edu/cpg/publications/pub53.pdf)
+describes volume filaments, partial-inductance matrices and terminal-network
+reduction. The superconducting extension and this repository's finite-mask
+adapter require separate verification; the current bounded benchmarks use
+direct field evaluation, not multipole acceleration.
+
+<a id="whiteley_fasthenry"></a>
+**[whiteley_fasthenry]** S. R. Whiteley, *Xic Inductance/Resistance Extraction
+Interface*: [geometry](https://wrcad.com/manual/xicmanual/node498.html),
+[terminal definition](https://wrcad.com/manual/xicmanual/node499.html), and
+[superconducting output extensions](https://wrcad.com/manual/xicmanual/node501.html).
+Primary documentation for finite electrode equivalencing, ordered terminal
+pairs and the Whiteley `lambda` extension. The upstream normal-metal solver
+does not supply that extension. See the [independent London implementation](magnetic-extraction.md)
+and its [native analytic and circuit checks](magnetic-jpa-validation.md).

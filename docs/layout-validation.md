@@ -84,14 +84,16 @@ The initial workflow deliberately exposes these boundaries:
 - KIT folded/four-pass routing and configurable package-wide ground stitching.
 - Foundry-specific JJ/barrier/contact/capacitor primitives and conditional DRC.
 - Mask-tone conversion, junction etch bias, and process-qualified corners.
-- Calibrated loop/lead/resonator extraction and circuit back-annotation.
-- RPM resonators, coupling networks, bias coils/tees and on-chip loss elements.
-- Extracted-layout versus JoSIM amplifier-response validation.
+- Calibrated SQUID/SNAIL loop and TWPA cell extraction/back-annotation.
+- RPM resonators, electric coupling networks, bias coils/tees and on-chip loss elements.
+- Package extraction and electric stray capacitance outside the MIM coupon.
 
-The [initial JPA EM implementation](em-extraction.md) now covers the capacitor
-coupon and annotated lumped-circuit response. The full interconnect/package
-and other device families remain outside that first extraction stage.
+The [JPA London-network implementation](magnetic-extraction.md) now covers
+the capacitor coupon plus finite interconnect, return, contact, kinetic energy
+and signed inductive coupling extraction. The new pickup-loop geometry is
+included in the all-family geometry and native DRC example campaign.
 
 The earlier JoSIM reports apply to their numerical circuits. The separate
-[JPA EM report](em-jpa-validation.md) now checks a capacitor-annotated circuit;
-it does not validate omitted full-layout parasitics.
+[London-network report](magnetic-jpa-validation.md) checks the extracted
+full-sine circuit against JoSIM. Omitted electric/package effects and other
+device families remain outside that benchmark.

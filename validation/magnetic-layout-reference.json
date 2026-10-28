@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "records": [
+    {
+      "design": "kit_small",
+      "passed": true,
+      "klayout_python": "0.30.12",
+      "process_sha256": "185e8794f08a7522322c4628b0b4d7b116b87be7b5b4d703734a0dcf3a99bc00",
+      "design_sha256": "5bcc8ed7d8be4b17dd688867825d6c0172da0e27ad67e7acdcc5fb04cc5e81a7",
+      "gds_sha256": "f0aeebbfa2a08599d406d355e819d1d1f1edff0b1f04831ef3c869e8af4bf35c",
+      "qualification": "research_reference",
+      "rule_count": 17,
+      "connectivity": {
+        "physical_nets": 3,
+        "intended_nets": 3,
+        "unassigned_islands": 0
+      },
+      "components": {},
+      "native_drc_violations": 0
+    },
+    {
+      "design": "jpa",
+      "passed": true,
+      "klayout_python": "0.30.12",
+      "process_sha256": "ece09da4d1fa9b8ea75ac828a4aba296fa4248d2c70084412c045f3f7150cf77",
+      "design_sha256": "e640aeef1697064b85931fc7a5a3a1268a8eec972a075414215e73a1c0495ec0",
+      "gds_sha256": "51fc0b2e80f0495238f12eed970b0a510a6c70e8976bf35a13413c2af41632e0",
+      "qualification": "illustrative",
+      "rule_count": 31,
+      "connectivity": {
+        "physical_nets": 2,
+        "intended_nets": 2,
+        "unassigned_islands": 0
+      },
+      "components": {
+        "JJ": 1,
+        "CAP": 1
+      },
+      "native_drc_violations": 0
+    },
+    {
+      "design": "jpa_inductive",
+      "passed": true,
+      "klayout_python": "0.30.12",
+      "process_sha256": "ece09da4d1fa9b8ea75ac828a4aba296fa4248d2c70084412c045f3f7150cf77",
+      "design_sha256": "b77bd26b0ee99e783c507492b8a2fa6b924ae2ec3e7197c3dc21c37cb3ec8353",
+      "gds_sha256": "8fb996d83b74df19bf9ef22d09732929f5ae1f9f789623608e2cacddd1e72df6",
+      "qualification": "illustrative",
+      "rule_count": 31,
+      "connectivity": {
+        "physical_nets": 4,
+        "intended_nets": 4,
+        "unassigned_islands": 0
+      },
+      "components": {
+        "JJ": 1,
+        "CAP": 1,
+        "IND": 1
+      },
+      "native_drc_violations": 0
+    },
+    {
+      "design": "squid_jpa",
+      "passed": true,
+      "klayout_python": "0.30.12",
+      "process_sha256": "ece09da4d1fa9b8ea75ac828a4aba296fa4248d2c70084412c045f3f7150cf77",
+      "design_sha256": "b6f4f1e201f6dce37ab39f67d680bae1f8964476ce920343c3255ebc17b17f04",
+      "gds_sha256": "ece7dbad5568e75ba7bc239a4aba68a607d4904f517d228639ca3d30cc19dbf2",
+      "qualification": "illustrative",
+      "rule_count": 31,
+      "connectivity": {
+        "physical_nets": 2,
+        "intended_nets": 2,
+        "unassigned_islands": 0
+      },
+      "components": {
+        "JJ": 2,
+        "CAP": 1
+      },
+      "native_drc_violations": 0
+    },
+    {
+      "design": "jtwpa4wm",
+      "passed": true,
+      "klayout_python": "0.30.12",
+      "process_sha256": "ece09da4d1fa9b8ea75ac828a4aba296fa4248d2c70084412c045f3f7150cf77",
+      "design_sha256": "ed55fe8f632942f7162ca96821ce4af3ccbc0637f3616f606c0324116396b37e",
+      "gds_sha256": "549de211283f7514408ec4daed269846e028917dfacaf6f0516bb5837bfb1c01",
+      "qualification": "illustrative",
+      "rule_count": 31,
+      "connectivity": {
+        "physical_nets": 10,
+        "intended_nets": 10,
+        "unassigned_islands": 0
+      },
+      "components": {
+        "JJ": 8,
+        "CAP": 9
+      },
+      "native_drc_violations": 0
+    },
+    {
+      "design": "rfsquid3wm",
+      "passed": true,
+      "klayout_python": "0.30.12",
+      "process_sha256": "ece09da4d1fa9b8ea75ac828a4aba296fa4248d2c70084412c045f3f7150cf77",
+      "design_sha256": "83db2506a5d597c0e57429a82ceb1f59e0ceeaca0cc264985faf7afb40554352",
+      "gds_sha256": "8d533c9dfd72dbacce3adf5662fb2932c0ed138fd147b621dcc5752709717ff3",
+      "qualification": "illustrative",
+      "rule_count": 31,
+      "connectivity": {
+        "physical_nets": 10,
+        "intended_nets": 10,
+        "unassigned_islands": 0
+      },
+      "components": {
+        "JJ": 8,
+        "IND": 8,
+        "CAP": 9
+      },
+      "native_drc_violations": 0
+    },
+    {
+      "design": "snail3wm",
+      "passed": true,
+      "klayout_python": "0.30.12",
+      "process_sha256": "ece09da4d1fa9b8ea75ac828a4aba296fa4248d2c70084412c045f3f7150cf77",
+      "design_sha256": "b53e42d4b2c949cf2141f7b0a1b95c11f10148872778a6cfcbc95f872bbee922",
+      "gds_sha256": "991d4e3c6b381c5e8eb0ed2453bbdd7831ef92b9a943f4e056f2044c1ee48e34",
+      "qualification": "illustrative",
+      "rule_count": 31,
+      "connectivity": {
+        "physical_nets": 14,
+        "intended_nets": 14,
+        "unassigned_islands": 0
+      },
+      "components": {
+        "JJ": 16,
+        "CAP": 5
+      },
+      "native_drc_violations": 0
+    }
+  ]
+}

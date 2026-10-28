@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "id": "illustrative_london_v1",
+  "status": "illustrative",
+  "temperature_K": 0.02,
+  "m1_thickness_um": 0.2,
+  "m2_thickness_um": 0.2,
+  "dielectric_gap_um": 0.0664,
+  "m1_lambda_um": 0.09,
+  "m2_lambda_um": 0.09,
+  "via_lambda_um": 0.09
+}

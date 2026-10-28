@@ -6,9 +6,10 @@ solves it with openEMS, checks numerical refinements, and replaces the nominal
 shunt capacitance in a physical RCSJ circuit. The resulting circuit feeds the
 existing reduced JPA model and independent JoSIM transient calculations.
 
-This first implementation is component-level extraction. It does not yet
-extract the full interconnect, ground return, package, kinetic inductance,
-coupling network or bias geometry. Junction `Ic` and `Cj` come from actual
+This page describes the initial component-level electric extraction. The
+[London-network extension](magnetic-extraction.md) adds finite interconnect,
+ground return, kinetic energy and signed inductive coupling. Package and
+bias geometry remain outside those benchmarks. Junction `Ic` and `Cj` come from actual
 GDS junction-window area and the explicit process densities. PEC extraction
 does not determine superconducting loss or nonlinear junction physics.
 
@@ -141,9 +142,9 @@ junction resistance remain explicit user assumptions with per-parameter
 origins recorded in `backannotation.json`. The reduced resonance must lie
 inside the extraction frequency band.
 
-See [validation evidence](em-jpa-validation.md). Remaining work includes
-multiport full-layout extraction, passive-network reduction, inductance and
-kinetic-inductance modeling, dielectric/material loss, coupling/bias structures,
-and SQUID/SNAIL/JTWPA back-annotation. The initial JoSIM comparison checks the
-EM-annotated lumped circuit, not those unextracted parasitics or a fabricated
-amplifier's measured performance.
+See the [initial capacitor validation](em-jpa-validation.md) and the newer
+[London-network validation](magnetic-jpa-validation.md), which retains finite
+interconnect, return, contacts, kinetic energy and inductive coupling. Electric
+stray capacitance beyond the MIM coupon, packages, dielectric/material loss,
+bias structures and SQUID/SNAIL/JTWPA back-annotation remain separate work.
+Neither benchmark establishes a fabricated amplifier's measured performance.
