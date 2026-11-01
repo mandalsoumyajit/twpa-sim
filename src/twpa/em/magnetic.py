@@ -246,7 +246,7 @@ def layout_magnetic_job(gds,stack=None,*,patch_side_um=.5,**settings):
         if c['kind'] not in ('JJ','CAP'):continue
         b=c['box_um'];x=(b[0]+b[2])/2;y=(b[1]+b[3])/2
         if patch_side_um>min(b[2]-b[0],b[3]-b[1]):raise ValueError('Electrode patch exceeds device window')
-        if patch_side_um>min(b[2]-b[0],b[3]-b[1]):raise ValueError('Patch exceeds component window')
+
         for role in ('M1','M2'):patch(c['id']+'_'+role,role,x,y)
     pins={v['name']:v for v in m['pins']}
     patch('INPUT','M1',*pins['in']['at_um']);patch('GROUND0','M1',*pins['ground_rail']['at_um'])

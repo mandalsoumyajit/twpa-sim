@@ -75,7 +75,7 @@ def certify_magnetic(primary,controls):
         p['settings']['nh']<loaded['thickness']['settings']['nh'] or
         p['settings']['local_pitch_um']>loaded['contact']['settings']['local_pitch_um']):raise ValueError('Primary must use finest declared numerical controls')
     fcontrol=loaded['frequency']
-    if any(fcontrol['settings'][k]!=p['settings'][k] for k in p['settings'] if k!='frequencies_hz') or fcontrol['samples'][0]['frequency_Hz']<1e11:
+    if any(fcontrol['settings'][k]!=p['settings'][k] for k in p['settings'] if k!='frequencies_hz') or fcontrol['samples'][0]['frequency_Hz']<1e11 or fcontrol['samples'][0]['frequency_Hz']==p['samples'][0]['frequency_Hz']:
         raise ValueError('Independent high-frequency control at fixed physical/current basis required')
     ferror=float(np.max(abs(_matrix(fcontrol)-l))/np.max(abs(l)))
     records['frequency']=dict(matrix_relative=ferror,passed=ferror<1e-7)

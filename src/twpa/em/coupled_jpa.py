@@ -208,6 +208,7 @@ def response(point,frequencies,*,sideband_order=2,quadrature=1024):
     bands=np.arange(-sideband_order,sideband_order+1);n=len(bands);signal=[];idler=[]
     for f in fs:
         freqs=f+2*bands*point.frequency
+        if np.any(abs(freqs)<1.) or len(np.unique(np.round(abs(freqs),6)))!=len(freqs):raise ValueError('Non-degenerate positive sideband frequencies required')
         matrix=np.zeros((5*n,5*n),complex);rhs=np.zeros(5*n,complex)
         for i,band in enumerate(bands):
             matrix[5*i:5*i+5,5*i:5*i+5]=-1j*2*np.pi*freqs[i]/c.plasma_omega*np.eye(5)-a

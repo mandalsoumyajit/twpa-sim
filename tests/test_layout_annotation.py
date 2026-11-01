@@ -76,12 +76,14 @@ class TerminalNetworkPhysics(unittest.TestCase):
         self.assertGreater(np.linalg.eigvalsh(np.block([[c.L,basis],[basis.T,np.array([[coil]])]]))[0],0)
 
     def test_reject_invalid_or_unresolved_physics(self):
-        for key,value in [('inductance_H',[[-1.]]),('reference','absent')]:
+        for key,value in [('inductance_H',[[-1.]]),('reference','absent'),('junctions',[]),('ports',[])]:
             d=rf_network();d[key]=value
             with self.assertRaises(ValueError):LayoutNetwork(d)
         c=LayoutNetwork(rf_network())
         with self.assertRaises(ValueError):c.flux_vector([0.,0.])
         with self.assertRaises(ValueError):c.response(c.periodic(5e9,0.),[5e9])
+        with self.assertRaises(ValueError):c.response(c.periodic(5e9,0.),[2.5e9])
+        with self.assertRaises(ValueError):c.response(c.periodic(5e9,0.),[7.5e9])
         with self.assertRaises(ValueError):c.response(c.periodic(5e9,0.),[4e9],quadrature=1)
 
 

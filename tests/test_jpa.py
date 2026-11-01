@@ -77,6 +77,11 @@ class JPATests(unittest.TestCase):
         marginal = [p for p in points if p.stability == 'marginal']
         self.assertGreaterEqual(len(marginal), 1)
         self.assertEqual(len(points), 2)
+        below = pump_points(r, fp, power*(1-5e-15))
+        self.assertEqual([p.stability for p in below], ['stable', 'unstable', 'stable'])
+        self.assertLess(select_pump_point(below, 'lower').photons, x*r.kappa/abs(r.kerr))
+        above = pump_points(r, fp, power*(1+5e-15))
+        self.assertEqual([p.stability for p in above], ['stable'])
 
     def test_weak_pump_root_is_not_truncated(self):
         r = Resonator(5e9, 1e7, kerr=-1e3)

@@ -93,6 +93,10 @@ class MagneticContracts(unittest.TestCase):
         with self.assertRaises(ValueError):certify_magnetic(p,c)
         c=controls();c['bulk']['ports'][2]['positive_patch']='coil_hi';c['bulk']=seal(c['bulk'])
         with self.assertRaisesRegex(ValueError,'orientation'):certify_magnetic(p,c)
+        p_hf=synthetic(frequencies_hz=[2e11]);c_hf=controls()
+        for v in c_hf.values():v['samples'][0]['frequency_Hz']=2e11
+        c_hf={k:seal(v) for k,v in c_hf.items()}
+        with self.assertRaisesRegex(ValueError,'Independent high-frequency'):certify_magnetic(p_hf,c_hf)
 
 
 class CircuitPhysics(unittest.TestCase):
@@ -144,7 +148,7 @@ class CircuitPhysics(unittest.TestCase):
 
     def test_reject_nonfinite_and_aliased_response_inputs(self):
         c=self.circuits()[0];f=c.modes()[0]['frequency'];p=pump(c,f,0)
-        for fs in ([float('nan')],[],[[f]],[-f],[2*f]):
+        for fs in ([float('nan')],[],[[f]],[-f],[f],[2*f]):
             with self.assertRaises(ValueError):response(p,fs)
         for kwargs in (dict(quadrature=16),dict(quadrature=128.5),dict(sideband_order=True)):
             with self.assertRaises(ValueError):response(p,[f*.99],**kwargs)
@@ -169,7 +173,8 @@ class ActualMaskBasis(unittest.TestCase):
                 magnetic=certify_magnetic(synthetic(),controls())
                 magnetic.update(source=job['source'],manifest_sha256=job['manifest_sha256'],topology=job['topology'])
                 magnetic=seal(magnetic)
-                from test_em import synthetic as electric_fixture
+                try: from .test_em import synthetic as electric_fixture
+                except ImportError: from test_em import synthetic as electric_fixture
                 electric=electric_fixture();ejob=capacitor_job(gds,load_stack())
                 electric.update(source=ejob['source'],stack=ejob['stack']);electric=seal(electric)
                 refinements=[]

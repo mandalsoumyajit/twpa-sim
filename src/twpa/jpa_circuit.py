@@ -120,6 +120,8 @@ class SQUIDJPA:
 
     def junction_phase(self, flux=None):
         bias = self.flux_bias if flux is None else flux
+        if isinstance(bias, bool) or not np.isfinite(bias) or not abs(bias) < (.45 if flux is None else .45+2e-5):
+            raise ValueError('initial SQUID adapter requires |flux_bias| < 0.45')
         beta = self.arm_inductance*self.critical_current/PHIBAR
         return brentq(lambda x: x+beta*np.sin(x)-np.pi*bias, -np.pi/2, np.pi/2)
 
@@ -129,7 +131,13 @@ class SQUIDJPA:
             yj = 1/self.junction_resistance+1j*w*self.junction_capacitance+1/(1j*w*lj)
             return 1j*w*self.shunt_capacitance+2/(1j*w*self.arm_inductance+1/yj)
         guess = 1/np.sqrt((lj+self.arm_inductance)/2*(self.shunt_capacitance+2*self.junction_capacitance))
-        w = brentq(lambda w: admittance(w).imag, guess*.8, guess*1.2)
+        wj = 1/np.sqrt(lj*self.junction_capacitance)
+        lo, hi = min(guess*.8, wj*.5), min(guess*1.2, wj)
+        while admittance(lo).imag >= 0:
+            lo *= .5
+        while admittance(hi).imag <= 0:
+            hi *= 1.5
+        w = brentq(lambda w: admittance(w).imag, lo, hi)
         dw = w*1e-5
         ceff = (admittance(w+dw).imag-admittance(w-dw).imag)/(4*dw)
         return w, ceff, admittance(w).real

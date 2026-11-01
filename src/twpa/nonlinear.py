@@ -36,7 +36,7 @@ class NonlinearResult:
 def route_profile(mode='ideal', cycles=1):
     """Return u(s), s in [0,1]. Modes map to original exact-gradient cases."""
     positive(cycles, 'cycles')
-    profiles = {'ideal': lambda s: 0., 'linear': lambda s: s-.5,
+    profiles = {'ideal': lambda s: 0.*s, 'linear': lambda s: s-.5,
                 'from-input': lambda s: s,
                 'sine': lambda s: .5*np.sin(2*np.pi*cycles*s),
                 'folded': lambda s: .5*np.cos(2*np.pi*cycles*s),
@@ -48,7 +48,7 @@ def route_profile(mode='ideal', cycles=1):
 
 def nonlinear(design, bias, signal_frequency, signal_current, *, idler_current=0j,
               frequency=None, pump_frequency=None, gradient=0., profile=None,
-              derivative_step=.001, samples=201, rtol=1e-8, atol=1e-12):
+              derivative_step=.001, samples=201, rtol=1e-8, atol=1e-12, **pump_options):
     """Integrate full pump/signal/idler CMEs, optionally with a film gradient.
 
     gradient is fractional inductance variation times profile(cell/Nc).
@@ -57,15 +57,17 @@ def nonlinear(design, bias, signal_frequency, signal_current, *, idler_current=0
     Currents are internally normalized to the largest input amplitude so the
     absolute tolerance does not overwhelm a small probe current.
     """
+    positive(signal_frequency, 'signal_frequency')
     positive(abs(signal_current), 'signal_current')
     if not np.isfinite(gradient) or not np.isfinite(idler_current):
         raise ValueError('gradient and idler current must be finite')
     positive(derivative_step, 'derivative_step')
-    if derivative_step >= 1 or not isinstance(samples, int) or samples < 2:
+    if derivative_step >= 1 or isinstance(samples, bool) or not isinstance(samples, int) or samples < 2:
         raise ValueError('derivative_step must be < 1 and samples >= 2')
     grid = default_frequency() if frequency is None else frequency
     ref = linear(design, grid, bias.impedance)
-    fp = select_pump(ref, bias) if pump_frequency is None else pump_frequency
+    fp = select_pump(ref, bias, **pump_options) if pump_frequency is None else pump_frequency
+    positive(fp, 'pump_frequency')
     modes = np.array([fp, signal_frequency, fp-signal_frequency])
     if not np.all(np.isfinite(modes)) or not np.all(supported(ref, modes)):
         raise ValueError('pump, signal and idler must lie in modeled passbands')
@@ -111,9 +113,9 @@ def compression(design, bias, signal_frequency, input_power_dbm, **options):
     gains = np.array([nonlinear(design, bias, signal_frequency,
                       np.sqrt(2*1e-3*10**(p/10)/bias.impedance), **options).gain for p in powers])
     deficit = 10*np.log10(reference.gain/gains)
-    crossing = np.flatnonzero(deficit >= 1)
+    crossing = np.flatnonzero((deficit[:-1] < 1) & (deficit[1:] >= 1))
     p1db = np.nan
-    if len(crossing) and crossing[0] > 0:
-        j = crossing[0]
+    if len(crossing):
+        j = crossing[0]+1
         p1db = powers[j-1]+(powers[j]-powers[j-1])*(1-deficit[j-1])/(deficit[j]-deficit[j-1])
     return gains, float(p1db)

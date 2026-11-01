@@ -88,6 +88,27 @@ class EMContract(unittest.TestCase):
         self.assertTrue(result['convergence']['passed'])
         self.assertIn('port_impedance',{r['control'] for r in result['convergence']['comparisons']})
 
+    def test_worker_mesh_rounding_avoids_float_drift_collision(self):
+        from unittest.mock import MagicMock, patch
+        from twpa.em import openems_worker
+        em,csx=MagicMock(),MagicMock(); em.__version__=csx.__version__='0.0'
+        port=em.openEMS.return_value.AddLumpedPort.return_value
+        port.uf_tot=np.ones(3); port.if_tot=1j*2*np.pi*np.array([1e9,2e9,3e9])*1e-13
+        port.ut_tot=port.it_tot=np.r_[1.,np.zeros(19)]
+        base=dict(kind='jpa_mim_capacitor',source={},stack_sha256='test',scope='test',
+                  stack=asdict(load_stack()),
+                  geometry=dict(port_width_um=2.0,polygons_um={'M1':[[[-6.0,-6.0],[6.0,-6.0],[6.0,6.0],[-6.0,6.0]]],'M2':[]}),
+                  settings=dict(mesh_um=0.1,margin_um=5.0,z_cells=3,timesteps=100,
+                                excitation_cutoff_hz=50e9,port_resistance=50.0,frequencies_hz=[1e9,2e9,3e9]))
+        with tempfile.TemporaryDirectory() as temp, patch.object(openems_worker,'runtime',return_value=(em,csx,[])):
+            for step in (0.1,0.15,0.2,0.3):
+                job=deepcopy(base); job['settings']['mesh_um']=step
+                res=openems_worker.run(job,Path(temp),1)
+                self.assertGreaterEqual(min(res['mesh']['min_steps_um'][:2]),step*1e-5)
+            bad=deepcopy(base); bad['geometry']['polygons_um']['M1'][0][0][0]=-6.0+1e-7
+            with self.assertRaisesRegex(ValueError,'Near-duplicate mesh lines'):
+                openems_worker.run(bad,Path(temp),1)
+
 
 @unittest.skipUnless(HAVE_LAYOUT,'Install twpa-sim[layout]')
 class GeometryBinding(unittest.TestCase):
@@ -130,6 +151,11 @@ class GeometryBinding(unittest.TestCase):
         self.assertEqual(record['parameter_origins']['port_impedance'],'User-supplied external embedding')
         self.gds.write_bytes(self.gds.read_bytes()+b'\0')
         with self.assertRaisesRegex(ValueError,'Stale'): back_annotate_jpa(self.gds,certified)
+        from twpa.layout import load_process
+        from twpa.layout.generate import JosephsonLayout,generate
+        pickup=self.root/'pickup.gds'
+        generate(JosephsonLayout(inductive_coupler=True),load_process('jj_overlap_illustrative'),pickup)
+        with self.assertRaisesRegex(ValueError,'single-junction'): back_annotate_jpa(pickup,certified)
 
 
 if __name__=='__main__': unittest.main()

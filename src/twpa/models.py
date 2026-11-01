@@ -5,7 +5,7 @@ from scipy.constants import epsilon_0
 
 
 def positive(value, name, zero=False):
-    if not isfinite(value) or (value < 0 if zero else value <= 0):
+    if isinstance(value, bool) or not isfinite(value) or (value < 0 if zero else value <= 0):
         raise ValueError(f"{name} must be finite and {'nonnegative' if zero else 'positive'}")
 
 
@@ -33,7 +33,7 @@ class Section:
     count: int
 
     def __post_init__(self):
-        if not isinstance(self.count, int) or self.count < 0:
+        if isinstance(self.count, bool) or not isinstance(self.count, int) or self.count < 0:
             raise ValueError('count must be a nonnegative integer')
 
 
@@ -45,7 +45,7 @@ class Design:
     name: str = 'custom'
 
     def __post_init__(self):
-        if not isinstance(self.repeats, int) or self.repeats < 1:
+        if isinstance(self.repeats, bool) or not isinstance(self.repeats, int) or self.repeats < 1:
             raise ValueError('repeats must be a positive integer')
         if self.period_cells < 1:
             raise ValueError('period must contain at least one cell')

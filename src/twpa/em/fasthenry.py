@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shutil
 import subprocess
 import time
 import numpy as np
@@ -59,9 +60,13 @@ class FastHenry:
 
     def probe(self):
         if self.wsl_distribution:
-            check=subprocess.run(self._prefix()+['sha256sum',self.executable],capture_output=True,text=True,check=True,timeout=20)
+            exe=self.executable if '/' in self.executable else subprocess.run(self._prefix()+['which',self.executable],capture_output=True,text=True,check=True,timeout=20).stdout.strip()
+            check=subprocess.run(self._prefix()+['sha256sum',exe],capture_output=True,text=True,check=True,timeout=20)
             binary_hash=check.stdout.split()[0]
-        else:binary_hash=hashlib.sha256(Path(self.executable).read_bytes()).hexdigest()
+        else:
+            exe=Path(self.executable)
+            if not exe.is_file() and shutil.which(self.executable):exe=Path(shutil.which(self.executable))
+            binary_hash=hashlib.sha256(exe.read_bytes()).hexdigest()
         if self.binary_sha256 and binary_hash!=self.binary_sha256:raise ValueError('FastHenry executable hash differs from selected installation')
         run=subprocess.run(self._prefix()+[self.executable,'-h'],capture_output=True,text=True,timeout=20)
         banner=run.stdout+run.stderr

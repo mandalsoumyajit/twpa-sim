@@ -136,6 +136,18 @@ class LayoutTests(unittest.TestCase):
             from_circuit(ParallelJPA(20e-6,144e-15,1e-12),p)
         with self.assertRaisesRegex(ValueError,'additional layout primitives'):
             from_circuit(Chain(20e-6,144e-15,240e-15,8,resonator=ResonantLoad(1e-15,1e-12,1e-9)),p)
+        from twpa.layout.generate import generate,JosephsonLayout,KITLayout
+        for c in (ParallelJPA(15.2e-6,145e-15,182.4e-15),Chain(20e-6,145e-15,240e-15,4,cell_length=60e-6)):
+            sized=from_circuit(c,p,relative_tolerance=.05)
+            generate(sized,p,self.root/'sized.gds')
+        with self.assertRaisesRegex(ValueError,'Off-grid'):
+            JosephsonLayout(junction_width=1.751).validate(p)
+        with self.assertRaisesRegex(ValueError,'Off-grid'):
+            JosephsonLayout(family='jtwpa4wm',capacitor_height=12.002).validate(p)
+        kit_p=load_process()
+        with self.assertRaisesRegex(ValueError,'bracketed'):
+            KITLayout(turn_periods=1,turn_radius=1600).validate(kit_p)
+        generate(KITLayout(rows=2,periods_per_row=1,unloaded_cells=48,loaded_cells=7,pitch=1.502),kit_p,self.root/'short_kit.gds')
 
     def test_shorts_and_opens(self):
         path,_=self.build()

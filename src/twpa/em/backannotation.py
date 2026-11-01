@@ -118,7 +118,7 @@ def back_annotate_jpa(gds, extraction, *, port_impedance=5000., internal_resista
     gds=Path(gds)
     manifest_path=gds.with_suffix('.manifest.json')
     m=_json(manifest_path.read_text(encoding='utf-8-sig'))
-    if m['family']!='jpa':
+    if m['family']!='jpa' or m['design'].get('inductive_coupler'):
         raise ValueError('Back-annotation supports single-junction jpa only')
     expected=dict(gds_sha256=hashlib.sha256(gds.read_bytes()).hexdigest(),
                   manifest_sha256=hashlib.sha256(manifest_path.read_bytes()).hexdigest(),

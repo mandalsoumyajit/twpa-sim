@@ -194,12 +194,20 @@ def _nonlinear(branch, nonlinearity='cubic', indices=None, quadrature=16, deriva
         current = _cube(branch)/6
         if not derivative:
             return current
-        derivatives = []
-        step = 1e-6
-        for col in range(2*modes):
-            perturb = np.zeros_like(branch)
-            perturb[col % modes] = step*(1 if col < modes else 1j)
-            derivatives.append((_cube(branch+perturb)-_cube(branch-perturb))/(12*step))
+        # Exact Wirtinger derivatives of _cube(branch)/6.
+        p, s, i = branch
+        p2, s2, i2 = abs(p)**2, abs(s)**2, abs(i)**2
+        dz = [np.array([p2+s2+i2, np.conj(p)*s+p*np.conj(i), np.conj(p)*i+p*np.conj(s)])/4,
+              np.array([np.conj(s)*p+i*np.conj(p), p2+s2+i2, np.conj(s)*i])/4,
+              np.array([np.conj(i)*p+s*np.conj(p), np.conj(i)*s, p2+s2+i2])/4]
+        dzc = [np.array([.5*p*p+s*i, p*s, p*i])/4,
+               np.array([s*p, .5*s*s, s*i+.5*p*p])/4,
+               np.array([i*p, i*s+.5*p*p, .5*i*i])/4]
+        return [a+b for a, b in zip(dz, dzc)]+[1j*(a-b) for a, b in zip(dz, dzc)]
+
+
+
+
         return derivatives
     basis = _basis(tuple(indices), quadrature)
     theta = np.real(basis.T@branch)
@@ -235,6 +243,7 @@ def _jacobian(fields, matrices, nonlinearity='cubic', indices=None, quadrature=1
     blocks = []
     for row in range(2*modes):
         sub = []
+
         for col in range(2*modes):
             component = derivatives[col][row % modes]
             nonlinear = laplace(component.real if row < modes else component.imag)

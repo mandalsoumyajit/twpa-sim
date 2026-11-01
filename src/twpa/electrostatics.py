@@ -24,7 +24,10 @@ def electrostatic(relative_permittivity, fixed_potential, oxide, *, dx, dy, volt
     """
     er = np.asarray(relative_permittivity, float)
     fixed = np.asarray(fixed_potential, float)
-    oxide = np.asarray(oxide, bool)
+    raw_oxide = np.asarray(oxide)
+    if raw_oxide.dtype != bool and not np.all(np.isin(raw_oxide, (0, 1))):
+        raise ValueError('oxide mask must be boolean')
+    oxide = raw_oxide.astype(bool)
     if er.ndim != 2 or min(er.shape) < 2 or er.shape != fixed.shape or er.shape != oxide.shape:
         raise ValueError('maps must have identical 2D shapes, at least 2 by 2')
     if np.any(~np.isfinite(er)) or np.any(er <= 0) or np.any(np.isinf(fixed)):

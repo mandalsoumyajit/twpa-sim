@@ -90,6 +90,7 @@ explains why these tests answer different questions.
 - [Contributing and numerical changes](../CONTRIBUTING.md)
 - [Josephson implementation scope and roadmap](josephson-roadmap.md)
 - [Logo and design provenance](assets/README.md)
+- [Bug tracker and audit resolution log](bug-tracker.md)
 
 The repository uses Markdown documentation so it remains readable directly on
 GitHub and in a source checkout. Run `python tools/check_documentation.py`

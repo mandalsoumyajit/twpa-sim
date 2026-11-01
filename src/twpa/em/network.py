@@ -24,6 +24,7 @@ class LayoutNetwork:
         if self.n>200:raise ValueError('Local network envelope is 200 active nodes')
         self.L=np.asarray(d['inductance_H'],float)
         self.BL=self.incidence(d['metal_branches']);self.BJ=self.incidence(d['junctions'])
+        if not d['junctions'] or not d['ports']:raise ValueError('At least one junction and port required')
         if self.L.shape!=(self.BL.shape[1],)*2 or not np.all(np.isfinite(self.L)):raise ValueError('Invalid inductance dimensions')
         if not np.allclose(self.L,self.L.T,rtol=1e-8,atol=1e-20) or np.linalg.eigvalsh(self.L)[0]<=0:raise ValueError('Inductance matrix must be reciprocal and positive definite')
         self.invL=np.linalg.inv(self.L);self.K=self.BL@self.invL@self.BL.T
@@ -160,7 +161,7 @@ class LayoutNetwork:
         out=[]
         for f in np.atleast_1d(frequencies):
             fs=f+bands*fp
-            if np.any(abs(fs)<1.) or not np.isfinite(f) or f<=0 or f>=2*fp:raise ValueError('Supported distinct positive signal/idler frequencies required')
+            if np.any(abs(fs)<1.) or len(np.unique(np.round(abs(fs),6)))!=len(fs) or not np.isfinite(f) or f<=0 or f>=2*fp:raise ValueError('Supported distinct positive signal/idler frequencies required')
             a=np.zeros((self.n*len(bands),)*2,complex);rhs=np.zeros(self.n*len(bands),complex)
             for i,k in enumerate(bands):
                 s=slice(i*self.n,(i+1)*self.n);w=2*np.pi*fs[i]
@@ -181,7 +182,10 @@ class LayoutNetwork:
         """
         from ..jpa_circuit import voltage_sources
         def node(name):return '0' if name==self.reference else 'T'+str(self.index[name])
-        lines=['* twpa-sim geometry-derived finite terminal network']+voltage_sources(tones,float(self.R[0]))
+        vs=voltage_sources(tones,float(self.R[0]))
+        p0_neg=node(self.data['ports'][0]['negative'])
+        if p0_neg!='0':vs[-1]=vs[-1].replace(' 0 SIN(',f' {p0_neg} SIN(',1)
+        lines=['* twpa-sim geometry-derived finite terminal network']+vs
         for i,p in enumerate(self.data['ports']):
             source='SRC0' if i==0 else node(p['negative'])
             lines.append(f'RPORT{i} {source} {node(p["positive"])} {self.R[i]:.17g}')

@@ -70,6 +70,8 @@ def idc_fields(geometry=IDCGeometry(), oxide_thickness=60e-9):
     ix = int(round(edge/(lx/(nx-1))))
     jm = np.where((y >= -1e-12) & (y <= g.metal_thickness+1e-12))[0]
     metal[:ix+1, jm] = True
+    if ix < 1 or ix >= nx-1 or len(jm) == 0 or (oxide_thickness > 0 and not np.any(oxide)):
+        raise ValueError('mesh too coarse to resolve finger, gap, metal or oxide')
     for i in range(nx):
         for j in range(ny):
             idx = i*ny+j

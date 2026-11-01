@@ -35,6 +35,11 @@ class Pipeline(unittest.TestCase):
         g = nonlinear(d, b, 4.6e9, b.pump_current/100, pump_frequency=a.pump_frequency,
                       gradient=.02, profile=route_profile('folded', 2))
         self.assertTrue(np.isfinite(g.gain))
+        assert_allclose(route_profile('ideal')(np.linspace(0, 1, 5)), np.zeros(5))
+        with self.assertRaises((TypeError, ValueError)):
+            nonlinear(d, b, [4.6e9], b.pump_current*1e-5, pump_frequency=a.pump_frequency)
+        with self.assertRaises(ValueError):
+            nonlinear(d, b, 4.6e9, b.pump_current*1e-5, stopband_index=99)
 
     def test_pump_depletion_and_compression(self):
         d, b = preset('v2-tls')

@@ -27,13 +27,15 @@ def from_circuit(circuit, process, *, capacitor_width=12., relative_tolerance=.0
         geometry.setdefault('cell_pitch',circuit.cell_length*1e6)
     else:
         raise TypeError('Automatic sizing currently supports ParallelJPA and uniform 4WM Chain')
-    positive(capacitor_width,'capacitor_width'); process.coordinate(capacitor_width)
+    positive(capacitor_width,'capacitor_width'); process.coordinate(capacitor_width); process.coordinate(capacitor_width/2)
     jc=process.parameter('critical_current_density','uA/um2')*1e-6
     cj=process.parameter('junction_specific_capacitance','fF/um2')*1e-15
     cs=process.parameter('capacitor_specific_capacitance','fF/um2')*1e-15
-    def snap(x): return round(x/process.grid)*process.grid
+    def snap(x, multiple=2):
+        step = multiple * process.grid
+        return round(x / step) * step
     width=snap(math.sqrt(circuit.critical_current/jc))
-    height=snap(shunt/(cs*capacitor_width))
+    height=snap(shunt/(cs*capacitor_width), 2 if family=='jpa' else 4)
     achieved=(width**2*jc,width**2*cj,capacitor_width*height*cs)
     targets=(circuit.critical_current,circuit.junction_capacitance,shunt)
     for name,value,target in zip(('critical_current','junction_capacitance','shunt_capacitance'),achieved,targets):

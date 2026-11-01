@@ -38,7 +38,7 @@ def run(job,root,threads,dll_directory=None):
     for axis in range(2):
         vertices=np.unique(all_points[:,axis])
         # All polygon vertices and port edges are exact grid planes.
-        lines=np.unique(np.r_[np.arange(low[axis],high[axis]+dx/2,dx),low[axis],high[axis],vertices,-half,half,0])
+        lines=np.unique(np.round(np.r_[np.arange(low[axis],high[axis]+dx/2,dx),low[axis],high[axis],vertices,-half,half,0],12))
         if np.min(np.diff(lines))<dx*1e-5:
             raise ValueError('Near-duplicate mesh lines; choose a compatible mesh step')
         grid.AddLine('xy'[axis],lines); mesh.append(lines)
@@ -46,7 +46,7 @@ def run(job,root,threads,dll_directory=None):
     zs=np.unique(np.r_[-sub,-sub*.66,-sub*.33,-.5,-.2,-h,-h/2,
                        np.linspace(0,h,zc+1),h*1.5,h*2,h+.2,h+.5,h+1,h+2,h+sub])
     # Restrict substrate lines to the declared volume; keep air above M2.
-    zs=zs[zs>=-sub]
+    zs=np.unique(np.round(zs[zs>=-sub],12))
     if np.min(np.diff(zs))<1e-8:
         raise ValueError('Near-duplicate vertical mesh planes')
     grid.AddLine('z',zs); mesh.append(zs)

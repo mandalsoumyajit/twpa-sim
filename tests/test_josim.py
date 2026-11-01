@@ -145,6 +145,9 @@ class CircuitMeasurementTests(unittest.TestCase):
         self.assertIn('KONE LCOIL LARM1', deck)
         self.assertIn('KTWO LCOIL LARM2 -', deck)
         with self.assertRaises(ValueError): c.pair_drive(.4)
+        with self.assertRaises(ValueError): c.junction_phase(.49)
+        shifted = SQUIDJPA(20e-6, 100e-15, arm_inductance=50e-12, junction_capacitance=500e-15)
+        self.assertGreater(shifted.reduced_model().frequency, 0)
 
 
 @unittest.skipUnless(os.environ.get('TWPA_JOSIM_EXECUTABLE'), 'Set TWPA_JOSIM_EXECUTABLE for a real JoSIM integration test')

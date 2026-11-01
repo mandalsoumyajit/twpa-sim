@@ -2,7 +2,10 @@
 from dataclasses import asdict, dataclass, fields
 import hashlib
 import json
+import math
 from pathlib import Path
+import numpy as np
+from scipy.optimize import brentq
 
 from .process import Process, integer, positive, _json, _keys
 
@@ -56,10 +59,12 @@ class KITLayout:
             if f.name in ('rows', 'periods_per_row', 'unloaded_cells', 'loaded_cells', 'turn_periods', 'taper_cells', 'arc_points'):
                 integer(v, f.name)
             elif f.name == 'bias_ratio':
-                if not isinstance(v, (int, float)) or not 0 <= v <= 1:
+                if isinstance(v, bool) or not isinstance(v, (int, float)) or not 0 <= v <= 1:
                     raise ValueError('bias_ratio must be between 0 and 1')
             else:
                 positive(v, f.name); p.coordinate(v)
+                if f.name in ('launch_length', 'pad_width', 'pad_height', 'die_size'):
+                    p.coordinate(v/2)
         if self.rows < 2 or self.unloaded_cells % 2 or self.arc_points < 33:
             raise ValueError('At least two rows, even unloaded_cells and >=33 arc_points required')
         if p.grid != p.dbu:
@@ -74,6 +79,26 @@ class KITLayout:
             raise ValueError('Signal bump pad does not fit launch')
         if self.taper_cells*2 >= (self.unloaded_cells+self.loaded_cells)*self.turn_periods:
             raise ValueError('Turn tapers occupy the entire turn')
+        nc = self.unloaded_cells + self.loaded_cells
+        length = self.periods_per_row * nc * self.pitch
+        p.coordinate(length/2)
+        if math.floor(length/(6*p.grid))*2*p.grid <= 0:
+            raise ValueError('Row length is too short for ground landing pads')
+        nturn = self.turn_periods * nc
+        dtheta = np.pi / nturn
+        th = np.pi/2 - (np.arange(nturn) + .5) * dtheta
+        alpha = np.clip(np.minimum(np.pi/2 - th, th + np.pi/2) / (self.taper_cells * dtheta), 0., 1.)
+        s = alpha * alpha * (3. - 2. * alpha)
+        target = nturn * (self.pitch / self.spine_width) * (1. + self.bias_ratio**2)
+        pturn = np.pi * self.turn_radius / nturn
+        def err(wm):
+            w = self.spine_width + (wm - self.spine_width) * s
+            return np.sum((pturn / w) * (1. + self.bias_ratio**2 * (self.spine_width / w)**2)) - target
+        if err(self.spine_width/10) * err(10*self.spine_width) > 0:
+            raise ValueError('Turn spine width match is not bracketed')
+        wm = brentq(err, self.spine_width/10, 10*self.spine_width)
+        if self.turn_radius - .5*max(wm, self.spine_width) - self.finger_length - self.spine_gap <= 0:
+            raise ValueError('Loaded fingers or turn radius are inconsistent')
         p.require_roles(dict(DIE='boundary',M1='conductor',GND_PAD='conductor',
                              SIG_PAD='conductor',OXIDE='opening'))
 
@@ -112,6 +137,14 @@ class JosephsonLayout:
             if f.name in ('family', 'cells', 'large_junctions', 'inductive_coupler'):
                 continue
             v = getattr(self, f.name); positive(v, f.name); p.coordinate(v)
+            if f.name in ('junction_width', 'small_junction_width', 'capacitor_width', 'capacitor_height', 'via_width', 'cell_pitch'):
+                p.coordinate(v/2)
+        if self.family not in ('jpa', 'squid_jpa'):
+            p.coordinate(self.capacitor_height/4)
+        if self.family == 'rfsquid3wm' or self.inductive_coupler:
+            p.coordinate(self.wire_width/2)
+        if self.inductive_coupler:
+            p.coordinate(self.coupler_height/2); p.coordinate(self.coupler_length/2)
         if not .5 <= self.junction_width <= 4:
             raise ValueError('This primitive supports JJ widths .5 to 4 um')
         if self.family=='snail3wm' and not .5 <= self.small_junction_width <= self.junction_width:
@@ -273,7 +306,7 @@ def _kit(c,d):
         c.box('SIG_PAD',xp-d.pad_width/2,y-d.pad_height/2,xp+d.pad_width/2,y+d.pad_height/2)
         c.pin('in' if i==0 else 'out','signal',xp,y)
     # Ground landing pads between straight rows; all are checked against the actual metal.
-    pw=min(d.pad_width,length/3)
+    pw=min(d.pad_width,math.floor(length/(6*c.p.grid))*2*c.p.grid)
     for i in range(d.rows-1):
         y=(ys[i]+ys[i+1])/2
         c.box('GND_PAD',-pw/2,y-d.pad_height/2,pw/2,y+d.pad_height/2)

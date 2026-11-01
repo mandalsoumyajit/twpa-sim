@@ -95,6 +95,8 @@ def primitives(ly, design):
         sq_b = (p_turn / w_arr) * (1.0 + design.bias_ratio**2 * (w_line_straight / w_arr)**2)
         return np.sum(sq_b) - target_sq_biased
 
+    if turn_biased_sq_err(w_line_straight/10) * turn_biased_sq_err(10*w_line_straight) > 0:
+        raise ValueError('Turn spine width match is not bracketed')
     w_max_opt = brentq(turn_biased_sq_err, w_line_straight/10, 10*w_line_straight)
 
     n_arc = design.arc_points

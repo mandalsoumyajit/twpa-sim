@@ -43,6 +43,8 @@ class Solvers(unittest.TestCase):
 
     def test_validation(self):
         with self.assertRaises(ValueError): Cell(-1, 1)
+        with self.assertRaises(ValueError): Cell(True, 10e-15)
+        with self.assertRaises(ValueError): Section(Cell(50e-12, 10e-15), True)
         d = Design((Section(Cell(50e-12, 10e-15), 1),), 1000)
         with self.assertRaises(ValueError): linear(d, [1., 2.])
         with self.assertRaises(ValueError): small_signal(d, Bias(), [2e9])
@@ -102,6 +104,13 @@ class Solvers(unittest.TestCase):
         resistance = 10/4 + .5/4+.5/8 + 9/8
         assert_allclose(r.capacitance_per_length, epsilon_0*8/resistance, rtol=1e-12)
         assert_allclose(r.participation, (10.5/4)/resistance, rtol=1e-12)
+        from twpa import IDCGeometry, idc_fields
+        with self.assertRaisesRegex(ValueError, 'mesh too coarse'):
+            idc_fields(IDCGeometry(mesh=2.5e-9), oxide_thickness=1e-9)
+        with self.assertRaisesRegex(ValueError, 'mesh too coarse'):
+            idc_fields(IDCGeometry(mesh=.15e-6), oxide_thickness=60e-9)
+        with self.assertRaisesRegex(ValueError, 'oxide mask'):
+            electrostatic(er, fixed, np.full_like(er, 2.), dx=1e-8, dy=1e-8)
 
 
 if __name__ == '__main__':

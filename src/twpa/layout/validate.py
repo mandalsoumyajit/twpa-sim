@@ -173,7 +173,7 @@ def validate(gds, manifest=None, report=None, *, drc=True):
         box=db.Box(*(round(v/ly.dbu) for v in c['box_um'])); cr=db.Region(box)
         if c['kind']=='IND':
             found=hits(cr.sized(1),'M1')
-            found.sort(key=lambda k:pieces[k].bbox().center().x)
+            found.sort(key=lambda k:(pieces[k] & cr.sized(1)).bbox().center().x)
             segment=(cr & regs['M1']).merged()
             if (len(found)!=2 or segment.count()!=1 or
                     segment.bbox().left!=box.left or segment.bbox().right!=box.right):

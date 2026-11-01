@@ -71,12 +71,13 @@ def pump_points(resonator, frequency, power, phase=0.):
         raise ValueError('pump phase must be finite')
     r = resonator
     delta = 2*np.pi*(frequency-r.frequency)
-    incoming = np.sqrt(power/(h*frequency))*np.exp(1j*phase)
+    photon_flux = power/(h*frequency)
+    incoming = np.sqrt(photon_flux)*np.exp(1j*phase)
     if r.kerr == 0 or power == 0:
-        photons = [r.kappa_external*abs(incoming)**2/((r.kappa/2)**2+delta**2)]
+        photons = [r.kappa_external*photon_flux/((r.kappa/2)**2+delta**2)]
     else:
         d, sign = delta/r.kappa, np.sign(r.kerr)
-        drive = abs(r.kerr)*r.kappa_external*abs(incoming)**2/r.kappa**3
+        drive = abs(r.kerr)*r.kappa_external*photon_flux/r.kappa**3
         def polynomial(x):
             return x*(.25+(d-sign*x)**2)-drive
         turns = []
@@ -87,7 +88,7 @@ def pump_points(resonator, frequency, power, phase=0.):
         upper = max(1., 2*abs(d)+2*np.cbrt(drive)+1)
         knots = sorted(set([0., *turns, upper]))
         roots = []
-        tol = 64*np.finfo(float).eps*max(drive, np.finfo(float).tiny)
+        tol = 4*np.finfo(float).eps*max(drive, np.finfo(float).tiny)
         for x in knots:
             if abs(polynomial(x)) <= tol:
                 roots.append(x)
@@ -97,7 +98,7 @@ def pump_points(resonator, frequency, power, phase=0.):
                 continue
             if np.signbit(flo) != np.signbit(fhi):
                 root = brentq(polynomial, lo, hi, xtol=np.finfo(float).tiny, rtol=1e-14)
-                if not any(abs(root-x) < 1e-9*max(1., abs(root)) for x in roots):
+                if not any(abs(root-x) < 1e-11*max(1., abs(root)) for x in roots):
                     roots.append(root)
         photons = sorted(x*r.kappa/abs(r.kerr) for x in roots)
     points = []

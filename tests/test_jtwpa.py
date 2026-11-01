@@ -63,6 +63,7 @@ class JTWPA(unittest.TestCase):
         numerical = _real_vector((_residual(fields+eps*delta, matrices, np.zeros_like(fields))-
                                   _residual(fields-eps*delta, matrices, np.zeros_like(fields)))/(2*eps))
         assert_allclose(_jacobian(fields, matrices)@direction, numerical, atol=1e-9, rtol=1e-8)
+        assert_allclose(_nonlinear(np.zeros((3, 5), complex), 'cubic', derivative=True), 0., atol=0.)
         indices = ((1, 0), (1, 1), (1, -1))
         numerical = _real_vector((_residual(fields+eps*delta, matrices, np.zeros_like(fields), 'sine', indices)-
                                   _residual(fields-eps*delta, matrices, np.zeros_like(fields), 'sine', indices))/(2*eps))
